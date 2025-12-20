@@ -17,7 +17,6 @@ const teamsByYear = Object.entries(teamFiles).map(([filepath, mod]) => {
     teams: Array.isArray(data) ? data : []
   };
 })
-// Sort by year descending (latest first)
 .sort((a, b) => (b.year || 0) - (a.year || 0));
 
 console.log("Teams by year:", teamsByYear);
@@ -30,6 +29,7 @@ function groupByRole(items) {
   });
   return map;
 }
+
 ---
 <html lang="en">
   <head>
@@ -88,21 +88,29 @@ function groupByRole(items) {
                 </table>
               </aside>
 
-              {/* RIGHT: Hero Image */}
+              {/* RIGHT: Hero Image with Loader */}
               <div class="team-photo-large">
                 {heroImg && heroImg !== "N/A" ? (
-                  <img
-                    src={heroImg}
-                    alt={sectionTitle}
-                    class="team-hero"
-                    id={`teamHero-${yearIndex}`}
-                  />
+                  <div class="image-wrapper" style="position: relative;">
+                    <div class="loader" id={`loader-${yearIndex}`}>
+                      <div class="spinner"></div>
+                    </div>
+                    <img
+                      src={heroImg}
+                      alt={sectionTitle}
+                      class="team-hero"
+                      id={`teamHero-${yearIndex}`}
+                      onload={`document.getElementById('loader-${yearIndex}').style.display='none'`}
+                      style="display: block;"
+                    />
+                  </div>
                 ) : (
                   <div class="team-placeholder">
                     Photo coming soon!
                   </div>
                 )}
               </div>
+
 
               {/* Modal */}
               <div id={`photoModal-${yearIndex}`} class="modal">
@@ -118,6 +126,35 @@ function groupByRole(items) {
     <Footer />
   </body>
 </html>
+
+<style>
+/* Loader Styles */
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #555;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
 
 <script>
   // Handle multiple modals automatically
