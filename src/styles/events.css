@@ -37,8 +37,8 @@
   top: 50%;
   transform: translateY(-50%);
   background: rgba(255, 0, 230, 0.12);
-  border: 2px solid #FF00E6;
-  color: #FF8BF4;
+  border: 2px solid var(--color-primary);
+  color: var(--color-secondary);
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -83,7 +83,7 @@
 }
 
 .dot.active {
-  background: #FF00E6;
+  background: var(--color-primary);
   box-shadow: 0 0 8px rgba(255,0,230,0.25);
 }
 
