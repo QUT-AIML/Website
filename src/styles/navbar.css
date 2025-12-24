@@ -143,7 +143,7 @@
 }
 
 .main-links .dropbtn.active {
-  color: var(--color-primary) !important;
+  color: var(--color-secondary) !important;
 }
 
 .main-links .dropbtn.open .arrow {
