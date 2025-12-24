@@ -18,38 +18,20 @@ import Footer from '@/components/Footer.astro';
 <head lang="en">
   <link rel="icon" type="image/png" href="favicon.png">
   <meta charset="utf-8">
-  <meta name="viewport" content="width=1024">
-  <meta name="keywords" content="neural networks,machine learning,javascript">
-
-  <meta property="og:type" content="article"/>
-  <meta property="og:title" content="Tensorflow — Neural Network Playground"/>
-  <meta property="og:description" content="Tinker with a real neural network right here in your browser.">
-  <meta property="og:url" content="http://playground.tensorflow.org"/>
-  <meta property="og:image" content="http://playground.tensorflow.org/preview.png"/>
-
-  <meta name="twitter:card" value="summary_large_image">
-  <meta name="twitter:title" content="Tensorflow — Neural Network Playground">
-  <meta name="twitter:description" content="Tinker with a real neural network right here in your browser.">
-  <meta name="twitter:url" content="http://playground.tensorflow.org">
-  <meta name="twitter:image" content="http://playground.tensorflow.org/preview.png">
-  <meta name="twitter:image:width" content="560">
-  <meta name="twitter:image:height" content="295">
-
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Material+Icons" rel="stylesheet" type="text/css">
 
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width" />
   <title>QUT AIML</title>
   <script is:inline src="/ml_playground/dist/lib.js"></script>
 </head>
 <body>
   <!-- Header -->
-  <header>
-    <h1 class="l--page">Tinker With a <b>Neural Network</b> <span class="optional">Right Here </span>in Your Browser.<br>Don’t Worry, You Can’t Break It. We Promise.</h1>
-  </header>
+  <div class="page-header">
+    <h1 class="page-title">Our Aims & Objectives</h1>
+  </div>
 
   <body>
-
     <!-- Top Controls -->
     <div id="top-controls">
       <div class="container l--page">
@@ -243,10 +225,10 @@ import Footer from '@/components/Footer.astro';
       <div class="column hidden-layers">
         <h4>
           <div class="ui-numHiddenLayers">
-            <button id="add-layers" class="mdl-button mdl-js-button mdl-button--icon">
+            <button id="add-layers" class="neural-button mdl-button mdl-js-button mdl-button--icon">
               <i class="material-icons">add</i>
             </button>
-            <button id="remove-layers" class="mdl-button mdl-js-button mdl-button--icon">
+            <button id="remove-layers" class="neural-button mdl-button mdl-js-button mdl-button--icon">
               <i class="material-icons">remove</i>
             </button>
           </div>
@@ -313,4 +295,5 @@ import Footer from '@/components/Footer.astro';
     <!-- Google analytics -->
     <script is:inline src="/ml_playground/dist/analytics.js"></script>
   </body>
+
 </html>
