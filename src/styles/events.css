@@ -136,6 +136,10 @@
   }
 }
 
+.padding-bottom {
+  padding-bottom: 2rem;
+}
+
 @media (max-width: 520px) {
   .carousel {
     padding: 0 32px;
