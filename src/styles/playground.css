@@ -23,6 +23,18 @@
   }
 }
 
+.important {
+  font-size: 10px !important;
+}
+
+h4 {
+  font-size: 20px !important;
+}
+
+h4 span {
+  font-size: 20px !important;
+}
+
 /* Buttons */
 
 #main-part .mdl-button {
@@ -82,7 +94,7 @@
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: space-betweenspace-between;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 #top-controls .timeline-controls {
@@ -92,8 +104,7 @@
   display: -webkit-flex;
   display: flex;
   align-items: center;
-  margin-right: 20px;
-  width: 140px;
+  width: 120px;
 }
 
 #play-pause-button .material-icons {
@@ -116,9 +127,9 @@
 
 #top-controls .control {
   flex-grow: 1;
-  max-width: 180px;
-  min-width: 110px;
-  margin-left: 30px;
+  max-width: 120px;
+  min-width: 70px;
+  margin-left: 40px;
   margin-top: 6px;
 }
 
@@ -560,7 +571,6 @@ g.column rect {
 }
 
 /* Hidden layers column */
-
 .hidden-layers.column {
   width: 40%;
 }
@@ -750,6 +760,10 @@ g.test circle {
   height: 32px;
   padding: 0;
   border-radius: 50%;
+}
+
+.inline-details {
+    display: inline-block;
 }
 
 .mdl-button--icon i {
