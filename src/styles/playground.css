@@ -37,50 +37,45 @@ h4 span {
 
 /* Buttons */
 
-#main-part {
-  max-width: 1100px;   /* adjust this value as needed */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#main-part {
+.main-part {
   display: flex;
-  flex-wrap: nowrap; /* don't wrap network columns */
-  overflow-x: auto;  /* allow horizontal scroll */
+  flex-wrap: nowrap;                  /* no wrapping */
+  overflow-x: auto;                   /* scroll horizontally when needed */
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+  justify-content: flex-start;
   padding-top: 10px;
   padding-bottom: 20px;
-  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
 }
 
-#main-part::-webkit-scrollbar {
+.main-part::-webkit-scrollbar {
   height: 8px;
 }
 
-#main-part::-webkit-scrollbar-thumb {
+.main-part::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,0.2);
   border-radius: 4px;
 }
 
-#main-part .mdl-button {
+.main-part .mdl-button {
   background-color: rgba(158,158,158,.9); /* light instead of dark */
   width: 28px;
   height: 28px;
   min-width: 28px;
 }
 
-#main-part .mdl-button:hover {
+.main-part .mdl-button:hover {
   background-color: rgba(158,158,158,.7); /* slightly darker on hover */
 }
 
-#main-part .mdl-button:focus:not(:active) {
+.main-part .mdl-button:focus:not(:active) {
   background-color: rgba(158,158,158,.6);
 }
 
-#main-part .mdl-button:active {
+.main-part .mdl-button:active {
   background-color: rgba(158,158,158,.5); /* inverted from original .5 dark */
 }
 
-#main-part .mdl-button .material-icons {
+.main-part .mdl-button .material-icons {
   font-size: 20px;
   color: rgba(0, 0, 0, 0.3); /* lighter icon color */
 }
@@ -124,13 +119,13 @@ h4 span {
 
 /* Buttons */
 
-#main-part {
+.main-part {
   max-width: 1100px;   /* adjust this value as needed */
   margin-left: auto;
   margin-right: auto;
 }
 
-#main-part {
+.main-part {
   display: flex;
   flex-wrap: nowrap; /* don't wrap network columns */
   overflow-x: auto;  /* allow horizontal scroll */
@@ -139,40 +134,40 @@ h4 span {
   -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
 }
 
-#main-part::-webkit-scrollbar {
+.main-part::-webkit-scrollbar {
   height: 8px;
 }
 
-#main-part::-webkit-scrollbar-thumb {
+.main-part::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,0.2);
   border-radius: 4px;
 }
 
-#main-part .mdl-button {
+.main-part .mdl-button {
   background-color: rgba(158,158,158,.9); /* light instead of dark */
   width: 28px;
   height: 28px;
   min-width: 28px;
 }
 
-#main-part .mdl-button:hover {
+.main-part .mdl-button:hover {
   background-color: rgba(158,158,158,.7); /* slightly darker on hover */
 }
 
-#main-part .mdl-button:focus:not(:active) {
+.main-part .mdl-button:focus:not(:active) {
   background-color: rgba(158,158,158,.6);
 }
 
-#main-part .mdl-button:active {
+.main-part .mdl-button:active {
   background-color: rgba(158,158,158,.5); /* inverted from original .5 dark */
 }
 
-#main-part .mdl-button .material-icons {
+.main-part .mdl-button .material-icons {
   font-size: 20px;
   color: rgba(0, 0, 0, 0.3); /* lighter icon color */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1150px) {
   /* Stack bottom row controls vertically */
   #top-controls .bottom-row {
     flex-direction: column;
@@ -221,7 +216,6 @@ h4 span {
 
 /* Top Controls */
 #top-controls {
-  border-bottom: 1px solid #aaa; /* slightly darker for light mode */
   padding: 18px 0;
   box-shadow: 0 1px 4px rgba(0,0,0,0.02); /* lighter shadow */
 }
@@ -521,7 +515,7 @@ h4 span {
 
 /* Main Part*/
 
-#main-part {
+.main-part {
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
@@ -536,12 +530,12 @@ h4 span {
 }
 
 @media (min-height: 700px) {
-  #main-part {
+  .main-part {
     margin-top: 50px;
   }
 }
 
-#main-part h4 {
+.main-part h4 {
 
   display: flex;
   align-items: center;
@@ -555,9 +549,9 @@ h4 span {
   color: white; /* dark text for light theme */
 }
 
-#main-part p,
-#main-part .column .label,
-#main-part .column label {
+.main-part p,
+.main-part .column .label,
+.main-part .column label {
   font-weight: 300;
   line-height: 1.38em;
   margin: 0;
@@ -677,14 +671,14 @@ g.column rect {
   background-color: #fff;
 }
 
-#main-part .data.column .dataset .label {
+.main-part .data.column .dataset .label {
   position: absolute;
   left: 48px;
   top: calc(50% - 9px);
   display: none;
 }
 
-#main-part .data.column p.slider {
+.main-part .data.column p.slider {
   margin: 0 -25px 20px;
 }
 
@@ -699,7 +693,7 @@ g.column rect {
     margin-bottom: 6px; /* same spacing as dataset text */
 }
 
-#main-part .basic-button {
+.main-part .basic-button {
   margin-top: 25px;
   height: 34px;
   margin-right: 0;
@@ -718,17 +712,17 @@ g.column rect {
   cursor: pointer;
 }
 
-#main-part .basic-button:hover {
+.main-part .basic-button:hover {
   background: rgba(158,158,158,.8);
   color: rgba(0, 0, 0, 0.8);
 }
 
-#main-part .basic-button:focus {
+.main-part .basic-button:focus {
   background: rgba(158,158,158,.7);
   color: rgba(0, 0, 0, 0.9);
 }
 
-#main-part .basic-button:active {
+.main-part .basic-button:active {
   background: rgba(158,158,158,.6);
   color: rgba(0, 0, 0, 1);
 }
@@ -781,7 +775,7 @@ g.column rect {
   fill-opacity: 0.4;
 }
 
-#main-part .features.column .callout .label {
+.main-part .features.column .callout .label {
   position: absolute;
   top: 24px;
   left: 3px;
@@ -893,7 +887,7 @@ g.column rect {
   width: 40%;
 }
 
-#main-part .hidden-layers h4 {
+.main-part .hidden-layers h4 {
   -webkit-justify-content: center;
   justify-content: center;
   margin-top: -5px;
@@ -978,7 +972,7 @@ g.test circle {
   fill-opacity: 0.9;
 }
 
-#main-part .output .mdl-checkbox__label.label {
+.main-part .output .mdl-checkbox__label.label {
   line-height: 1.7em;
 }
 
@@ -1014,36 +1008,36 @@ g.test circle {
 
 /* Slider */
 
-#main-part .mdl-slider.is-upgraded {
+.main-part .mdl-slider.is-upgraded {
   color: #ccc; /* dark slider for light theme */
 }
 
-#main-part .mdl-slider__background-lower {
+.main-part .mdl-slider__background-lower {
   background-color: #D9EDF3; /* light track */
 }
 
-#main-part .mdl-slider.is-upgraded::-webkit-slider-thumb {
+.main-part .mdl-slider.is-upgraded::-webkit-slider-thumb {
   background-color: white; /* dark thumb */
 }
 
-#main-part .mdl-slider.is-upgraded::-moz-range-thumb {
+.main-part .mdl-slider.is-upgraded::-moz-range-thumb {
   background-color: white;
 }
 
-#main-part .mdl-slider.is-upgraded::-ms-thumb {
+.main-part .mdl-slider.is-upgraded::-ms-thumb {
   background-color: white;
 }
 
-#main-part .mdl-slider.is-upgraded.is-lowest-value::-webkit-slider-thumb {
+.main-part .mdl-slider.is-upgraded.is-lowest-value::-webkit-slider-thumb {
   border-color: white;
 }
 
-#main-part .mdl-slider.is-upgraded.is-lowest-value::-moz-range-thumb {
+.main-part .mdl-slider.is-upgraded.is-lowest-value::-moz-range-thumb {
   border-color: white;
 }
 
 /* Keep grey focus circle for non-start values */
-#main-part .mdl-slider.is-upgraded:focus:not(:active)::-webkit-slider-thumb {
+.main-part .mdl-slider.is-upgraded:focus:not(:active)::-webkit-slider-thumb {
   box-shadow: 0 0 0 10px rgba(0,0,0, 0.12);
 }
 
@@ -1229,7 +1223,6 @@ g.test circle {
 /* Add spacing inside top-controls */
 #top-controls {
     padding: 24px 0 16px 0; /* top + bottom padding */
-    border-bottom: 1px solid #aaa; /* keep subtle bottom line */
     position: relative;
 }
 
@@ -1268,11 +1261,33 @@ g.test circle {
   display: table;
 }
 
-/* Top Controls */
-#top-controls {
-  border-bottom: 1px solid #aaa; /* slightly darker for light mode */
-  padding: 18px 0;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.02); /* lighter shadow */
+/* Add this on mobile only */
+@media (max-width: 768px) {
+  /* Wrap the network columns in a horizontal scroll container */
+  .main-part {
+    display: block; /* stack everything for mobile */
+  }
+
+  #network-wrapper {
+    overflow-x: auto; /* horizontal scroll */
+    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+    width: 100%;
+    padding-bottom: 10px;
+  }
+
+  #network-wrapper .network-content {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  /* Keep each network column from shrinking */
+  #network-wrapper .features.column,
+  #network-wrapper .hidden-layers.column,
+  #network-wrapper .output.column {
+    flex: 0 0 auto;
+    min-width: 200px; /* adjust as needed */
+    margin-right: 12px;
+  }
 }
 
 @media (min-height: 700px) {
@@ -1570,7 +1585,7 @@ g.test circle {
 
 /* Main Part*/
 
-#main-part {
+.main-part {
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
@@ -1585,12 +1600,12 @@ g.test circle {
 }
 
 @media (min-height: 700px) {
-  #main-part {
+  .main-part {
     margin-top: 50px;
   }
 }
 
-#main-part h4 {
+.main-part h4 {
 
   display: flex;
   align-items: center;
@@ -1604,9 +1619,9 @@ g.test circle {
   color: white; /* dark text for light theme */
 }
 
-#main-part p,
-#main-part .column .label,
-#main-part .column label {
+.main-part p,
+.main-part .column .label,
+.main-part .column label {
   font-weight: 300;
   line-height: 1.38em;
   margin: 0;
@@ -1726,14 +1741,14 @@ g.column rect {
   background-color: #fff;
 }
 
-#main-part .data.column .dataset .label {
+.main-part .data.column .dataset .label {
   position: absolute;
   left: 48px;
   top: calc(50% - 9px);
   display: none;
 }
 
-#main-part .data.column p.slider {
+.main-part .data.column p.slider {
   margin: 0 -25px 20px;
 }
 
@@ -1748,7 +1763,7 @@ g.column rect {
     margin-bottom: 6px; /* same spacing as dataset text */
 }
 
-#main-part .basic-button {
+.main-part .basic-button {
   margin-top: 25px;
   height: 34px;
   margin-right: 0;
@@ -1767,17 +1782,17 @@ g.column rect {
   cursor: pointer;
 }
 
-#main-part .basic-button:hover {
+.main-part .basic-button:hover {
   background: rgba(158,158,158,.8);
   color: rgba(0, 0, 0, 0.8);
 }
 
-#main-part .basic-button:focus {
+.main-part .basic-button:focus {
   background: rgba(158,158,158,.7);
   color: rgba(0, 0, 0, 0.9);
 }
 
-#main-part .basic-button:active {
+.main-part .basic-button:active {
   background: rgba(158,158,158,.6);
   color: rgba(0, 0, 0, 1);
 }
@@ -1830,7 +1845,7 @@ g.column rect {
   fill-opacity: 0.4;
 }
 
-#main-part .features.column .callout .label {
+.main-part .features.column .callout .label {
   position: absolute;
   top: 24px;
   left: 3px;
@@ -1942,7 +1957,7 @@ g.column rect {
   width: 40%;
 }
 
-#main-part .hidden-layers h4 {
+.main-part .hidden-layers h4 {
   -webkit-justify-content: center;
   justify-content: center;
   margin-top: -5px;
@@ -2027,7 +2042,7 @@ g.test circle {
   fill-opacity: 0.9;
 }
 
-#main-part .output .mdl-checkbox__label.label {
+.main-part .output .mdl-checkbox__label.label {
   line-height: 1.7em;
 }
 
@@ -2063,36 +2078,36 @@ g.test circle {
 
 /* Slider */
 
-#main-part .mdl-slider.is-upgraded {
+.main-part .mdl-slider.is-upgraded {
   color: #ccc; /* dark slider for light theme */
 }
 
-#main-part .mdl-slider__background-lower {
+.main-part .mdl-slider__background-lower {
   background-color: #D9EDF3; /* light track */
 }
 
-#main-part .mdl-slider.is-upgraded::-webkit-slider-thumb {
+.main-part .mdl-slider.is-upgraded::-webkit-slider-thumb {
   background-color: white; /* dark thumb */
 }
 
-#main-part .mdl-slider.is-upgraded::-moz-range-thumb {
+.main-part .mdl-slider.is-upgraded::-moz-range-thumb {
   background-color: white;
 }
 
-#main-part .mdl-slider.is-upgraded::-ms-thumb {
+.main-part .mdl-slider.is-upgraded::-ms-thumb {
   background-color: white;
 }
 
-#main-part .mdl-slider.is-upgraded.is-lowest-value::-webkit-slider-thumb {
+.main-part .mdl-slider.is-upgraded.is-lowest-value::-webkit-slider-thumb {
   border-color: white;
 }
 
-#main-part .mdl-slider.is-upgraded.is-lowest-value::-moz-range-thumb {
+.main-part .mdl-slider.is-upgraded.is-lowest-value::-moz-range-thumb {
   border-color: white;
 }
 
 /* Keep grey focus circle for non-start values */
-#main-part .mdl-slider.is-upgraded:focus:not(:active)::-webkit-slider-thumb {
+.main-part .mdl-slider.is-upgraded:focus:not(:active)::-webkit-slider-thumb {
   box-shadow: 0 0 0 10px rgba(0,0,0, 0.12);
 }
 
@@ -2278,7 +2293,6 @@ g.test circle {
 /* Add spacing inside top-controls */
 #top-controls {
     padding: 24px 0 16px 0; /* top + bottom padding */
-    border-bottom: 1px solid #aaa; /* keep subtle bottom line */
     position: relative;
 }
 
@@ -2302,4 +2316,27 @@ g.test circle {
     height: 1px;
     background-color: rgba(255, 255, 255, 0.2); /* subtle light line */
     margin: 16px 0; /* spacing above and below */
+}
+
+
+
+/* Scrollable wrapper */
+.scroll-wrapper {
+  width: 100%;            /* fill parent */
+  overflow-x: auto;       /* allow horizontal scroll */
+  -webkit-overflow-scrolling: touch; /* smooth on iOS */
+}
+
+/* Main part stays horizontal */
+.scroll-wrapper .main-part {
+  display: flex;
+  flex-wrap: nowrap;      /* prevent wrapping */
+  min-width: 1150px;      /* adjust for total content width */
+}
+
+/* Each column should not shrink */
+.scroll-wrapper .main-part > .column {
+  flex: 0 0 auto;         /* do not shrink or grow */
+  min-width: 200px;       /* adjust width as needed */
+  margin-right: 12px;     /* spacing between columns */
 }
