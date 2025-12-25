@@ -143,7 +143,7 @@
 }
 
 .main-links .dropbtn.active {
-  color: var(--color-primary) !important;
+  color: var(--color-secondary) !important;
 }
 
 .main-links .dropbtn.open .arrow {
@@ -396,6 +396,7 @@ body.no-scroll {
 
   .nav-links .dropbtn.active .arrow {
     transform: translateY(-50%) rotate(180deg);
+    color: var(--color-secondary);
   }
 
   .dropbtn {
@@ -436,8 +437,8 @@ body.no-scroll {
   }
 
   .hamburger {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
     padding: 0;
     display: flex;
     align-items: center;
@@ -447,6 +448,7 @@ body.no-scroll {
     cursor: pointer;
     line-height: 1;
     z-index: 2002;
+    margin-bottom: 0.3rem !important;
   }
 
   .mobile-header {
@@ -471,11 +473,11 @@ body.no-scroll {
   }
 
   .hamburger:not(.open) {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .hamburger.open {
-    font-size: 3rem;
+    font-size: 2.6rem;
   }
 
   .main-links {
@@ -540,6 +542,11 @@ body.no-scroll {
   .dropbtn {
     color: white !important;
   }
+
+  .dropbtn.active {
+    color: var(--color-secondary);
+  }
+
 
 
   .dropdown-content {

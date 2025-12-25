@@ -1,0 +1,2336 @@
+/* Layout */
+.l--body {
+  width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.l--page {
+  width: 944px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 1180px) {
+  .l--page {
+    width: 1100px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .l--page {
+    width: 1220px;
+  }
+}
+
+.important {
+  font-size: 10px !important;
+}
+
+h4 {
+  font-size: 20px !important;
+}
+
+h4 span {
+  font-size: 20px !important;
+}
+
+/* Buttons */
+
+.main-part {
+  display: flex;
+  flex-wrap: nowrap;                  /* no wrapping */
+  overflow-x: auto;                   /* scroll horizontally when needed */
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+  justify-content: flex-start;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.main-part::-webkit-scrollbar {
+  height: 8px;
+}
+
+.main-part::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.main-part .mdl-button {
+  background-color: rgba(158,158,158,.9); /* light instead of dark */
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+}
+
+.main-part .mdl-button:hover {
+  background-color: rgba(158,158,158,.7); /* slightly darker on hover */
+}
+
+.main-part .mdl-button:focus:not(:active) {
+  background-color: rgba(158,158,158,.6);
+}
+
+.main-part .mdl-button:active {
+  background-color: rgba(158,158,158,.5); /* inverted from original .5 dark */
+}
+
+.main-part .mdl-button .material-icons {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.3); /* lighter icon color */
+}
+
+/* Layout */
+.l--body {
+  width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.l--page {
+  width: 944px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 1180px) {
+  .l--page {
+    width: 1100px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .l--page {
+    width: 1220px;
+  }
+}
+
+.important {
+  font-size: 10px !important;
+}
+
+h4 {
+  font-size: 20px !important;
+}
+
+h4 span {
+  font-size: 20px !important;
+}
+
+/* Buttons */
+
+.main-part {
+  max-width: 1100px;   /* adjust this value as needed */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-part {
+  display: flex;
+  flex-wrap: nowrap; /* don't wrap network columns */
+  overflow-x: auto;  /* allow horizontal scroll */
+  padding-top: 10px;
+  padding-bottom: 20px;
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+}
+
+.main-part::-webkit-scrollbar {
+  height: 8px;
+}
+
+.main-part::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.main-part .mdl-button {
+  background-color: rgba(158,158,158,.9); /* light instead of dark */
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+}
+
+.main-part .mdl-button:hover {
+  background-color: rgba(158,158,158,.7); /* slightly darker on hover */
+}
+
+.main-part .mdl-button:focus:not(:active) {
+  background-color: rgba(158,158,158,.6);
+}
+
+.main-part .mdl-button:active {
+  background-color: rgba(158,158,158,.5); /* inverted from original .5 dark */
+}
+
+.main-part .mdl-button .material-icons {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.3); /* lighter icon color */
+}
+
+@media (max-width: 1150px) {
+  /* Stack bottom row controls vertically */
+  #top-controls .bottom-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px; /* spacing between stacked controls */
+  }
+
+  #top-controls .bottom-row > * {
+    width: 100%; /* full width for each control */
+    margin-left: 0;
+  }
+
+  /* Make dataset selector stack nicely */
+  #top-controls .ui-dataset.compact {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  /* Slider labels take full width */
+  #top-controls .ui-percTrainData,
+  #top-controls .ui-noise,
+  #top-controls .ui-batchSize {
+    width: 100%;
+    margin: 0;
+  }
+
+  /* Regenerate button full width */
+  #top-controls #data-regen-button {
+    width: 100%;
+  }
+}
+
+.hide-button {
+  cursor: pointer;
+  padding: 6px 4px 8px 4px;
+  border-left: 1px solid #d3d3d3; /* light border instead of dark */
+  border-bottom: 1px solid #d3d3d3;
+  position: fixed;
+  right: 0px;
+  background: #f5f5f5; /* light background instead of dark */
+  color: #111; /* dark text instead of light */
+  font: 11px 'Lucida Grande', sans-serif;
+  display: table;
+}
+
+/* Top Controls */
+#top-controls {
+  padding: 18px 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.02); /* lighter shadow */
+}
+
+@media (min-height: 700px) {
+  #top-controls {
+    padding: 24px 0;
+  }
+}
+
+.top-controls-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Shared row styling */
+.controls-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+/* Optional visual separation */
+.controls-row--data {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 12px;
+}
+
+
+/* Keep sliders compact */
+.controls-row--data .control {
+  min-width: 180px;
+}
+
+#top-controls .container {
+  flex-direction: column;
+  align-items: stretch;
+}
+#top-controls .timeline-controls {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  width: 120px;
+}
+
+/* Keep dataset selector horizontal in top controls */
+#top-controls .ui-dataset {
+  display: block; /* restore original behavior */
+}
+
+#top-controls .ui-dataset > p {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #ccc;
+  font-weight: 300;
+}
+
+/* Force thumbnails to be horizontal */
+#top-controls .ui-dataset .dataset-list {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+/* Ensure each dataset stays inline */
+#top-controls .ui-dataset .dataset {
+  display: inline-flex;
+}
+
+#top-controls .top-row,
+#top-controls .bottom-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#top-controls .bottom-row .control {
+  margin-left: 20px;
+}
+
+#top-controls .row-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 12px 0;
+}
+
+#play-pause-button .material-icons {
+  color: black; /* dark icon for light background */
+  font-size: 36px;
+  transform: translate(-18px,-12px);
+}
+
+#play-pause-button .material-icons:nth-of-type(2) {
+  display: none;
+}
+
+#play-pause-button.playing .material-icons:nth-of-type(1) {
+  display: none;
+}
+
+#play-pause-button.playing .material-icons:nth-of-type(2) {
+  display: inherit;
+}
+
+#top-controls .control {
+  flex-grow: 1;
+  max-width: 140px;
+  min-width: 140px;
+  margin-left: 40px;
+  margin-top: 6px;
+}
+
+#top-controls .control .label,
+#top-controls .control label {
+  color: #ccc; /* darker text for light background */
+  font-size: 13px;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 300;
+}
+
+#top-controls .control .value {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 300;
+  color: white; /* match icons/text */
+}
+
+#top-controls .control .select {
+  position: relative;
+}
+
+#top-controls .control select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: block;
+  border: none;
+  border-radius: 0;
+  padding: 6px 0;
+  width: 100%;
+  font-size: 14px;
+  border-bottom: solid 1px #888; /* darker border for contrast */
+  color: white; /* dark text */
+  outline: none;
+}
+
+#top-controls .control select:focus {
+  border-bottom-color: white;
+}
+
+#top-controls .control .select::after {
+  class: "material-icons";
+  content: "arrow_drop_down";
+  color: #666; /* slightly darker arrow for light background */
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  position: absolute;
+  right: 0;
+  top: 6px;
+  pointer-events: none;
+}
+
+#top-controls .top-row > .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* === FORCE DATA CONTROLS INTO ONE ROW === */
+#top-controls .bottom-row {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 28px; /* spacing between sliders */
+}
+
+/* Keep each data section compact */
+#top-controls .bottom-row > * {
+  flex: 0 0 auto;
+}
+
+/* Dataset block inline */
+#top-controls .ui-dataset.compact {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Keep Data title inline */
+#top-controls .ui-dataset.compact h4 {
+  margin: 0;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Stack text + thumbnails inside dataset selector */
+#top-controls .ui-dataset.compact .ui-dataset {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dataset thumbnails horizontal */
+#top-controls .ui-dataset .dataset-list {
+  display: flex;
+  gap: 8px;
+}
+
+/* Slider blocks spacing + alignment */
+#top-controls .ui-percTrainData,
+#top-controls .ui-noise,
+#top-controls .ui-batchSize {
+  width: 160px;
+  margin: 0px 15px;
+}
+
+/* Slider label spacing */
+#top-controls .bottom-row label {
+  margin-bottom: 4px;
+}
+
+/* Keep Regenerate aligned */
+#top-controls #data-regen-button {
+  margin-top: 18px;
+  white-space: nowrap;
+}
+
+/* Custom styling for the regenerate button */
+#top-controls .regenerate-button {
+  margin-top: 25px;
+  height: 34px;
+  margin-right: 0;
+  width: 100px;
+  display: block;
+  color: black; /* darker text for light theme */
+  border: none;
+  background: white; /* inverted background */
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 500;
+  outline: none;
+  transition: background 0.3s linear;
+  cursor: pointer;
+}
+
+#top-controls .regenerate-button:hover {
+  background: rgba(158,158,158,.8);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+#top-controls .regenerate-button:focus {
+  background: rgba(158,158,158,.7);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+#top-controls .regenerate-button:active {
+  background: rgba(158,158,158,.6);
+  color: rgba(0, 0, 0, 1);
+}
+
+/* Hover card */
+#hovercard {
+  display: none;
+  position: absolute;
+  padding: 5px;
+  border: 1px solid #666; /* darker border for contrast on light bg */
+  z-index: 1000;
+  cursor: default;
+  border-radius: 5px;
+  left: 240px;
+  width: 150px;
+  top: -20px;
+  background-color: #666;
+}
+
+#hovercard input {
+  width: 60px;
+}
+
+/* Main Part*/
+
+.main-part {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  padding-top: 2px;
+  position: relative;
+}
+
+@media (min-height: 700px) {
+  .main-part {
+    margin-top: 50px;
+  }
+}
+
+.main-part h4 {
+
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  font-size: 16px;
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: 8px;
+  margin: 0;
+  line-height: 1.4em;
+  color: white; /* dark text for light theme */
+}
+
+.main-part p,
+.main-part .column .label,
+.main-part .column label {
+  font-weight: 300;
+  line-height: 1.38em;
+  margin: 0;
+  color: #ccc; 
+  font-size: 13px;
+}
+
+.more {
+  position: absolute;
+  left: 50%;
+}
+
+.more button {
+  position: absolute;
+  left: -28px;
+  top: -28px;
+  background: #f9f9f9; /* light background */
+}
+
+.more button:hover,
+.more button:active,
+.more button:focus,
+.more button:focus:not(:active) {
+  background: #e6e6e6; /* slightly darker hover/active state */
+}
+
+svg text {
+  dominant-baseline: middle;
+  fill: #183D4E; /* dark text for svg labels */
+}
+
+canvas {
+  display: block;
+}
+
+.link {
+  fill: none;
+  stroke: #666; /* darker stroke for light theme */
+  stroke-width: 1;
+}
+
+g.column rect {
+  stroke: none;
+}
+
+#heatmap {
+  position: relative;
+  float: left;
+  margin-top: 10px;
+}
+
+#heatmap .tick line {
+  stroke: #ccc; /* lighter line for light background */
+}
+
+#heatmap .tick text {
+  fill: #777; /* darker text for readability */
+  dominant-baseline: auto;
+}
+
+#heatmap .tick:nth-child(7) text {
+  fill: #ccc; /* dark text for emphasis */
+}
+
+#heatmap .tick:nth-child(7) line {
+  stroke: #999; /* medium line for contrast */
+}/* Data column */
+
+.vcenter {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+
+.data.column {
+  width: 10%;
+}
+
+.data.column .dataset-list {
+  margin: 20px 0 10px;
+  overflow: hidden;
+}
+
+.data.column .dataset {
+  position: relative;
+  float: left;
+  width: 34px;
+  height: 34px;
+  margin: 0 14px 14px 0;
+}
+
+.data.column .dataset:nth-of-type(2n) {
+  margin-right: 0;
+}
+
+.data.column .data-thumbnail {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 3px;
+  background-color: #f9f9f9; /* light background for thumbnails */
+}
+
+.data.column .data-thumbnail:hover {
+  border: 2px solid #666; /* darker border for hover on light bg */
+}
+
+.data.column .data-thumbnail.selected {
+  border: 2px solid #ccc; /* dark border for selected */
+  opacity: 1;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  background-color: #fff;
+}
+
+.main-part .data.column .dataset .label {
+  position: absolute;
+  left: 48px;
+  top: calc(50% - 9px);
+  display: none;
+}
+
+.main-part .data.column p.slider {
+  margin: 0 -25px 20px;
+}
+
+/* Force slider labels to look like top dataset text */
+.ui-percTrainData label,
+.ui-noise label,
+.ui-batchSize label {
+    font-size: 13px;
+    color: #ccc;
+    font-weight: 300;
+    display: block;
+    margin-bottom: 6px; /* same spacing as dataset text */
+}
+
+.main-part .basic-button {
+  margin-top: 25px;
+  height: 34px;
+  margin-right: 0;
+  width: 100%;
+  display: block;
+  color: black; /* darker text for light theme */
+  border: none;
+  background: white; /* inverted background */
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 500;
+  outline: none;
+  transition: background 0.3s linear;
+  cursor: pointer;
+}
+
+.main-part .basic-button:hover {
+  background: rgba(158,158,158,.8);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.main-part .basic-button:focus {
+  background: rgba(158,158,158,.7);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.main-part .basic-button:active {
+  background: rgba(158,158,158,.6);
+  color: rgba(0, 0, 0, 1);
+}
+
+/* Features column */
+
+.features.column {
+  width: 10%;
+  position: relative;
+}
+
+.features.column .plus-minus-neurons {
+  position: absolute;
+  text-align: center;
+  line-height: 28px;
+  top: -58px;
+  width: 65px;
+  height: 44px;
+  font-size: 12px;
+  z-index: 100;
+}
+
+.plus-minus-neurons .mdl-button:first-of-type {
+  margin-right: 5px;
+  
+}
+
+.features.column .callout {
+  position: absolute;
+  width: 95px;
+  font-style: italic;
+}
+
+.features.column .callout svg {
+  position: absolute;
+  left: -15px;
+  width: 30px;
+  height: 30px;
+}
+
+.features.column .callout svg path {
+  fill: none;
+  stroke: #ccc; /* darker stroke for light theme */
+  stroke-opacity: 0.4;
+}
+
+.features.column .callout svg defs path {
+  fill: #ccc; /* dark fill for light theme */
+  stroke: none;
+  fill-opacity: 0.4;
+}
+
+.main-part .features.column .callout .label {
+  position: absolute;
+  top: 24px;
+  left: 3px;
+  font-size: 11px;
+  color: #ccc; /* dark text for labels */
+}
+
+/* Network (inside features column) */
+
+#network {
+  position: absolute;
+  top: 110px;
+  left: 0;
+  z-index: 100;
+}
+
+#network svg .main-label {
+  font-size: 13px;
+  fill: #ccc; /* darker for light theme */
+  font-weight: 300;
+}
+
+.axis line {
+  fill: none;
+  stroke: #aaa; /* lighter for light theme */
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #555; /* darker text for visibility */
+  font-size: 10px;
+}
+
+.axis path {
+  display: none;
+}
+
+#network svg .active .main-label {
+  fill: #ccc; /* dark active label */
+}
+
+#network svg #markerArrow {
+  fill: #ccc; /* dark arrow for light theme */
+  stroke: #ccc;
+  stroke-opacity: 0.2;
+}
+
+#network .node {
+  cursor: default;
+}
+
+#network .node rect {
+  fill: #f9f9f9; /* light background for nodes */
+  stroke-width: 0;
+}
+
+#network .node.inactive {
+  opacity: 0.5;
+}
+
+#network .node.hovered {
+  opacity: 1.0;
+}
+
+@-webkit-keyframes flowing {
+  from { stroke-dashoffset: 0; } to { stroke-dashoffset: -10; }
+}
+
+#network .core .link {
+  stroke-dasharray: 9 1;
+  stroke-dashoffset: 1;
+  /*-webkit-animation: 0.5s linear 0s infinite flowing;*/
+}
+
+/** Invisible thick links used for showing weight values on mouse hover. */
+#network .core .link-hover {
+  stroke-width: 8;
+  stroke: #ccc; /* darker stroke for light theme */
+  fill: none;
+  opacity: 0;
+}
+
+#network .canvas canvas {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  border: 2px solid #666; /* darker border */
+  border-radius: 3px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* softer shadow */
+}
+
+#network .canvas.inactive canvas {
+  box-shadow: inherit;
+  opacity: 0.4;
+  border: 0;
+  top: 0;
+  left: 0;
+}
+
+#network .canvas.hovered canvas {
+  opacity: 1.0;
+  border: 2px solid #ccc;
+  top: -2px;
+  left: -2px;
+}
+
+/* Hidden layers column */
+.hidden-layers.column {
+  width: 40%;
+}
+
+.main-part .hidden-layers h4 {
+  -webkit-justify-content: center;
+  justify-content: center;
+  margin-top: -5px;
+}
+
+.hidden-layers #layers-label {
+  width: 125px;
+  display: inline-block;
+}
+
+.hidden-layers #num-layers {
+  margin: 0 10px;
+  width: 10px;
+  display: inline-block;
+}
+
+.hidden-layers h4 .mdl-button {
+  margin-right: 5px;
+}
+
+.bracket {
+  margin-top: 5px;
+  border: solid 1px #aaa; /* lighter border for light theme */
+  border-bottom: 0;
+  height: 4px;
+}
+
+.bracket.reverse {
+  border-bottom: solid 1px #aaa;
+  border-top: 0;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+/* Output column */
+
+.output.column {
+  width: 275px;
+}
+
+.metrics {
+  position: relative;
+  font-weight: 300;
+  font-size: 13px;
+  height: 60px;
+}
+
+#linechart {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 55px;
+}
+
+.metrics .train {
+  color: #ccc; /* darker text for light theme */
+}
+
+#loss-test {
+  color: #ccc; /* dark for visibility */
+}
+
+.output .output-stats .value {
+  color: #ccc; /* darker value text */
+  /*font-size: 20px;*/
+  font-weight: 300;
+  display: inline;
+}
+
+g.train circle {
+  stroke: #ccc;
+  stroke-width: 1;
+  stroke-opacity: 0.8;
+  fill-opacity: 0.9;
+}
+
+g.test circle {
+  stroke-width: 1;
+  stroke: #666;
+  stroke-opacity: 0.6;
+  fill-opacity: 0.9;
+}
+
+.main-part .output .mdl-checkbox__label.label {
+  line-height: 1.7em;
+}
+
+/* Material Overrides */
+
+/* Buttons */
+
+.mdl-button--fab.mdl-button--colored,
+.mdl-button--fab.mdl-button--colored:hover,
+.mdl-button--fab.mdl-button--colored:active,
+.mdl-button--fab.mdl-button--colored:focus,
+.mdl-button--fab.mdl-button--colored:focus:not(:active) {
+    background: #D9EDF3; /* light background instead of dark */
+}
+
+/* Checkbox */
+
+.mdl-checkbox__box-outline {
+  border-color: rgba(0, 0, 0, 0.3); /* lighter border for light theme */
+}
+
+.mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
+  background-color: #ccc; /* keep tick dark for visibility */
+}
+
+.mdl-checkbox.is-checked .mdl-checkbox__box-outline {
+  border-color: #ccc; /* dark border to match tick */
+}
+
+.mdl-checkbox__ripple-container .mdl-ripple {
+  background-color: #ccc; /* ripple remains visible */
+}
+
+/* Slider */
+
+.main-part .mdl-slider.is-upgraded {
+  color: #ccc; /* dark slider for light theme */
+}
+
+.main-part .mdl-slider__background-lower {
+  background-color: #D9EDF3; /* light track */
+}
+
+.main-part .mdl-slider.is-upgraded::-webkit-slider-thumb {
+  background-color: white; /* dark thumb */
+}
+
+.main-part .mdl-slider.is-upgraded::-moz-range-thumb {
+  background-color: white;
+}
+
+.main-part .mdl-slider.is-upgraded::-ms-thumb {
+  background-color: white;
+}
+
+.main-part .mdl-slider.is-upgraded.is-lowest-value::-webkit-slider-thumb {
+  border-color: white;
+}
+
+.main-part .mdl-slider.is-upgraded.is-lowest-value::-moz-range-thumb {
+  border-color: white;
+}
+
+/* Keep grey focus circle for non-start values */
+.main-part .mdl-slider.is-upgraded:focus:not(:active)::-webkit-slider-thumb {
+  box-shadow: 0 0 0 10px rgba(0,0,0, 0.12);
+}
+
+
+/* ================================
+   MATERIAL BUTTONS (Play + Add)
+   ================================ */
+
+.mdl-button {
+  position: relative;
+  display: inline-block;
+  min-width: 64px;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 2px;
+  background: transparent;
+  color: rgba(0,0,0,.87);
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Icon button (ADD / REMOVE) */
+.mdl-button--icon {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.inline-details {
+    display: inline-block;
+}
+
+.mdl-button--icon i {
+  line-height: 32px;
+  font-size: 24px;
+  margin-top: -2px !important;
+  color: white !important;
+}
+
+/* Floating Action Button (PLAY) */
+.mdl-button--fab {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 24px;
+  background: white;
+  color: black;
+  box-shadow: 0 2px 5px rgba(0,0,0,.26);
+  padding-top: 22px;
+  padding-left: 28px;
+}
+
+.mdl-button--colored {
+  background: #ff00e6;
+  color: #fff;
+}
+
+/* ================================
+   MATERIAL SLIDER
+   ================================ */
+
+.mdl-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2px;
+  background: #bdbdbd;
+  outline: none;
+  margin: 16px 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* WebKit thumb */
+.mdl-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #3f51b5;
+  cursor: pointer;
+}
+
+/* Firefox thumb */
+.mdl-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #3f51b5;
+  cursor: pointer;
+}
+
+/* ================================
+   MATERIAL ICONS FIX
+   ================================ */
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+
+/* Dataset thumbnails slightly larger */
+.ui-dataset .data-thumbnail {
+    width: 72px;
+    height: 72px;
+    border-radius: 3px;
+    cursor: pointer;
+    opacity: 0.2;
+    position: relative;
+    display: block;
+}
+
+/* Classification datasets */
+.ui-dataset .data-thumbnail[data-dataset] {
+    background-color: #f9f9f9; /* light gray */
+    border: 2px solid rgba(0,0,0,0.1);
+}
+
+/* Regression datasets */
+.ui-dataset .data-thumbnail[data-regDataset] {
+    background-color: #e0f7fa; /* light blue */
+    border: 2px solid #00acc1;
+}
+
+/* Hover effects */
+.ui-dataset .data-thumbnail:hover {
+    border: 2px solid #666;
+    opacity: 0.8;
+}
+
+/* Selected state */
+.ui-dataset .data-thumbnail.selected[data-dataset] {
+    border: 2px solid #ccc;
+    background-color: #fff;
+    opacity: 1;
+}
+
+.ui-dataset .data-thumbnail.selected[data-regDataset] {
+    border: 2px solid #00acc1;
+    background-color: #b2ebf2;
+    opacity: 1;
+}
+
+/* Optional small labels inside thumbnails */
+.ui-dataset .data-thumbnail[data-dataset]::after,
+.ui-dataset .data-thumbnail[data-regDataset]::after {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    font-size: 9px;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.ui-dataset .data-thumbnail[data-dataset]::after {
+    content: "C";
+    color: #333;
+}
+
+.ui-dataset .data-thumbnail[data-regDataset]::after {
+    content: "R";
+    color: #007c91;
+}
+
+/* Add spacing inside top-controls */
+#top-controls {
+    padding: 24px 0 16px 0; /* top + bottom padding */
+    position: relative;
+}
+
+/* Divider line between top-row and bottom-row */
+#top-controls .top-bottom-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2); /* subtle light line */
+    margin: 16px 0; /* spacing above and below */
+}
+
+/* Add extra padding for bottom-row so sliders and dataset have breathing room */
+#top-controls .bottom-row {
+    padding: 12px 0px;
+    align-items: flex-start;
+}
+
+/* Divider line between top-row and bottom-row */
+#top-controls-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2); /* subtle light line */
+    margin: 16px 0; /* spacing above and below */
+}
+
+.hide-button {
+  cursor: pointer;
+  padding: 6px 4px 8px 4px;
+  border-left: 1px solid #d3d3d3; /* light border instead of dark */
+  border-bottom: 1px solid #d3d3d3;
+  position: fixed;
+  right: 0px;
+  background: #f5f5f5; /* light background instead of dark */
+  color: #111; /* dark text instead of light */
+  font: 11px 'Lucida Grande', sans-serif;
+  display: table;
+}
+
+/* Add this on mobile only */
+@media (max-width: 768px) {
+  /* Wrap the network columns in a horizontal scroll container */
+  .main-part {
+    display: block; /* stack everything for mobile */
+  }
+
+  #network-wrapper {
+    overflow-x: auto; /* horizontal scroll */
+    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+    width: 100%;
+    padding-bottom: 10px;
+  }
+
+  #network-wrapper .network-content {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  /* Keep each network column from shrinking */
+  #network-wrapper .features.column,
+  #network-wrapper .hidden-layers.column,
+  #network-wrapper .output.column {
+    flex: 0 0 auto;
+    min-width: 200px; /* adjust as needed */
+    margin-right: 12px;
+  }
+}
+
+.top-controls-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Shared row styling */
+.controls-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+/* Optional visual separation */
+.controls-row--data {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 12px;
+}
+
+
+/* Keep sliders compact */
+.controls-row--data .control {
+  min-width: 180px;
+}
+
+#top-controls .container {
+  flex-direction: column;
+  align-items: stretch;
+}
+#top-controls .timeline-controls {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  width: 120px;
+}
+
+/* Keep dataset selector horizontal in top controls */
+#top-controls .ui-dataset {
+  display: block; /* restore original behavior */
+}
+
+#top-controls .ui-dataset > p {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #ccc;
+  font-weight: 300;
+}
+
+/* Force thumbnails to be horizontal */
+#top-controls .ui-dataset .dataset-list {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+/* Ensure each dataset stays inline */
+#top-controls .ui-dataset .dataset {
+  display: inline-flex;
+}
+
+#top-controls .top-row,
+#top-controls .bottom-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#top-controls .bottom-row .control {
+  margin-left: 20px;
+}
+
+#top-controls .row-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 12px 0;
+}
+
+#play-pause-button .material-icons {
+  color: black; /* dark icon for light background */
+  font-size: 36px;
+  transform: translate(-18px,-12px);
+}
+
+#play-pause-button .material-icons:nth-of-type(2) {
+  display: none;
+}
+
+#play-pause-button.playing .material-icons:nth-of-type(1) {
+  display: none;
+}
+
+#play-pause-button.playing .material-icons:nth-of-type(2) {
+  display: inherit;
+}
+
+#top-controls .control {
+  flex-grow: 1;
+  max-width: 140px;
+  min-width: 140px;
+  margin-left: 40px;
+  margin-top: 6px;
+}
+
+#top-controls .control .label,
+#top-controls .control label {
+  color: #ccc; /* darker text for light background */
+  font-size: 13px;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 300;
+}
+
+#top-controls .control .value {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 300;
+  color: white; /* match icons/text */
+}
+
+#top-controls .control .select {
+  position: relative;
+}
+
+#top-controls .control select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: block;
+  border: none;
+  border-radius: 0;
+  padding: 6px 0;
+  width: 100%;
+  font-size: 14px;
+  border-bottom: solid 1px #888; /* darker border for contrast */
+  color: white; /* dark text */
+  outline: none;
+}
+
+#top-controls .control select:focus {
+  border-bottom-color: white;
+}
+
+#top-controls .control .select::after {
+  class: "material-icons";
+  content: "arrow_drop_down";
+  color: #666; /* slightly darker arrow for light background */
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  position: absolute;
+  right: 0;
+  top: 6px;
+  pointer-events: none;
+}
+
+#top-controls .top-row > .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* === FORCE DATA CONTROLS INTO ONE ROW === */
+#top-controls .bottom-row {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 28px; /* spacing between sliders */
+}
+
+/* Keep each data section compact */
+#top-controls .bottom-row > * {
+  flex: 0 0 auto;
+}
+
+/* Dataset block inline */
+#top-controls .ui-dataset.compact {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Keep Data title inline */
+#top-controls .ui-dataset.compact h4 {
+  margin: 0;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Stack text + thumbnails inside dataset selector */
+#top-controls .ui-dataset.compact .ui-dataset {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dataset thumbnails horizontal */
+#top-controls .ui-dataset .dataset-list {
+  display: flex;
+  gap: 8px;
+}
+
+/* Slider blocks spacing + alignment */
+#top-controls .ui-percTrainData,
+#top-controls .ui-noise,
+#top-controls .ui-batchSize {
+  width: 160px;
+  margin: 0px 15px;
+}
+
+/* Slider label spacing */
+#top-controls .bottom-row label {
+  margin-bottom: 4px;
+}
+
+/* Keep Regenerate aligned */
+#top-controls #data-regen-button {
+  margin-top: 18px;
+  white-space: nowrap;
+}
+
+/* Custom styling for the regenerate button */
+#top-controls .regenerate-button {
+  margin-top: 25px;
+  height: 34px;
+  margin-right: 0;
+  width: 100px;
+  display: block;
+  color: black; /* darker text for light theme */
+  border: none;
+  background: white; /* inverted background */
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 500;
+  outline: none;
+  transition: background 0.3s linear;
+  cursor: pointer;
+}
+
+#top-controls .regenerate-button:hover {
+  background: rgba(158,158,158,.8);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+#top-controls .regenerate-button:focus {
+  background: rgba(158,158,158,.7);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+#top-controls .regenerate-button:active {
+  background: rgba(158,158,158,.6);
+  color: rgba(0, 0, 0, 1);
+}
+
+/* Hover card */
+#hovercard {
+  display: none;
+  position: absolute;
+  padding: 5px;
+  border: 1px solid #666; /* darker border for contrast on light bg */
+  z-index: 1000;
+  cursor: default;
+  border-radius: 5px;
+  left: 240px;
+  width: 150px;
+  top: -20px;
+  background-color: #666;
+}
+
+#hovercard input {
+  width: 60px;
+}
+
+/* Main Part*/
+
+.main-part {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  padding-top: 2px;
+  position: relative;
+}
+
+@media (min-height: 700px) {
+  .main-part {
+    margin-top: 50px;
+  }
+}
+
+.main-part h4 {
+
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  font-size: 16px;
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: 8px;
+  margin: 0;
+  line-height: 1.4em;
+  color: white; /* dark text for light theme */
+}
+
+.main-part p,
+.main-part .column .label,
+.main-part .column label {
+  font-weight: 300;
+  line-height: 1.38em;
+  margin: 0;
+  color: #ccc; 
+  font-size: 13px;
+}
+
+.more {
+  position: absolute;
+  left: 50%;
+}
+
+.more button {
+  position: absolute;
+  left: -28px;
+  top: -28px;
+  background: #f9f9f9; /* light background */
+}
+
+.more button:hover,
+.more button:active,
+.more button:focus,
+.more button:focus:not(:active) {
+  background: #e6e6e6; /* slightly darker hover/active state */
+}
+
+svg text {
+  dominant-baseline: middle;
+  fill: #183D4E; /* dark text for svg labels */
+}
+
+canvas {
+  display: block;
+}
+
+.link {
+  fill: none;
+  stroke: #666; /* darker stroke for light theme */
+  stroke-width: 1;
+}
+
+g.column rect {
+  stroke: none;
+}
+
+#heatmap {
+  position: relative;
+  float: left;
+  margin-top: 10px;
+}
+
+#heatmap .tick line {
+  stroke: #ccc; /* lighter line for light background */
+}
+
+#heatmap .tick text {
+  fill: #777; /* darker text for readability */
+  dominant-baseline: auto;
+}
+
+#heatmap .tick:nth-child(7) text {
+  fill: #ccc; /* dark text for emphasis */
+}
+
+#heatmap .tick:nth-child(7) line {
+  stroke: #999; /* medium line for contrast */
+}/* Data column */
+
+.vcenter {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+
+.data.column {
+  width: 10%;
+}
+
+.data.column .dataset-list {
+  margin: 20px 0 10px;
+  overflow: hidden;
+}
+
+.data.column .dataset {
+  position: relative;
+  float: left;
+  width: 34px;
+  height: 34px;
+  margin: 0 14px 14px 0;
+}
+
+.data.column .dataset:nth-of-type(2n) {
+  margin-right: 0;
+}
+
+.data.column .data-thumbnail {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 3px;
+  background-color: #f9f9f9; /* light background for thumbnails */
+}
+
+.data.column .data-thumbnail:hover {
+  border: 2px solid #666; /* darker border for hover on light bg */
+}
+
+.data.column .data-thumbnail.selected {
+  border: 2px solid #ccc; /* dark border for selected */
+  opacity: 1;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  background-color: #fff;
+}
+
+.main-part .data.column .dataset .label {
+  position: absolute;
+  left: 48px;
+  top: calc(50% - 9px);
+  display: none;
+}
+
+.main-part .data.column p.slider {
+  margin: 0 -25px 20px;
+}
+
+/* Force slider labels to look like top dataset text */
+.ui-percTrainData label,
+.ui-noise label,
+.ui-batchSize label {
+    font-size: 13px;
+    color: #ccc;
+    font-weight: 300;
+    display: block;
+    margin-bottom: 6px; /* same spacing as dataset text */
+}
+
+.main-part .basic-button {
+  margin-top: 25px;
+  height: 34px;
+  margin-right: 0;
+  width: 100%;
+  display: block;
+  color: black; /* darker text for light theme */
+  border: none;
+  background: white; /* inverted background */
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 500;
+  outline: none;
+  transition: background 0.3s linear;
+  cursor: pointer;
+}
+
+.main-part .basic-button:hover {
+  background: rgba(158,158,158,.8);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.main-part .basic-button:focus {
+  background: rgba(158,158,158,.7);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.main-part .basic-button:active {
+  background: rgba(158,158,158,.6);
+  color: rgba(0, 0, 0, 1);
+}
+
+/* Features column */
+
+.features.column {
+  width: 10%;
+  position: relative;
+}
+
+.features.column .plus-minus-neurons {
+  position: absolute;
+  text-align: center;
+  line-height: 28px;
+  top: -58px;
+  width: 65px;
+  height: 44px;
+  font-size: 12px;
+  z-index: 100;
+}
+
+.plus-minus-neurons .mdl-button:first-of-type {
+  margin-right: 5px;
+  
+}
+
+.features.column .callout {
+  position: absolute;
+  width: 95px;
+  font-style: italic;
+}
+
+.features.column .callout svg {
+  position: absolute;
+  left: -15px;
+  width: 30px;
+  height: 30px;
+}
+
+.features.column .callout svg path {
+  fill: none;
+  stroke: #ccc; /* darker stroke for light theme */
+  stroke-opacity: 0.4;
+}
+
+.features.column .callout svg defs path {
+  fill: #ccc; /* dark fill for light theme */
+  stroke: none;
+  fill-opacity: 0.4;
+}
+
+.main-part .features.column .callout .label {
+  position: absolute;
+  top: 24px;
+  left: 3px;
+  font-size: 11px;
+  color: #ccc; /* dark text for labels */
+}
+
+/* Network (inside features column) */
+
+#network {
+  position: absolute;
+  top: 110px;
+  left: 0;
+  z-index: 100;
+}
+
+#network svg .main-label {
+  font-size: 13px;
+  fill: #ccc; /* darker for light theme */
+  font-weight: 300;
+}
+
+.axis line {
+  fill: none;
+  stroke: #aaa; /* lighter for light theme */
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #555; /* darker text for visibility */
+  font-size: 10px;
+}
+
+.axis path {
+  display: none;
+}
+
+#network svg .active .main-label {
+  fill: #ccc; /* dark active label */
+}
+
+#network svg #markerArrow {
+  fill: #ccc; /* dark arrow for light theme */
+  stroke: #ccc;
+  stroke-opacity: 0.2;
+}
+
+#network .node {
+  cursor: default;
+}
+
+#network .node rect {
+  fill: #f9f9f9; /* light background for nodes */
+  stroke-width: 0;
+}
+
+#network .node.inactive {
+  opacity: 0.5;
+}
+
+#network .node.hovered {
+  opacity: 1.0;
+}
+
+@-webkit-keyframes flowing {
+  from { stroke-dashoffset: 0; } to { stroke-dashoffset: -10; }
+}
+
+#network .core .link {
+  stroke-dasharray: 9 1;
+  stroke-dashoffset: 1;
+  /*-webkit-animation: 0.5s linear 0s infinite flowing;*/
+}
+
+/** Invisible thick links used for showing weight values on mouse hover. */
+#network .core .link-hover {
+  stroke-width: 8;
+  stroke: #ccc; /* darker stroke for light theme */
+  fill: none;
+  opacity: 0;
+}
+
+#network .canvas canvas {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  border: 2px solid #666; /* darker border */
+  border-radius: 3px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* softer shadow */
+}
+
+#network .canvas.inactive canvas {
+  box-shadow: inherit;
+  opacity: 0.4;
+  border: 0;
+  top: 0;
+  left: 0;
+}
+
+#network .canvas.hovered canvas {
+  opacity: 1.0;
+  border: 2px solid #ccc;
+  top: -2px;
+  left: -2px;
+}
+
+/* Hidden layers column */
+.hidden-layers.column {
+  width: 40%;
+}
+
+.main-part .hidden-layers h4 {
+  -webkit-justify-content: center;
+  justify-content: center;
+  margin-top: -5px;
+}
+
+.hidden-layers #layers-label {
+  width: 125px;
+  display: inline-block;
+}
+
+.hidden-layers #num-layers {
+  margin: 0 10px;
+  width: 10px;
+  display: inline-block;
+}
+
+.hidden-layers h4 .mdl-button {
+  margin-right: 5px;
+}
+
+.bracket {
+  margin-top: 5px;
+  border: solid 1px #aaa; /* lighter border for light theme */
+  border-bottom: 0;
+  height: 4px;
+}
+
+.bracket.reverse {
+  border-bottom: solid 1px #aaa;
+  border-top: 0;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+/* Output column */
+
+.output.column {
+  width: 275px;
+}
+
+.metrics {
+  position: relative;
+  font-weight: 300;
+  font-size: 13px;
+  height: 60px;
+}
+
+#linechart {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 55px;
+}
+
+.metrics .train {
+  color: #ccc; /* darker text for light theme */
+}
+
+#loss-test {
+  color: #ccc; /* dark for visibility */
+}
+
+.output .output-stats .value {
+  color: #ccc; /* darker value text */
+  /*font-size: 20px;*/
+  font-weight: 300;
+  display: inline;
+}
+
+g.train circle {
+  stroke: #ccc;
+  stroke-width: 1;
+  stroke-opacity: 0.8;
+  fill-opacity: 0.9;
+}
+
+g.test circle {
+  stroke-width: 1;
+  stroke: #666;
+  stroke-opacity: 0.6;
+  fill-opacity: 0.9;
+}
+
+.main-part .output .mdl-checkbox__label.label {
+  line-height: 1.7em;
+}
+
+/* Material Overrides */
+
+/* Buttons */
+
+.mdl-button--fab.mdl-button--colored,
+.mdl-button--fab.mdl-button--colored:hover,
+.mdl-button--fab.mdl-button--colored:active,
+.mdl-button--fab.mdl-button--colored:focus,
+.mdl-button--fab.mdl-button--colored:focus:not(:active) {
+    background: #D9EDF3; /* light background instead of dark */
+}
+
+/* Checkbox */
+
+.mdl-checkbox__box-outline {
+  border-color: rgba(0, 0, 0, 0.3); /* lighter border for light theme */
+}
+
+.mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
+  background-color: #ccc; /* keep tick dark for visibility */
+}
+
+.mdl-checkbox.is-checked .mdl-checkbox__box-outline {
+  border-color: #ccc; /* dark border to match tick */
+}
+
+.mdl-checkbox__ripple-container .mdl-ripple {
+  background-color: #ccc; /* ripple remains visible */
+}
+
+/* Slider */
+
+.main-part .mdl-slider.is-upgraded {
+  color: #ccc; /* dark slider for light theme */
+}
+
+.main-part .mdl-slider__background-lower {
+  background-color: #D9EDF3; /* light track */
+}
+
+.main-part .mdl-slider.is-upgraded::-webkit-slider-thumb {
+  background-color: white; /* dark thumb */
+}
+
+.main-part .mdl-slider.is-upgraded::-moz-range-thumb {
+  background-color: white;
+}
+
+.main-part .mdl-slider.is-upgraded::-ms-thumb {
+  background-color: white;
+}
+
+.main-part .mdl-slider.is-upgraded.is-lowest-value::-webkit-slider-thumb {
+  border-color: white;
+}
+
+.main-part .mdl-slider.is-upgraded.is-lowest-value::-moz-range-thumb {
+  border-color: white;
+}
+
+/* Keep grey focus circle for non-start values */
+.main-part .mdl-slider.is-upgraded:focus:not(:active)::-webkit-slider-thumb {
+  box-shadow: 0 0 0 10px rgba(0,0,0, 0.12);
+}
+
+
+/* ================================
+   MATERIAL BUTTONS (Play + Add)
+   ================================ */
+
+.mdl-button {
+  position: relative;
+  display: inline-block;
+  min-width: 64px;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 2px;
+  background: transparent;
+  color: rgba(0,0,0,.87);
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Icon button (ADD / REMOVE) */
+.mdl-button--icon {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.inline-details {
+    display: inline-block;
+}
+
+.mdl-button--icon i {
+  line-height: 32px;
+  font-size: 24px;
+  margin-top: -2px !important;
+  color: white !important;
+}
+
+/* Floating Action Button (PLAY) */
+.mdl-button--fab {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 24px;
+  background: white;
+  color: black;
+  box-shadow: 0 2px 5px rgba(0,0,0,.26);
+  padding-top: 22px;
+  padding-left: 28px;
+}
+
+.mdl-button--colored {
+  background: #ff00e6;
+  color: #fff;
+}
+
+/* ================================
+   MATERIAL SLIDER
+   ================================ */
+
+.mdl-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2px;
+  background: #bdbdbd;
+  outline: none;
+  margin: 16px 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* WebKit thumb */
+.mdl-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #3f51b5;
+  cursor: pointer;
+}
+
+/* Firefox thumb */
+.mdl-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #3f51b5;
+  cursor: pointer;
+}
+
+/* ================================
+   MATERIAL ICONS FIX
+   ================================ */
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+
+/* Dataset thumbnails slightly larger */
+.ui-dataset .data-thumbnail {
+    width: 72px;
+    height: 72px;
+    border-radius: 3px;
+    cursor: pointer;
+    opacity: 0.2;
+    position: relative;
+    display: block;
+}
+
+/* Classification datasets */
+.ui-dataset .data-thumbnail[data-dataset] {
+    background-color: #f9f9f9; /* light gray */
+    border: 2px solid rgba(0,0,0,0.1);
+}
+
+/* Regression datasets */
+.ui-dataset .data-thumbnail[data-regDataset] {
+    background-color: #e0f7fa; /* light blue */
+    border: 2px solid #00acc1;
+}
+
+/* Hover effects */
+.ui-dataset .data-thumbnail:hover {
+    border: 2px solid #666;
+    opacity: 0.8;
+}
+
+/* Selected state */
+.ui-dataset .data-thumbnail.selected[data-dataset] {
+    border: 2px solid #ccc;
+    background-color: #fff;
+    opacity: 1;
+}
+
+.ui-dataset .data-thumbnail.selected[data-regDataset] {
+    border: 2px solid #00acc1;
+    background-color: #b2ebf2;
+    opacity: 1;
+}
+
+/* Optional small labels inside thumbnails */
+.ui-dataset .data-thumbnail[data-dataset]::after,
+.ui-dataset .data-thumbnail[data-regDataset]::after {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    font-size: 9px;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.ui-dataset .data-thumbnail[data-dataset]::after {
+    content: "C";
+    color: #333;
+}
+
+.ui-dataset .data-thumbnail[data-regDataset]::after {
+    content: "R";
+    color: #007c91;
+}
+
+/* Add spacing inside top-controls */
+#top-controls {
+    padding: 24px 0 16px 0; /* top + bottom padding */
+    position: relative;
+}
+
+/* Divider line between top-row and bottom-row */
+#top-controls .top-bottom-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2); /* subtle light line */
+    margin: 16px 0; /* spacing above and below */
+}
+
+/* Add extra padding for bottom-row so sliders and dataset have breathing room */
+#top-controls .bottom-row {
+    padding: 12px 0px;
+    align-items: flex-start;
+}
+
+/* Divider line between top-row and bottom-row */
+#top-controls-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2); /* subtle light line */
+    margin: 16px 0; /* spacing above and below */
+}
+
+
+
+/* Scrollable wrapper */
+.scroll-wrapper {
+  width: 100%;            /* fill parent */
+  overflow-x: auto;       /* allow horizontal scroll */
+  -webkit-overflow-scrolling: touch; /* smooth on iOS */
+}
+
+/* Main part stays horizontal */
+.scroll-wrapper .main-part {
+  display: flex;
+  flex-wrap: nowrap;      /* prevent wrapping */
+  min-width: 1150px;      /* adjust for total content width */
+}
+
+/* Each column should not shrink */
+.scroll-wrapper .main-part > .column {
+  flex: 0 0 auto;         /* do not shrink or grow */
+  min-width: 200px;       /* adjust width as needed */
+  margin-right: 12px;     /* spacing between columns */
+}
