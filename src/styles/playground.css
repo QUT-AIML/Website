@@ -37,6 +37,12 @@ h4 span {
 
 /* Buttons */
 
+#main-part {
+  max-width: 1100px;   /* adjust this value as needed */
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #main-part .mdl-button {
   background-color: rgba(158,158,158,.9); /* light instead of dark */
   width: 28px;
@@ -87,16 +93,37 @@ h4 span {
   }
 }
 
-#top-controls .container {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
+.top-controls-grid {
   display: flex;
-  -webkit-justify-content: space-betweenspace-between;
-  justify-content: flex-start;
+  flex-direction: column;
+  gap: 12px;
 }
 
+/* Shared row styling */
+.controls-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+/* Optional visual separation */
+.controls-row--data {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 12px;
+}
+
+
+/* Keep sliders compact */
+.controls-row--data .control {
+  min-width: 180px;
+}
+
+#top-controls .container {
+  flex-direction: column;
+  align-items: stretch;
+}
 #top-controls .timeline-controls {
   display: -webkit-box;
   display: -moz-box;
@@ -105,6 +132,47 @@ h4 span {
   display: flex;
   align-items: center;
   width: 120px;
+}
+
+/* Keep dataset selector horizontal in top controls */
+#top-controls .ui-dataset {
+  display: block; /* restore original behavior */
+}
+
+#top-controls .ui-dataset > p {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #ccc;
+  font-weight: 300;
+}
+
+/* Force thumbnails to be horizontal */
+#top-controls .ui-dataset .dataset-list {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+/* Ensure each dataset stays inline */
+#top-controls .ui-dataset .dataset {
+  display: inline-flex;
+}
+
+#top-controls .top-row,
+#top-controls .bottom-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#top-controls .bottom-row .control {
+  margin-left: 20px;
+}
+
+#top-controls .row-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 12px 0;
 }
 
 #play-pause-button .material-icons {
@@ -127,8 +195,8 @@ h4 span {
 
 #top-controls .control {
   flex-grow: 1;
-  max-width: 120px;
-  min-width: 70px;
+  max-width: 140px;
+  min-width: 140px;
   margin-left: 40px;
   margin-top: 6px;
 }
@@ -191,6 +259,106 @@ h4 span {
   right: 0;
   top: 6px;
   pointer-events: none;
+}
+
+#top-controls .top-row > .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* === FORCE DATA CONTROLS INTO ONE ROW === */
+#top-controls .bottom-row {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 28px; /* spacing between sliders */
+}
+
+/* Keep each data section compact */
+#top-controls .bottom-row > * {
+  flex: 0 0 auto;
+}
+
+/* Dataset block inline */
+#top-controls .ui-dataset.compact {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Keep Data title inline */
+#top-controls .ui-dataset.compact h4 {
+  margin: 0;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Stack text + thumbnails inside dataset selector */
+#top-controls .ui-dataset.compact .ui-dataset {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dataset thumbnails horizontal */
+#top-controls .ui-dataset .dataset-list {
+  display: flex;
+  gap: 8px;
+}
+
+/* Slider blocks spacing + alignment */
+#top-controls .ui-percTrainData,
+#top-controls .ui-noise,
+#top-controls .ui-batchSize {
+  width: 160px;
+  margin: 0px 15px;
+}
+
+/* Slider label spacing */
+#top-controls .bottom-row label {
+  margin-bottom: 4px;
+}
+
+/* Keep Regenerate aligned */
+#top-controls #data-regen-button {
+  margin-top: 18px;
+  white-space: nowrap;
+}
+
+/* Custom styling for the regenerate button */
+#top-controls .regenerate-button {
+  margin-top: 25px;
+  height: 34px;
+  margin-right: 0;
+  width: 100px;
+  display: block;
+  color: black; /* darker text for light theme */
+  border: none;
+  background: white; /* inverted background */
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 500;
+  outline: none;
+  transition: background 0.3s linear;
+  cursor: pointer;
+}
+
+#top-controls .regenerate-button:hover {
+  background: rgba(158,158,158,.8);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+#top-controls .regenerate-button:focus {
+  background: rgba(158,158,158,.7);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+#top-controls .regenerate-button:active {
+  background: rgba(158,158,158,.6);
+  color: rgba(0, 0, 0, 1);
 }
 
 /* Hover card */
@@ -379,6 +547,17 @@ g.column rect {
 
 #main-part .data.column p.slider {
   margin: 0 -25px 20px;
+}
+
+/* Force slider labels to look like top dataset text */
+.ui-percTrainData label,
+.ui-noise label,
+.ui-batchSize label {
+    font-size: 13px;
+    color: #ccc;
+    font-weight: 300;
+    display: block;
+    margin-bottom: 6px; /* same spacing as dataset text */
 }
 
 #main-part .basic-button {
@@ -842,4 +1021,97 @@ g.test circle {
   letter-spacing: normal;
   white-space: nowrap;
   direction: ltr;
+}
+
+
+/* Dataset thumbnails slightly larger */
+.ui-dataset .data-thumbnail {
+    width: 72px;
+    height: 72px;
+    border-radius: 3px;
+    cursor: pointer;
+    opacity: 0.2;
+    position: relative;
+    display: block;
+}
+
+/* Classification datasets */
+.ui-dataset .data-thumbnail[data-dataset] {
+    background-color: #f9f9f9; /* light gray */
+    border: 2px solid rgba(0,0,0,0.1);
+}
+
+/* Regression datasets */
+.ui-dataset .data-thumbnail[data-regDataset] {
+    background-color: #e0f7fa; /* light blue */
+    border: 2px solid #00acc1;
+}
+
+/* Hover effects */
+.ui-dataset .data-thumbnail:hover {
+    border: 2px solid #666;
+    opacity: 0.8;
+}
+
+/* Selected state */
+.ui-dataset .data-thumbnail.selected[data-dataset] {
+    border: 2px solid #ccc;
+    background-color: #fff;
+    opacity: 1;
+}
+
+.ui-dataset .data-thumbnail.selected[data-regDataset] {
+    border: 2px solid #00acc1;
+    background-color: #b2ebf2;
+    opacity: 1;
+}
+
+/* Optional small labels inside thumbnails */
+.ui-dataset .data-thumbnail[data-dataset]::after,
+.ui-dataset .data-thumbnail[data-regDataset]::after {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    font-size: 9px;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.ui-dataset .data-thumbnail[data-dataset]::after {
+    content: "C";
+    color: #333;
+}
+
+.ui-dataset .data-thumbnail[data-regDataset]::after {
+    content: "R";
+    color: #007c91;
+}
+
+/* Add spacing inside top-controls */
+#top-controls {
+    padding: 24px 0 16px 0; /* top + bottom padding */
+    border-bottom: 1px solid #aaa; /* keep subtle bottom line */
+    position: relative;
+}
+
+/* Divider line between top-row and bottom-row */
+#top-controls .top-bottom-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2); /* subtle light line */
+    margin: 16px 0; /* spacing above and below */
+}
+
+/* Add extra padding for bottom-row so sliders and dataset have breathing room */
+#top-controls .bottom-row {
+    padding: 12px 0px;
+    align-items: flex-start;
+}
+
+/* Divider line between top-row and bottom-row */
+#top-controls-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2); /* subtle light line */
+    margin: 16px 0; /* spacing above and below */
 }

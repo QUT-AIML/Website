@@ -39,42 +39,61 @@ import Footer from '@/components/Footer.astro';
       <!-- WHO WE ARE panel -->
       <section class="info-panel">
           <!-- Top Controls -->
+    
           <div id="top-controls">
-            <div class="container l--page">
-              <div class="timeline-controls">
-                <button class="mdl-button mdl-js-button mdl-button--icon ui-resetButton" id="reset-button" title="Reset the network">
-                  <i class="material-icons">replay</i>
-                </button>
-                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored ui-playButton" id="play-pause-button" title="Run/Pause">
-                  <i class="material-icons">play_arrow</i>
-                  <i class="material-icons">pause</i>
-                </button>
-                <button class="mdl-button mdl-js-button mdl-button--icon ui-stepButton" id="next-step-button" title="Step">
-                  <i class="material-icons">skip_next</i>
-                </button>
-              </div>
-              <div class="control">
-                <span class="label">Epoch</span>
-                <span class="value" id="iter-number"></span>
-              </div>
-              <div class="control ui-learningRate">
-                <label for="learningRate">Learning rate</label>
-                <div class="select">
-                  <select id="learningRate">
-                    <option value="0.00001">0.00001</option>
-                    <option value="0.0001">0.0001</option>
-                    <option value="0.001">0.001</option>
-                    <option value="0.003">0.003</option>
-                    <option value="0.01">0.01</option>
-                    <option value="0.03">0.03</option>
-                    <option value="0.1">0.1</option>
-                    <option value="0.3">0.3</option>
-                    <option value="1">1</option>
-                    <option value="3">3</option>
-                    <option value="10">10</option>
-                  </select>
+
+      <!-- ===================== -->
+      <!-- ROW 1: MODEL SETTINGS -->
+      <!-- ===================== -->
+
+      <div class="top-row">
+        <div class="container l--page">
+                <div class="timeline-controls">
+                  <button class="mdl-button mdl-js-button mdl-button--icon ui-resetButton" id="reset-button" title="Reset the network">
+                    <i class="material-icons">replay</i>
+                  </button>
+                  <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored ui-playButton" id="play-pause-button" title="Run/Pause">
+                    <i class="material-icons">play_arrow</i>
+                    <i class="material-icons">pause</i>
+                  </button>
+                  <button class="mdl-button mdl-js-button mdl-button--icon ui-stepButton" id="next-step-button" title="Step">
+                    <i class="material-icons">skip_next</i>
+                  </button>
                 </div>
+                <div class="control">
+                  <span class="label">Epoch</span>
+                  <span class="value" id="iter-number"></span>
+                </div>
+
+              <div class="control ui-problem">
+                <label for="problem">Problem type</label>
+                  <div class="select">
+                    <select id="problem">
+                      <option value="classification">Classification</option>
+                      <option value="regression">Regression</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control ui-learningRate">
+                  <label for="learningRate">Learning rate</label>
+                  <div class="select">
+                    <select id="learningRate">
+                      <option value="0.00001">0.00001</option>
+                      <option value="0.0001">0.0001</option>
+                      <option value="0.001">0.001</option>
+                      <option value="0.003">0.003</option>
+                      <option value="0.01">0.01</option>
+                      <option value="0.03">0.03</option>
+                      <option value="0.1">0.1</option>
+                      <option value="0.3">0.3</option>
+                      <option value="1">1</option>
+                      <option value="3">3</option>
+                      <option value="10">10</option>
+                    </select>
+                  </div>
               </div>
+
               <div class="control ui-activation">
                 <label for="activations">Activation</label>
                 <div class="select">
@@ -85,8 +104,9 @@ import Footer from '@/components/Footer.astro';
                     <option value="linear">Linear</option>
                   </select>
                 </div>
-              </div>
-              <div class="control ui-regularization">
+            </div>
+
+             <div class="control ui-regularization">
                 <label for="regularizations">Regularization</label>
                 <div class="select">
                   <select id="regularizations">
@@ -96,44 +116,23 @@ import Footer from '@/components/Footer.astro';
                   </select>
                 </div>
               </div>
-              <div class="control ui-regularizationRate">
-                <label for="regularRate">Regularization rate</label>
-                <div class="select">
-                  <select id="regularRate">
-                    <option value="0">0</option>
-                    <option value="0.001">0.001</option>
-                    <option value="0.003">0.003</option>
-                    <option value="0.01">0.01</option>
-                    <option value="0.03">0.03</option>
-                    <option value="0.1">0.1</option>
-                    <option value="0.3">0.3</option>
-                    <option value="1">1</option>
-                    <option value="3">3</option>
-                    <option value="10">10</option>
-                  </select>
-                </div>
-              </div>
-              <div class="control ui-problem">
-                <label for="problem">Problem type</label>
-                <div class="select">
-                  <select id="problem">
-                    <option value="classification">Classification</option>
-                    <option value="regression">Regression</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
+    </div>
+    </div>
 
+    <!-- ================= -->
+    <!-- ROW DIVIDER LINE -->
+    <!-- ================= -->
 
-        <!-- Main Part -->
-        <div id="main-part" class="l--page">
+    <div class="top-bottom-divider"></div>
 
-          <!--  Data Column-->
-          <div class="column data">
-            <h4>
-              <span>Data</span>
-            </h4>
+    <!-- ================= -->
+    <!-- ROW 2: DATA SETUP -->
+    <!-- ================= -->
+
+    <div class="bottom-row">
+
+      <!-- Dataset selector (MOVED from Data column) -->
+      <div class="ui-dataset compact">
             <div class="ui-dataset">
               <p>Which dataset do you want to use?</p>
               <div class="dataset-list">
@@ -157,30 +156,36 @@ import Footer from '@/components/Footer.astro';
                 </div>
               </div>
             </div>
-            <div>
+
               <div class="ui-percTrainData">
-                <label for="percTrainData">Ratio of training to test data:&nbsp;&nbsp;<span class="value">XX</span>%</label>
+                <label for="percTrainData">Train/Test Ratio:&nbsp;&nbsp;<span class="value">XX</span>%</label>
                 <p class="slider">
-                  <input class="mdl-slider mdl-js-slider" type="range" id="percTrainData" min="10" max="90" step="10">
+                  <input class="mdl-slider mdl-js-slider" type="range" id="percTrainData" min="10" max="90" step="15">
                 </p>
               </div>
               <div class="ui-noise">
                 <label for="noise">Noise:&nbsp;&nbsp;<span class="value">XX</span></label>
                 <p class="slider">
-                  <input class="mdl-slider mdl-js-slider" type="range" id="noise" min="0" max="50" step="5">
+                  <input class="mdl-slider mdl-js-slider" type="range" id="noise" min="0" max="50" step="10">
                 </p>
               </div>
               <div class="ui-batchSize">
                 <label for="batchSize">Batch size:&nbsp;&nbsp;<span class="value">XX</span></label>
                 <p class="slider">
-                  <input class="mdl-slider mdl-js-slider" type="range" id="batchSize" min="1" max="30" step="1">
+                  <input class="mdl-slider mdl-js-slider" type="range" id="batchSize" min="1" max="30" step="4">
                 </p>
               </div>
-                <button class="basic-button" id="data-regen-button" title="Regenerate data">
-                  Regenerate
-                </button>
-            </div>
-          </div>
+              <button class="basic-button regenerate-button" id="data-regen-button" title="Regenerate data">
+                Regenerate
+              </button>
+        </div>
+    </div>
+
+  </div>
+
+
+        <!-- Main Part -->
+        <div id="main-part" class="l--page">
 
           <!-- Features Column -->
           <div class="column features">
