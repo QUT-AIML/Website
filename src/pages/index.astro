@@ -1,32 +1,38 @@
 ---
-import "@/styles/global.css"
-import KeyLogo from "@/logos/Logo-Full.svg"
-import Navigation from "@/components/Navigation.astro"
+import "@/styles/global.css";
+import "@/styles/home.css";
+import KeyLogo from "@/logos/Logo-Full.svg";
+import Navigation from "@/components/Navigation.astro";
 import Footer from '../components/Footer.astro';
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="description" content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning through events, workshops, and collaboration." />
-		<title>QUT AIML</title>
-	</head>
-	<body class="background">
-		<Navigation />
-		<main class="min-h-screen items-center p-12">
-			<div class="logo-section">
-				<KeyLogo class="md:w-1/2" />
-				<h1 class="text-2xl text-center md:text-4xl font-heading white-heading">
-					Empowering the Future through AI & Machine Learning
-				</h1>
-				<div class="button-group">
-					<a href="https://campus.hellorubric.com/?s=11397" class="button-outline-pink">Join Us</a>
-					<a href="/about/aims" class="button-outline-pink">About Us</a>
-				</div>
-			</div>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning through events, workshops, and collaboration." />
+    <title>QUT AIML</title>
+  </head>
+  <body class="background-gradient">
+    <Navigation />
+
+    <main class="main-container">
+      <div>
+        <KeyLogo class="site-logo" />
+
+		<div class="pink-divider"></div>
+
+		<div class="content-wrapper centered-box">
+			<section class="minimal-padding-panel">
+			<p class="section-content">
+				Empowering the Future through AI & Machine Learning
+			</p>
+			</section>
+		</div>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
 </html>

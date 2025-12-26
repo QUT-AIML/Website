@@ -14,9 +14,46 @@
     background: radial-gradient(125% 125% at 50% 5%, #090909 20%, #090909 55%, #FF00E6 75%);
 }
 
+.background-gradient {
+  /* Top layer: semi-transparent radial gradient */
+  background-image: 
+    radial-gradient(125% 125% at 50% 5%, rgba(9, 9, 9, 0.8) 20%, rgba(9, 9, 9, 0.8) 55%, rgba(255, 0, 230, 0.6) 75%),
+    /* Bottom layer: subtle dark grey dots */
+    radial-gradient(circle, #989898 1px, transparent 1px);
+  
+  background-size: 
+    auto,         /* gradient scales normally */
+    30px 30px;    /* dots spacing */
+  
+  background-repeat: 
+    no-repeat, 
+    repeat;       /* dots repeat */
+  
+  background-position: 
+    center top, 
+    0 0;          /* gradient at top center, dots start at top-left */
+  
+  background-color: #000; /* fallback black base */
+}
+
+.background-dots {
+  background-color: #000; /* black base */
+  
+  /* repeating dot pattern */
+  background-image: 
+    radial-gradient(circle, #222 1px, transparent 1px); /* dark grey dot */
+  
+  background-size: 25px 25px; /* spacing of the dots in a grid */
+}
+
+
 * {
   font-family: var(--font-heading);
   color: var(--color-primary);
+}
+
+body {
+  display: block; /* or flex with justify-start */
 }
 
 .background-network {
@@ -128,6 +165,14 @@ h2 {
   box-shadow: 8px 8px 0 #1B1B1B;
   color: white;
   width: 100%;
+}
+
+.minimal-padding-panel {
+  background-color: #272727;
+  border-radius: 10px;
+  padding: 15px 40px;
+  box-shadow: 8px 8px 0 #1B1B1B;
+  color: white;
 }
 
 .section-title {

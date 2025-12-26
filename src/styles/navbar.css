@@ -58,12 +58,12 @@
 
 .main-links a { 
   transition: color 0.3s ease, border-bottom 0.3s ease;
-  padding: 0px 10px;
+  padding: 0px 12px;
 }
 
 /* Single source of truth for top-level nav spacing */
 .main-links > li > a {
-  padding: 0.3rem 10px;   /* ↑ vertical padding restored */
+  padding: 0.3rem 12px;   /* ↑ vertical padding restored */
   display: inline-flex;
   align-items: center;
 }
