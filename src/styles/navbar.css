@@ -18,7 +18,7 @@
   padding: 0.8rem 4rem;
 
   /* Frosted glass effect */
-  background: rgba(20, 20, 20, 0.8);
+  background: rgba(10, 10, 10, 0.8);
   backdrop-filter: blur(12px) saturate(120%);
   -webkit-backdrop-filter: blur(12px) saturate(120%);
 
@@ -39,19 +39,6 @@
 .brand {
   font-size:1.5rem; 
   margin-left: 2rem;
-}
-
-.secondary-links a.contact::after {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--color-primary);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.3s ease;
 }
 
 /* Centered main links */
@@ -82,20 +69,6 @@
 }
 
 .main-links a:hover { 
-  color:var(--color-secondary); 
-}
-
-.contact-link {
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  list-style:none;
-  margin:0;
-  padding: 0;
-  position: relative;
-}
-
-.contact-link:hover { 
   color:var(--color-secondary); 
 }
 
@@ -332,6 +305,12 @@ body.no-scroll {
 
 
 
+
+
+
+
+
+
 @media (max-width:1220px) {
 
   .navbar {
@@ -370,16 +349,15 @@ body.no-scroll {
     font-size: 1.1rem;
   }
 
-  .mobile-only .contact-button a {
+  .mobile-only a {
     font-size: 1.1rem;
   }
 
-
-
+  
   .nav-links .dropdown > .dropbtn {
     position: relative;
     display: inline-block;
-    padding: 0 2rem 0 .75rem;   
+    padding-right: 1.8rem;   
   }
 
   .nav-links .dropbtn .arrow {
@@ -412,15 +390,6 @@ body.no-scroll {
 
   .dropbtn.open .arrow {
     transform: translateY(-50%) rotate(180deg) !important;
-  }
-
-  .background{
-      background: linear-gradient(
-          to bottom,
-          #090909 0%,
-          #090909 65%,
-          var(--color-primary) 78%
-      );
   }
 
   .brand {
@@ -495,6 +464,7 @@ body.no-scroll {
     transform: translateY(-100%);
     transition: transform 0.4s ease;
     z-index: 100;
+    gap: 0.4rem !important; /* <-- Equal vertical spacing between links */
   }
 
   .main-links .dropdown {
@@ -564,7 +534,6 @@ body.no-scroll {
 
   .dropdown-content.show {
     margin: 10px 30px 0 15px;
-    padding: 0.5rem 0;
     background: #262626;
     max-height: 500px;  
     opacity: 1;
@@ -584,11 +553,6 @@ body.no-scroll {
     text-align: center;
   }
 
-  .contact-button {
-    padding-bottom: 1.5rem;
-    text-align: center;
-  }
-
   .secondary-links {
     display: none;
   }
@@ -605,6 +569,12 @@ body.no-scroll {
         var(--color-primary) 97%
     );
   }
+
+      /* Ensure ALL nav items (main + dropdown) have equal spacing */
+    .main-links > li,
+    .main-links .dropdown-content li {
+      margin: 0.2rem 0;   /* adjust spacing as needed */
+    }
 
 }
 
