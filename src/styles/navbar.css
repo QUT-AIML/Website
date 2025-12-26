@@ -15,8 +15,15 @@
   display: flex;
   align-items: center;
 
-  padding: 0.8rem 2rem;
-  background-color: rgba(0, 0, 0, 0.8);
+  padding: 0.8rem 4rem;
+
+  /* Frosted glass effect */
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
   color: #fff;
   font-family: 'Rajdhani', sans-serif;
   font-size: 1rem;
@@ -55,10 +62,6 @@
   display: flex;
   align-items: center;
   list-style: none;
-  gap: 1.2rem;
-
-  margin: 0;
-  padding: 0;
   position: relative;
 }
 
@@ -68,9 +71,15 @@
 
 .main-links a { 
   transition: color 0.3s ease, border-bottom 0.3s ease;
-  padding: 0px 17px;
+  padding: 0px 10px;
 }
 
+/* Single source of truth for top-level nav spacing */
+.main-links > li > a {
+  padding: 0.3rem 10px;   /* ↑ vertical padding restored */
+  display: inline-flex;
+  align-items: center;
+}
 
 .main-links a:hover { 
   color:var(--color-secondary); 
@@ -88,11 +97,6 @@
 
 .contact-link:hover { 
   color:var(--color-secondary); 
-}
-
-/* Style for the secondary Contact Us link when active */
-.secondary-links a.active {
-  color: var(--color-secondary);          
 }
 
 .main-links a.active { 
@@ -130,14 +134,6 @@
   border-radius: 10px;
 }
 
-.nav-links .dropdown > .dropbtn {
-  display: inline-block;      
-  width: auto;                
-  padding: 0.4rem 1.0625rem;       
-  position: relative;        
-  box-sizing: content-box;    
-}
-
 .nav-links .dropbtn .arrow {
   display: none;
 }
@@ -156,33 +152,78 @@ body.no-scroll {
 }
 
 .btn {
-  padding: 0.4rem 1em; 
-  background:var(--color-primary); 
-  color:#fff;
-  border: 1px solid var(--color-primary);
-  border-radius: 1rem; 
-  font-size: 1rem;
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
+    border: 1px solid var(--color-primary);
 }
 
 .btn:hover{
   background:transparent; 
+  border: none;
+}
+
+.btn-outline {
+  position: relative;
+  padding: 0.45rem 1.4rem;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: 1.2rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.btn-border {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.btn-border rect {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  transition: stroke-dashoffset 1.8s ease;
+}
+
+.btn-outline .btn-border rect {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-dasharray: 300;       /* total perimeter */
+  stroke-dashoffset: 300;      /* start hidden */
+  transition: stroke-dashoffset 0.6s ease; /* animation duration */
+}
+
+.btn-outline span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hover start */
+.btn-outline:hover .btn-border rect {
+  stroke-dashoffset: 300;      /* reset instantly */
+  animation: draw-border 1.8s forwards ease;
+}
+
+/* Keyframes to animate perimeter fill */
+@keyframes draw-border {
+  from {
+    stroke-dashoffset: 300;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .dropdown-content li a {
   padding:.8rem 1.2rem;
   text-align:center;
   color:#fff;
-}
-
-.secondary-links { 
-  display:flex; 
-  align-items: center;
-  gap:1rem; 
-  margin-right: 2rem;
 }
 
 /* Hamburger (hidden on desktop) */
@@ -219,18 +260,6 @@ body.no-scroll {
     z-index: 2;
   }
 
-  .secondary-links {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    position: relative;
-    z-index: 2;
-  }
-
-
-
-
   .main-links {
     position: absolute;
     left: 50%;
@@ -243,12 +272,6 @@ body.no-scroll {
     margin: 0;
     padding: 0;
     z-index: 1;
-  }
-
-
-
-  .secondary-links a.contact.active::after {
-    transform: scaleX(1);
   }
 
    /* Hide any “.show” classes desktop might’ve left behind */
@@ -290,46 +313,20 @@ body.no-scroll {
     bottom: 0;
     height: 2px;
     background: var(--color-primary);
-    transition: left 0.4s ease, width 0.4s ease;
     border-radius: 1px;
     pointer-events: none;
     z-index: 50;
+    opacity: 0;
+    transition:
+      left 0.4s ease,
+      width 0.4s ease,
+      opacity 0.2s ease;
   }
 
-  /* make the Contact Us container a positioning context */
-  .secondary-links {
-    position: relative;
+  .indicator.visible {
+    opacity: 1;
   }
-
-  /* ensure the link itself can carry an absolutely-positioned pseudo */
-  .secondary-links a.contact {
-    position: relative;
-    padding: 0;
-  }
-
-  /* the hidden “bar” above the text */
-  .secondary-links a.contact::after {
-    content: "";
-    position: absolute;
-    bottom: 100%;         
-    left: 0;
-    width: 100%;
-    height: 2px;          
-    background: var(--color-primary);  
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 0.3s ease;
-  }
-
-  .secondary-links a.contact:hover::after,
-  .secondary-links a.contact.active::after {
-    transform: scaleX(1);
-  }
-  }
-
-
-
-
+}
 
 
 
