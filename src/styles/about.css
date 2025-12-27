@@ -1,0 +1,280 @@
+/* ---------- MAIN CONTAINER ---------- */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;        /* horizontally center content */
+  justify-content: flex-start; /* vertically align to top */
+  padding-top: 5rem;          /* adjust distance from top */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ---------- LOGO SECTION ---------- */
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100vw;
+}
+
+/* ---------- PINK DIVIDER ---------- */
+.pink-divider {
+  width: 60px;           /* length of the line */
+  height: 2px;           /* thickness of the line */
+  background-color: var(--color-secondary); /* bright pink */
+  margin: 1.5rem auto;     /* vertical spacing and center horizontally */
+  border-radius: 2px;    /* rounded edges */
+  width: 80%;
+}
+
+.header-section {
+  width: 80vw;
+
+  /* center the section itself */
+  margin-left: auto;
+  margin-right: auto;
+
+  /* center children */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+
+.centered-box {
+  display: flex;
+  justify-content: center; /* centers content horizontally */
+  align-items: center;     /* centers content vertically if height is set */
+  text-align: center;      /* optional: center text inside */
+  width: 100%;             /* optional: take full width of parent */
+}
+
+
+/* ---------- LOGO ---------- */
+.site-logo {
+    padding-top: 3rem;
+    display: block; /* ensures centering works reliably */
+    margin-left: auto;
+    margin-right: auto;    
+    width: 65vw; /* desktop default */
+    max-width: 80vw;
+}
+
+/* ---------- HERO HEADING ---------- */
+.hero-heading {
+  font-size: 1.2rem !important;
+}
+
+/* ---------- BUTTON GROUP ---------- */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- PINK BUTTONS ---------- */
+.btn-outline-pink {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #FF00E6; /* pink border */
+  color: #FF00E6;
+  text-decoration: none;
+  border-radius: 9999px; /* pill shape */
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-pink:hover {
+  background-color: #FF00E6;
+  color: black;
+}
+
+.about-space {
+    padding-top: 10rem;
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .hero-heading {
+    font-size: 1.75rem;
+  }
+
+  .site-logo {
+    width: 75%;
+  }
+
+  .button-group {
+    gap: 0.75rem;
+  }
+}
+
+
+
+
+
+
+
+
+/* ===============================
+   OBJECTIVES WRAPPER + LINE
+================================ */
+
+.objectives-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 8rem 0;
+}
+
+/* reuse concept from info-panel */
+.objectives-wrapper .thick-line-behind {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 4cm;
+  background-color: var(--color-primary);
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+/* ===============================
+   OBJECTIVES SECTION
+================================ */
+
+.objectives-section {
+  width: 80%;
+  margin: 0 auto;
+  background: var(--color-primary);
+  border-radius: 24px;
+  padding: 4rem 3rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+.objectives-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* ===============================
+   HEADER
+================================ */
+
+.objectives-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.objectives-header h2 {
+  text-align: center;
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 0.9;
+  color: #fff;
+}
+
+.objectives-header h2 span {
+  font-size: 2.4rem;
+  letter-spacing: 0.25em;
+}
+
+/* ===============================
+   SIDE BANNERS (NOT TRIANGLES)
+================================ */
+
+.banner {
+  width: 180px;
+  height: 60px;
+  background: #1b1b1b;
+  border-radius: 12px;
+  position: relative;
+}
+
+/* inward notch */
+.banner::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  background: var(--color-primary);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.banner.left::after {
+  right: -14px;
+}
+
+.banner.right::after {
+  left: -14px;
+}
+
+/* ===============================
+   CARDS
+================================ */
+
+.objectives-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.objective-card {
+  background: #1b1b1b;
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  color: #fff;
+}
+
+.objective-number {
+  background: #111;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1000px) {
+  .objectives-section {
+    width: 90%;
+  }
+
+  .objectives-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .objectives-header {
+    flex-direction: column;
+  }
+
+  .banner {
+    display: none;
+  }
+
+  .objectives-header h2 {
+    font-size: 3rem;
+  }
+}
