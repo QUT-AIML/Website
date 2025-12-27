@@ -7,6 +7,7 @@
   padding-top: 5rem;          /* adjust distance from top */
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+  padding-bottom: 5rem;
   width: 100%;
   min-height: 100vh;
   box-sizing: border-box;
@@ -96,6 +97,11 @@
   background-color: #FF00E6;
   color: black;
 }
+
+.large-space {
+    padding-top: 4.5rem;
+}
+
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 768px) {

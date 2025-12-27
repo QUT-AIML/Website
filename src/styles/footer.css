@@ -26,7 +26,7 @@
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: 10% 20% 70%; /* updated ratio */
+  grid-template-columns: 10% 22% 68%; /* updated ratio */
   gap: 1rem;
   max-width: 1400px;
   margin: 0 auto;
@@ -107,11 +107,11 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 200%; /* extend beyond the footer */
+  height: 150%; /* extend beyond the footer */
   background-image: url('../../public/background-rubric.png');
   background-size: cover;
   background-position: center;
-  opacity: 0.15;
+  opacity: 0.3;
   z-index: 1;
   transform: translateY(-25%); /* optional: adjust visible portion */
 }
@@ -184,5 +184,20 @@
 
   .footer-shape {
     display: none;
+  }
+
+  .footer-social {
+    flex-wrap: wrap;           /* allow icons to flow into multiple rows */
+    gap: 0.75rem;              /* spacing between icons */
+    justify-content: flex-start; /* align rows to left; use center if preferred */
+  }
+
+  .footer-right .footer-social,
+  .footer-right .copyright {
+    justify-content: flex-start;
+  }
+
+  .footer-social a {
+    flex: 0 1 calc(33.33% - 0.5rem); /* 3 per row, minus gap */
   }
 }
