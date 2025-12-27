@@ -19,7 +19,7 @@
   background-image: 
     radial-gradient(125% 125% at 50% 5%, rgba(9, 9, 9, 0.8) 20%, rgba(9, 9, 9, 0.8) 55%, rgba(255, 0, 230, 0.6) 75%),
     /* Bottom layer: subtle dark grey dots */
-    radial-gradient(circle, #989898 1px, transparent 1px);
+    radial-gradient(circle, #bababa 1px, transparent 1px);
   
   background-size: 
     auto,         /* gradient scales normally */

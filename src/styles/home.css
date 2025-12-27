@@ -28,8 +28,24 @@
   background-color: var(--color-secondary); /* bright pink */
   margin: 1.5rem auto;     /* vertical spacing and center horizontally */
   border-radius: 2px;    /* rounded edges */
-  width: 100%;
+  width: 80%;
 }
+
+.header-section {
+  width: 80vw;
+
+  /* center the section itself */
+  margin-left: auto;
+  margin-right: auto;
+
+  /* center children */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 
 .centered-box {
   display: flex;
@@ -38,6 +54,7 @@
   text-align: center;      /* optional: center text inside */
   width: 100%;             /* optional: take full width of parent */
 }
+
 
 /* ---------- LOGO ---------- */
 .site-logo {
@@ -51,12 +68,7 @@
 
 /* ---------- HERO HEADING ---------- */
 .hero-heading {
-  font-family: var(--font-heading, "Share Tech", sans-serif);
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  color: white;
-  margin: 0;
+  font-size: 1.2rem !important;
 }
 
 /* ---------- BUTTON GROUP ---------- */

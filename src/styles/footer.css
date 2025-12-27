@@ -1,70 +1,188 @@
-.aiml-footer {
-  margin-top: 5rem;
-  padding: 2.5rem 1.25rem;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.2);
-  color: #a7a7a7;
-  font-size: 0.9rem;
+/* ===============================
+   FOOTER BASE
+================================ */
+
+.site-footer {
+  position: relative;
+  padding: 2.5rem 4rem 1.8rem;
+  overflow: hidden;
+  color: #fff;
+
+  /* Frosted glass effect */
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+  
+
+/* ===============================
+   INNER LAYOUT
+================================ */
+
+.footer-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 10% 20% 70%; /* updated ratio */
+  gap: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Right-align the social icons and copyright */
+.footer-right .footer-social,
+.footer-right .copyright {
+  margin-left: auto;
+  display: flex; /* ensures flex behavior for the icons */
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Optional: add spacing between social icons and copyright */
+.footer-right .copyright {
+  margin-top: 0.5rem; 
+}
+
+/* ===============================
+   COLUMNS
+================================ */
+
+.footer-column h4 {
+  color: var(--color-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 0.10rem;
+}
+
+.footer-column a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* 🔒 prevent dark hover */
+.footer-column a:hover {
+  color: var(--color-secondary);
+  opacity: 0.7;
+}
+
+.footer-column p {
+  margin: 0.15rem 0;
+  color: #e5e5e5;
+}
+
+.footer-column .mt {
+  margin-top: 1.2rem;
+}
+
+
+/* ===============================
+   RIGHT SECTION WITH IMAGE BACKGROUND
+================================ */
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  overflow: hidden; /* clip anything outside */
+}
+
+/* Background image overlay */
+.footer-right::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200%; /* extend beyond the footer */
+  background-image: url('../../public/background-rubric.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  z-index: 1;
+  transform: translateY(-25%); /* optional: adjust visible portion */
+}
+
+/* Ensure content stays above background */
+.footer-right > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===============================
+   SOCIAL ICONS
+================================ */
 
 .footer-social {
   display: flex;
-  justify-content: center;
   gap: 1rem;
-  font-size: 1.875rem !important;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.footer-note {
-  color: white;
-  margin: 0.2rem 0;
-}
-
-/* Ensure clean icon rendering */
-.footer-social svg {
-  color: #000000;
-  fill: #000000 !important;   
-  stroke: #000000 !important;
-  width: 1.5rem;    
-  height: 1.5rem;
-  outline: none;
-  stroke: none;
-  box-shadow: none;
-}
-
-.logo-section {
-  padding-top: 5.875rem;
+.footer-social a {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #111;
   display: flex;
-  flex-direction: column;
   align-items: center;
-}
-
-.white-heading {
-  padding-top: 1.875rem;
-  color: white;
-}
-
-.button-group {
-  display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  margin-top: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-.button-outline-pink {
-  display: inline-flex;   
-  justify-content: center;      
-  align-items: center;       
-  text-align: center;          
-  color: var(--color-primary);
-  border: 0.0625rem solid var(--color-primary);
-  background: transparent;
-  padding: 0.75rem 2.5rem;
-  border-radius: 2rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
+.footer-social a:hover {
+  border-color: #fff;
 }
 
-.button-outline-pink:hover {
-  background-color: rgba(194, 194, 194, 0.2);
+.footer-social svg {
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+}
+
+/* ===============================
+   COPYRIGHT
+================================ */
+
+.copyright {
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+/* ===============================
+   SHAPE (RIGHT ONLY)
+================================ */
+
+
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .footer-right {
+    align-items: flex-start;
+  }
+
+  .footer-shape {
+    display: none;
+  }
 }
