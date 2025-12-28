@@ -1,0 +1,262 @@
+.events-space {
+    padding-top: 10rem;
+}
+
+/* === SEARCH BAR STYLING === */
+.search-wrapper {
+  flex: 1;
+  min-width: 220px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  background: #1e1e1e;
+  border-radius: 999px;
+  padding: 0 1rem;
+
+  border: 3px solid var(--color-secondary);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);
+}
+
+.search-wrapper:focus-within {
+  box-shadow:
+    0 0 0 3px rgba(106, 255, 77, 0.25),
+    inset 0 0 0 1px rgba(0,0,0,0.35);
+}
+
+.search-wrapper input {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  color: #eaeaea;
+  font-size: 1rem;
+}
+
+.search-wrapper input::placeholder {
+  color: #8b8b8b;
+}
+
+/* Search icon */
+.search-icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-secondary);
+  stroke-width: 2;
+  fill: none;
+}
+
+/* === CATEGORY SORT (PILL STYLE) === */
+.type-filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* "Sort by:" green pill */
+.type-filter-label {
+  background: var(--color-secondary);
+  color: #1f0f1b;
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+/* Dark container pill */
+.type-filter-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  background: #1f1f1f;
+  border-radius: 999px;
+  padding: 0.35rem;
+}
+
+/* Individual buttons */
+.type-filter-pill .type-btn {
+  background: transparent;
+  border: none;
+  color: #e6e6e6;
+  font-size: 0.95rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.type-filter-pill .type-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Active category */
+.type-filter-pill .type-btn.active {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.type-filter-pill .type-btn.pill-selected:hover {
+  background: #333333;
+}
+
+
+/* === FILTERS POPOVER === */
+.filters-popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 260px;
+  z-index: 40;
+  display: none;
+
+  background: #1f1f1f;
+  border-radius: 14px;
+  padding: 0.9rem;
+
+  border: 3px solid var(--color--secondary);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+
+.filters-popover-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Groups */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  color: #bdbdbd;
+  font-weight: 500;
+}
+
+/* Selects */
+.filter-group select {
+  background: #2a2a2a;
+  color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #333;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--color--secondary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color--secondary) 35%, transparent);
+}
+
+/* Actions */
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--color--secondary);
+  color: #0f1f0f;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #e6e6e6;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid #333;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+
+
+
+
+
+
+
+
+/* === FILTER BUTTON === */
+.filters-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-secondary); /* pink button */
+  border-radius: 999px; /* circular */
+  padding: 0.6rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* Funnel Icon */
+.filters-toggle-icon {
+  width: 16px;
+  height: 16px;
+  fill: #000;
+  stroke: none;
+  transition: opacity 0.2s ease; /* smooth opacity change */
+}
+
+
+/* === DROPDOWN === */
+.filters-dropdown {
+  position: absolute;
+  top: 100%; /* directly below button */
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.5rem; /* small gap */
+  background: #1f1f1f;
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  min-width: 120px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: none; /* hidden by default */
+  z-index: 1000;
+}
+
+/* Show dropdown when button is expanded */
+.filters-toggle-btn[aria-expanded="true"] + .filters-dropdown {
+  display: block;
+}
+
+/* Dropdown items */
+.filter-item {
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.filter-item:hover {
+  background: #333;
+}

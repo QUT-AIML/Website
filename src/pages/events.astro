@@ -1,6 +1,6 @@
 ---
 import "@/styles/global.css";
-import "@/styles/about.css";
+import "@/styles/newEvents.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 import eventsIndex from "@/data/events/index.js";
@@ -39,7 +39,7 @@ const types = ["All", ...preferredExisting, ...remaining];
   <body class="background-dots">
     <Navigation />
 
-    <div class="content-wrapper about-space">
+    <div class="content-wrapper events-space">
       <!-- HERO / TITLE -->
       <section class="pink-panel">
         <p class="pink-title">What's on at QUT AIML</p>
@@ -49,39 +49,52 @@ const types = ["All", ...preferredExisting, ...remaining];
       <section class="events-controls" style="margin: 1.25rem 0;">
         <div class="controls-row" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
           <!-- Search (flex:1) -->
-          <label style="flex:1;min-width:220px;">
-            <input id="events-search" type="search" placeholder="Search events..." style="width:100%;padding:0.6rem;border-radius:6px;border:1px solid #ddd;" />
-          </label>
+          <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="16.65" y1="16.65" x2="21" y2="21" />
+            </svg>
 
-          <!-- Dynamic type filters inline on the same row -->
-          <div id="type-filters" style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
-            {types.map((t, i) => (
-              <button
-                class={`type-btn ${t === "All" ? "active" : ""}`}
-                data-type={t}
-                type="button"
-                style="padding:0.45rem 0.8rem;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;"
-              >
-                {t}
-              </button>
-            ))}
+            <input
+              id="events-search"
+              type="search"
+              placeholder="Search"
+              aria-label="Search events"
+            />
+          </div>
+
+
+          <div class="type-filter-wrapper">
+            <span class="type-filter-label">Sort by:</span>
+
+            <div id="type-filters" class="type-filter-pill">
+              {types.map((t) => (
+                <button
+                  class={`type-btn ${t === "All" ? "active" : ""}`}
+                  data-type={t}
+                  type="button"
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
           </div>
 
           <!-- Filters button (popover contains Semester + Sort) -->
-          <div style="margin-left:auto;position:relative;">
-            <button id="filters-toggle" aria-haspopup="true" aria-expanded="false" type="button" style="display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0.8rem;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;">
-              Filters
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden style="transform:translateY(1px);">
-                <path d="M6 9l6 6 6-6" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <div style="margin-left:auto; position:relative;">
+            <button id="filters-toggle" aria-haspopup="true" aria-expanded="false" type="button" class="filters-toggle-btn">
+              <!-- Funnel Icon using currentColor -->
+              <svg class="filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
               </svg>
             </button>
 
             <!-- Popover -->
-            <div id="filters-popover" role="dialog" aria-modal="false" style="position:absolute;right:0;top:calc(100% + 8px);min-width:260px;background:#fff;border:1px solid #e6e6e6;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.08);padding:0.75rem;display:none;z-index:40;">
-              <div style="display:flex;flex-direction:column;gap:0.75rem;">
-                <div style="display:flex;flex-direction:column;gap:0.25rem;">
-                  <label for="semester-select-pop" style="font-size:0.85rem;color:#444;">Semester</label>
-                  <select id="semester-select-pop" style="padding:0.45rem;border-radius:6px;border:1px solid #ddd;">
+            <div id="filters-popover" role="dialog" aria-modal="false" class="filters-popover">
+              <div class="filters-popover-content">
+                <div class="filter-group">
+                  <label for="semester-select-pop">Semester</label>
+                  <select id="semester-select-pop">
                     <option value="all" selected>All semesters</option>
                     {semesters.map(s => (
                       <option value={s.id}>{s.label}</option>
@@ -89,21 +102,26 @@ const types = ["All", ...preferredExisting, ...remaining];
                   </select>
                 </div>
 
-                <div style="display:flex;flex-direction:column;gap:0.25rem;">
-                  <label for="sort-select-pop" style="font-size:0.85rem;color:#444;">Sort</label>
-                  <select id="sort-select-pop" style="padding:0.45rem;border-radius:6px;border:1px solid #ddd;">
+                <div class="filter-group">
+                  <label for="sort-select-pop">Sort</label>
+                  <select id="sort-select-pop">
                     <option value="date-desc" selected>Date descending</option>
                     <option value="date-asc">Date ascending</option>
                     <option value="title-asc">Title A–Z</option>
                   </select>
                 </div>
 
-                <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.25rem;">
-                  <button id="filters-apply" type="button" style="padding:0.45rem 0.8rem;border-radius:6px;border:1px solid #1a73e8;background:#1a73e8;color:#fff;cursor:pointer;">Apply</button>
-                  <button id="filters-cancel" type="button" style="padding:0.45rem 0.8rem;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;">Cancel</button>
+                <div class="filter-actions">
+                  <button id="filters-apply" type="button" class="btn-primary">
+                    Apply
+                  </button>
+                  <button id="filters-cancel" type="button" class="btn-secondary">
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
