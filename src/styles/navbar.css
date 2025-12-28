@@ -97,7 +97,7 @@
   color: white;
   text-align: left !important;
   transition: background 0.2s;
-  line-height: 1.2 !important;     
+  line-height: 1.2rem !important;     
   padding: 12px 20px !important;   
 }
 
