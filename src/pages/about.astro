@@ -2,9 +2,11 @@
 import "@/styles/global.css";
 import "@/styles/about.css";
 import Navigation from "@/components/Navigation.astro";
-import Footer from '../components/Footer.astro';
 import Footer from "@/components/Footer.astro";
 import teamData from "../data/2026_team.json";
+
+/* Filter out overview on the server */
+const teamsForClient = teamData.filter(t => t.id !== "overview");
 ---
 
 <html lang="en">
@@ -12,13 +14,22 @@ import teamData from "../data/2026_team.json";
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning through events, workshops, and collaboration." />
+    <meta
+      name="description"
+      content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning."
+    />
     <title>QUT AIML</title>
   </head>
+
   <body class="background-dots">
     <Navigation />
 
-		<div class="content-wrapper about-space">
+    <div class="content-wrapper about-space">
+      <!-- ABOUT -->
+      <section class="pink-panel">
+        <p class="pink-title">About QUT AIML</p>
+      </section>
+
 		<div class="info-panel-wrapper">
 			<div class="thick-line-behind"></div>			
 			<section class="info-panel">
@@ -29,21 +40,8 @@ import teamData from "../data/2026_team.json";
 				</p>
 			</section>
 			</div>
-      <!-- ABOUT -->
-      <section class="pink-panel">
-        <p class="pink-title">About QUT AIML</p>
-      </section>
 
-      <div class="info-panel-wrapper">
-        <div class="thick-line-behind"></div>
-        <section class="info-panel">
-          <p class="section-content">
-            The QUT AI & ML Society is a student-led community dedicated to
-            empowering the next generation of innovators in artificial
-            intelligence and machine learning.
-          </p>
-        </section>
-      </div>
+    <div class="content-wrapper>">
 
       <!-- OBJECTIVES -->
       <div class="objectives-wrapper">
@@ -61,21 +59,21 @@ import teamData from "../data/2026_team.json";
               <div class="objective-item">
                 <div class="objective-number">1</div>
                 <div class="objective-card">
-                  <p>Gain insights from industry professionals.</p>
+                  <p>Gain insights and guidance from alumni, professionals, and leaders in the AI and ML industry.</p>
                 </div>
               </div>
 
               <div class="objective-item">
                 <div class="objective-number">2</div>
                 <div class="objective-card">
-                  <p>Collaborate and build impactful AI projects.</p>
+                  <p>Collaborate, experiment, and build impactful projects focused on artificial intelligence and machine learning.</p>
                 </div>
               </div>
 
               <div class="objective-item">
                 <div class="objective-number">3</div>
                 <div class="objective-card">
-                  <p>Connect with the broader AI & tech community.</p>
+                  <p>Connect and network with students, researchers, and professionals in the AI, ML, and broader tech community.</p>
                 </div>
               </div>
             </div>
@@ -83,12 +81,30 @@ import teamData from "../data/2026_team.json";
         </section>
       </div>
 
+
       <!-- TEAM -->
       <section class="team-section">
-        <div class="team-header">
-          <span id="team-title"></span>
+        <!-- Pink panel header + button on same row -->
+        <div class="pink-panel-flex">
+          <p class="pink-title">Meet the Team</p>
+          <button
+            class="history-button"
+            onclick="window.location.href='/about/history';"
+          >
+            Our History
+          </button>
         </div>
 
+        <!-- Team name below -->
+        <div class="content-wrapper centered-box">
+          <section class="minimal-padding-panel spacing-top">
+            <p class="section-content">
+              <div id="team-title" class="team-name"></div>
+            </p>
+          </section>
+        </div>
+
+        <!-- Team carousel grid -->
         <div class="team-grid-wrapper">
           <div class="team-row">
             <div class="side-bar left">
@@ -109,125 +125,123 @@ import teamData from "../data/2026_team.json";
           <div class="team-dots" id="team-dots"></div>
         </div>
       </section>
+
+
     </div>
 
     <Footer />
 
+
     <!-- CLIENT SCRIPT -->
-   <script>
-  const grid = document.getElementById("team-grid");
-  const title = document.getElementById("team-title");
-  const dotsContainer = document.getElementById("team-dots");
-  const leftArrow = document.querySelector(".carousel-arrow.left");
-  const rightArrow = document.querySelector(".carousel-arrow.right");
+    <script>
+      const grid = document.getElementById("team-grid");
+      const title = document.getElementById("team-title");
+      const dotsContainer = document.getElementById("team-dots");
+      const leftArrow = document.querySelector(".carousel-arrow.left");
+      const rightArrow = document.querySelector(".carousel-arrow.right");
 
-  const teams = JSON.parse(grid.dataset.teams);
-  const PAGE_SIZE = 4;
-  const AUTO_DELAY = 4000; // 4 seconds
+      const teams = JSON.parse(grid.dataset.teams);
+      const PAGE_SIZE = 4;
+      const AUTO_DELAY = 6000;
 
-  let globalPages = []; // flat list of all panels
-  let currentGlobalIndex = 0;
-  let autoTimer;
+      let globalPages = [];
+      let currentGlobalIndex = 0;
+      let autoTimer;
 
-  // Prepare all pages globally
-  teams.forEach(team => {
-    for (let i = 0; i < team.items.length; i += PAGE_SIZE) {
-      globalPages.push({
-        teamTitle: team.title,
-        items: team.items.slice(i, i + PAGE_SIZE),
-        pageIndex: i / PAGE_SIZE,
+      // Build global pages
+      teams.forEach(team => {
+        for (let i = 0; i < team.items.length; i += PAGE_SIZE) {
+          globalPages.push({
+            teamTitle: team.title,
+            items: team.items.slice(i, i + PAGE_SIZE),
+            pageIndex: i / PAGE_SIZE,
+          });
+        }
       });
-    }
-  });
 
-  function renderDots() {
-    dotsContainer.innerHTML = "";
-    globalPages.forEach((_, i) => {
-      const dot = document.createElement("span");
-      dot.className = "team-dot" + (i === currentGlobalIndex ? " active" : "");
-      dot.onclick = () => {
-        currentGlobalIndex = i;
-        resetAuto();
-        render();
-      };
-      dotsContainer.appendChild(dot);
-    });
-  }
+      function renderDots() {
+        dotsContainer.innerHTML = "";
+        globalPages.forEach((_, i) => {
+          const dot = document.createElement("span");
+          dot.className = "team-dot" + (i === currentGlobalIndex ? " active" : "");
+          dot.onclick = () => {
+            currentGlobalIndex = i;
+            resetAuto();
+            renderPage(currentGlobalIndex);
+          };
+          dotsContainer.appendChild(dot);
+        });
+      }
 
-  function render() {
-    const page = globalPages[currentGlobalIndex];
+      function renderPage(index) {
+        const page = globalPages[index];
 
-    // ----- TITLE -----
-    if (page.pageIndex > 0) {
-      title.textContent =
-        page.pageIndex === 1
-          ? `${page.teamTitle} – Continued`
-          : `${page.teamTitle} – Continued (${page.pageIndex})`;
-    } else {
-      title.textContent = page.teamTitle;
-    }
+        title.textContent =
+          page.pageIndex > 0
+            ? `${page.teamTitle} – Continued`
+            : page.teamTitle;
 
-    // ----- CARDS -----
-    grid.innerHTML = "";
-    page.items.forEach(member => {
-      const card = document.createElement("div");
-      card.className = "team-card";
-      card.innerHTML = `
-        <div class="team-photo">
-          <img
-            src="/people/${member.name.split(" ")[0]}.png"
-            alt="${member.name}"
-            onerror="this.src='/people/Anonymous.png';"
-          />
-        </div>
-        <div class="team-info">
-          <span class="role">${member.role}</span>
-          <h3>${member.name}</h3>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
+        grid.innerHTML = "";
 
-    renderDots();
+        // Render members
+        page.items.forEach(member => {
+          const card = document.createElement("div");
+          card.className = "team-card";
+          card.innerHTML = `
+            <div class="team-photo">
+              <img
+                src="/people/${member.name.split(" ")[0]}.png"
+                alt="${member.name}"
+                onerror="this.src='/people/Anonymous.png';"
+              />
+            </div>
+            <div class="team-info">
+              <span class="role">${member.role}</span>
+              <h3>${member.name}</h3>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
 
-    // ----- ARROWS -----
-    leftArrow.style.visibility =
-      currentGlobalIndex === 0 ? "hidden" : "visible";
+        // Fill remaining slots with empty cards
+        const emptySlots = PAGE_SIZE - page.items.length;
+        for (let i = 0; i < emptySlots; i++) {
+          const emptyCard = document.createElement("div");
+          emptyCard.className = "team-card empty-card";
+          emptyCard.innerHTML = `<div class="team-photo"></div><div class="team-info"></div>`;
+          grid.appendChild(emptyCard);
+        }
 
-    rightArrow.style.visibility =
-      currentGlobalIndex === globalPages.length - 1 ? "hidden" : "visible";
-  }
+        // Handle arrows visibility
+        leftArrow.style.visibility = index === 0 ? "hidden" : "visible";
+        rightArrow.style.visibility = index === globalPages.length - 1 ? "hidden" : "visible";
 
-  function next() {
-    if (currentGlobalIndex < globalPages.length - 1) currentGlobalIndex++;
-    render();
-  }
+        renderDots();
+      }
 
-  function prev() {
-    if (currentGlobalIndex > 0) currentGlobalIndex--;
-    render();
-  }
+      function next() {
+        currentGlobalIndex =
+          currentGlobalIndex < globalPages.length - 1 ? currentGlobalIndex + 1 : 0;
+        renderPage(currentGlobalIndex);
+      }
 
-  function resetAuto() {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(() => {
-      if (currentGlobalIndex < globalPages.length - 1) next();
-      else currentGlobalIndex = 0; // loop back to first
-    }, AUTO_DELAY);
-  }
+      function prev() {
+        currentGlobalIndex =
+          currentGlobalIndex > 0 ? currentGlobalIndex - 1 : globalPages.length - 1;
+        renderPage(currentGlobalIndex);
+      }
 
-  rightArrow.onclick = () => {
-    next();
-    resetAuto();
-  };
+      function resetAuto() {
+        clearInterval(autoTimer);
+        autoTimer = setInterval(next, AUTO_DELAY);
+      }
 
-  leftArrow.onclick = () => {
-    prev();
-    resetAuto();
-  };
+      rightArrow.onclick = () => { next(); resetAuto(); };
+      leftArrow.onclick = () => { prev(); resetAuto(); };
 
-  resetAuto();
-  render();
-</script>
+      resetAuto();
+      renderPage(0);
+    </script>
+
   </body>
 </html>

@@ -122,6 +122,12 @@ h2 {
 }
 
 
+/* Footer full width */
+footer {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 
 /* ---------------------------------- */
 /*   Layout & Spacing for <main>      */
