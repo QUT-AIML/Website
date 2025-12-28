@@ -40,140 +40,131 @@ const types = ["All", ...preferredExisting, ...remaining];
     <Navigation />
 
     <div class="content-wrapper events-space">
-      <!-- HERO / TITLE -->
       <section class="pink-panel">
         <p class="pink-title">What's on at QUT AIML</p>
       </section>
 
-      <!-- ROW BELOW HEADING: Search | Types (dynamic) | Filters button -->
-      <section class="events-controls" style="margin: 1.25rem 0;">
-        <div class="controls-row" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
-          <!-- Search (flex:1) -->
-          <div class="search-wrapper">
-            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="11" cy="11" r="7" />
-              <line x1="16.65" y1="16.65" x2="21" y2="21" />
-            </svg>
-
-            <input
-              id="events-search"
-              type="search"
-              placeholder="Search"
-              aria-label="Search events"
-            />
-          </div>
-
-
-          <div class="type-filter-wrapper">
-            <span class="type-filter-label">Sort by:</span>
-
-            <div id="type-filters" class="type-filter-pill">
-              {types.map((t) => (
-                <button
-                  class={`type-btn ${t === "All" ? "active" : ""}`}
-                  data-type={t}
-                  type="button"
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <!-- Filters button (popover contains Semester + Sort) -->
-          <div style="margin-left:auto; position:relative;">
-            <button id="filters-toggle" aria-haspopup="true" aria-expanded="false" type="button" class="filters-toggle-btn">
-              <!-- Funnel Icon using currentColor -->
-              <svg class="filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
+      <div class="key-content">
+        <section class="events-controls" style="margin: 1.25rem 0;">
+          <div class="controls-row" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+            <div class="search-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <line x1="16.65" y1="16.65" x2="21" y2="21" />
               </svg>
-            </button>
+              <input
+                id="events-search"
+                type="search"
+                placeholder="Search"
+                aria-label="Search events"
+              />
+            </div>
 
-            <!-- Popover -->
-            <div id="filters-popover" role="dialog" aria-modal="false" class="filters-popover">
-              <div class="filters-popover-content">
-                <div class="filter-group">
-                  <label for="semester-select-pop">Semester</label>
-                  <select id="semester-select-pop">
-                    <option value="all" selected>All semesters</option>
-                    {semesters.map(s => (
-                      <option value={s.id}>{s.label}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div class="filter-group">
-                  <label for="sort-select-pop">Sort</label>
-                  <select id="sort-select-pop">
-                    <option value="date-desc" selected>Date descending</option>
-                    <option value="date-asc">Date ascending</option>
-                    <option value="title-asc">Title A–Z</option>
-                  </select>
-                </div>
-
-                <div class="filter-actions">
-                  <button id="filters-apply" type="button" class="btn-primary">
-                    Apply
+            <div class="type-filter-wrapper">
+              <span class="type-filter-label">Sort by:</span>
+              <div id="type-filters" class="type-filter-pill">
+                {types.map((t) => (
+                  <button
+                    class={`type-btn ${t === "All" ? "active" : ""}`}
+                    data-type={t}
+                    type="button"
+                  >
+                    {t}
                   </button>
-                  <button id="filters-cancel" type="button" class="btn-secondary">
-                    Cancel
-                  </button>
-                </div>
+                ))}
               </div>
             </div>
 
+            <div style="margin-left:auto; position:relative;">
+              <button id="filters-toggle" aria-haspopup="true" aria-expanded="false" type="button" class="filters-toggle-btn">
+                <svg class="filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
+                </svg>
+              </button>
+
+              <div id="filters-popover" role="dialog" aria-modal="false" class="filters-popover">
+                <div class="filters-popover-content">
+                  <div class="filter-group">
+                    <label for="semester-select-pop">Semester</label>
+                    <select id="semester-select-pop">
+                      <option value="all" selected>All semesters</option>
+                      {semesters.map(s => (
+                        <option value={s.id}>{s.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="sort-select-pop">Sort</label>
+                    <select id="sort-select-pop">
+                      <option value="upcoming" selected>Upcoming events</option>
+                      <option value="past">Past events</option>
+                      <option value="title-asc">Title A–Z</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-actions">
+                    <button id="filters-apply" type="button" class="btn-secondary">
+                      Apply
+                    </button>
+                    <button id="filters-cancel" type="button" class="btn-secondary">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- EVENTS GRID -->
-      <section id="events-grid" class="events-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;">
-        {eventsBySemester.map((ev) => {
-          const type = ev.type ?? ev.category ?? "Other";
-          return (
-            <article
-              class="event-card"
-              data-semester={ev.semesterId}
-              data-category={ev.category}
-              data-type={type}
-              data-title={ev.title.toLowerCase()}
-              data-date={ev.date}
-              style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06);"
-            >
-              <a href={ev.url} style="display:block;color:inherit;text-decoration:none;">
-                <div class="card-media" style="height:140px;background:#f3f3f3;display:flex;align-items:center;justify-content:center;">
-                  {ev.image ? <img src={ev.image} alt={ev.title} style="width:100%;height:100%;object-fit:cover;" /> : <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#999;">No image</div>}
-                </div>
+        <section class="events-panel">
+          <section id="events-grid" class="events-grid">
+            {eventsBySemester.map((ev) => {
+              const type = ev.type ?? ev.category ?? "Other";
+              return (
+                <article
+                  class="event-card"
+                  data-semester={ev.semesterId}
+                  data-category={ev.category}
+                  data-type={type}
+                  data-title={ev.title.toLowerCase()}
+                  data-date={ev.date}
+                >
+                  <a href={ev.url}>
+                    <div class="card-media">
+                      {ev.image ? (
+                        <img src={ev.image} alt={ev.title} />
+                      ) : (
+                        <div class="no-image">No image</div>
+                      )}
+                    </div>
 
-                <div class="card-body" style="padding:1rem;">
-                  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">
-                    <h3 style="margin:0;font-size:1.05rem;">{ev.title}</h3>
-                    <time style="font-size:0.85rem;color:#666;">{ev.dateLabel}</time>
-                  </div>
-
-                  <p style="margin:0.6rem 0 1rem;color:#444;font-size:0.95rem;line-height:1.35;">{ev.excerpt}</p>
-
-                  <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <span style="font-size:0.85rem;color:#888;">{type}</span>
-                    <span style="font-weight:600;color:#1a73e8;">View more →</span>
-                  </div>
-                </div>
-              </a>
-            </article>
-          );
-        })}
-      </section>
+                    <div class="card-body">
+                      <h3 class="card-title">{ev.title}</h3>
+                      <div class="card-divider"></div>
+                      <time class="card-date">{ev.dateLabel}</time>
+                      <p class="card-description">{ev.excerpt}</p>
+                      <div class="card-footer">
+                        <span class="card-view-more">View more →</span>
+                      </div>
+                    </div>
+                  </a>
+                </article>
+              );
+            })}
+          </section>
+        </section>
+      </div>
     </div>
 
     <Footer />
 
-    <!-- Client-side script for filters and sorting (popover version) -->
     <script type="module">
       const searchInput = document.getElementById('events-search');
       const typeButtons = Array.from(document.querySelectorAll('.type-btn'));
       const grid = document.getElementById('events-grid');
 
-      // Popover elements
       const filtersToggle = document.getElementById('filters-toggle');
       const filtersPopover = document.getElementById('filters-popover');
       const semesterSelectPop = document.getElementById('semester-select-pop');
@@ -181,9 +172,8 @@ const types = ["All", ...preferredExisting, ...remaining];
       const filtersApply = document.getElementById('filters-apply');
       const filtersCancel = document.getElementById('filters-cancel');
 
-      // Keep a single canonical sort and semester state (used by applyFilters)
       let currentSemester = 'all';
-      let currentSort = 'date-desc';
+      let currentSort = 'upcoming';
 
       function getCards() {
         return Array.from(grid.querySelectorAll('.event-card'));
@@ -193,42 +183,72 @@ const types = ["All", ...preferredExisting, ...remaining];
         const query = searchInput.value.trim().toLowerCase();
         const activeTypeBtn = typeButtons.find(b => b.classList.contains('active'));
         const selectedType = activeTypeBtn ? activeTypeBtn.dataset.type : 'All';
-        const selectedSemester = currentSemester; // 'all' or semester id
+
+        let visibleCount = 0;
 
         getCards().forEach(card => {
           const title = card.dataset.title || '';
           const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
           const cardType = card.dataset.type || '';
           const cardSemester = card.dataset.semester || '';
+
           const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
           const matchesType = selectedType === 'All' || cardType === selectedType;
-          const matchesSemester = selectedSemester === 'all' || cardSemester === selectedSemester;
+          const matchesSemester = currentSemester === 'all' || cardSemester === currentSemester;
 
-          card.style.display = (matchesQuery && matchesType && matchesSemester) ? '' : 'none';
+          const cardDate = new Date(card.dataset.date);
+          cardDate.setHours(0,0,0,0);
+
+          const today = new Date();
+          today.setHours(0,0,0,0);
+
+          let matchesSort = true;
+          if (currentSort === 'upcoming') matchesSort = cardDate >= today;
+          if (currentSort === 'past') matchesSort = cardDate < today;
+
+          const show = matchesQuery && matchesType && matchesSemester && matchesSort;
+          card.style.display = show ? '' : 'none';
+          if (show) visibleCount++;
         });
+
+        // Ensure a container for "No events found" exists inside the grid
+        let noEventsMessage = document.getElementById('no-events-message');
+        if (!noEventsMessage) {
+          noEventsMessage = document.createElement('div');
+          noEventsMessage.id = 'no-events-message';
+          noEventsMessage.textContent = 'No events found';
+          noEventsMessage.style.textAlign = 'center';
+          noEventsMessage.style.padding = '2rem';
+          noEventsMessage.style.gridColumn = '1 / -1'; // span full width if grid uses CSS grid
+          grid.appendChild(noEventsMessage);
+        }
+
+        noEventsMessage.style.display = visibleCount === 0 ? 'block' : 'none';
 
         applySort();
       }
 
       function applySort() {
         const mode = currentSort;
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
         const visibleCards = getCards().filter(c => c.style.display !== 'none');
 
         visibleCards.sort((a, b) => {
-          if (mode === 'title-asc') {
-            return a.dataset.title.localeCompare(b.dataset.title);
-          }
-          if (mode === 'date-asc') {
-            return new Date(a.dataset.date) - new Date(b.dataset.date);
-          }
-          // default date-desc
-          return new Date(b.dataset.date) - new Date(a.dataset.date);
+          const dateA = new Date(a.dataset.date); dateA.setHours(0,0,0,0);
+          const dateB = new Date(b.dataset.date); dateB.setHours(0,0,0,0);
+
+          if (mode === 'title-asc') return a.dataset.title.localeCompare(b.dataset.title);
+          if (mode === 'upcoming') return dateA - dateB; // soonest upcoming first
+          if (mode === 'past') return dateB - dateA;     // most recent past first
+
+          return 0;
         });
 
         visibleCards.forEach(c => grid.appendChild(c));
       }
 
-      // Type buttons
       typeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
           typeButtons.forEach(b => b.classList.remove('active'));
@@ -237,17 +257,13 @@ const types = ["All", ...preferredExisting, ...remaining];
         });
       });
 
-      // Search input
       searchInput.addEventListener('input', () => applyFilters());
 
-      // Popover toggle
       function openPopover() {
         filtersPopover.style.display = 'block';
         filtersToggle.setAttribute('aria-expanded', 'true');
-        // set popover selects to current state
         semesterSelectPop.value = currentSemester;
         sortSelectPop.value = currentSort;
-        // focus first control
         semesterSelectPop.focus();
         document.addEventListener('click', onDocClick);
         document.addEventListener('keydown', onKeyDown);
@@ -262,11 +278,10 @@ const types = ["All", ...preferredExisting, ...remaining];
 
       filtersToggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        const open = filtersPopover.style.display === 'block';
-        if (open) closePopover(); else openPopover();
+        if (filtersPopover.style.display === 'block') closePopover();
+        else openPopover();
       });
 
-      // Apply / Cancel inside popover
       filtersApply.addEventListener('click', () => {
         currentSemester = semesterSelectPop.value;
         currentSort = sortSelectPop.value;
@@ -274,33 +289,22 @@ const types = ["All", ...preferredExisting, ...remaining];
         applyFilters();
       });
 
-      filtersCancel.addEventListener('click', () => {
-        closePopover();
-      });
+      filtersCancel.addEventListener('click', closePopover);
 
-      // Close when clicking outside
       function onDocClick(e) {
-        if (!filtersPopover.contains(e.target) && e.target !== filtersToggle) {
-          closePopover();
-        }
+        if (!filtersPopover.contains(e.target) && e.target !== filtersToggle) closePopover();
       }
 
-      // Close on Escape
       function onKeyDown(e) {
         if (e.key === 'Escape') closePopover();
       }
 
-      // Initialize defaults
-      currentSemester = 'all';
-      currentSort = 'date-desc';
       applyFilters();
     </script>
 
     <style>
       .type-btn.active { background:#1a73e8; color:#fff; border-color:#1a73e8; }
-      @media (max-width:520px) {
-        #filters-popover { left: 8px; right: 8px; min-width: auto; }
-      }
+      @media (max-width:520px) { #filters-popover { left: 8px; right: 8px; min-width: auto; } }
     </style>
   </body>
 </html>

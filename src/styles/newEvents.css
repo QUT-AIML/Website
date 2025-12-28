@@ -260,3 +260,162 @@
 .filter-item:hover {
   background: #333;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.key-content {
+    margin-left: 3rem;
+    margin-right: 3rem;
+    margin-bottom: 5rem;
+    width: 100%;
+}
+
+
+/* === EVENTS GRID === */
+/* Panel wrapper that creates the dark grey division */
+.events-panel {
+  position: relative;
+  padding: 1.5rem;               /* space around the grid */
+  display: block;
+  width: 100%;
+}
+
+/* The dark grey background block behind the grid */
+.events-panel::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0.5rem;                   /* small offset from top of wrapper */
+  bottom: 0.5rem;                /* small offset from bottom of wrapper */
+  background: #272727;           /* dark grey color (adjust as needed) */
+  border-radius: 12px;           /* rounded corners to match cards */
+  z-index: 0;                    /* sits behind the grid */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25); /* subtle depth */
+}
+
+/* Ensure the grid and cards sit above the panel */
+.events-grid {
+    position: relative;
+    justify-content: start; /* aligns cards to the left instead of stretching */
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 360px); 
+    gap: 1.5rem;
+    padding: 1rem;                 /* inner spacing so cards don't touch panel edges */
+}
+
+.pink-panel,
+.events-controls {
+  display: block; /* ensures they stack vertically */
+  width: 100%;
+}
+
+/* === EVENT CARD === */
+.event-card {
+  background: #000; /* black background */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 2;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* Link wrapper */
+.event-card a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Card media */
+.card-media {
+  height: 140px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 0.9rem;
+  background: #111;
+}
+
+/* Card body */
+.card-body {
+  padding: 1rem;
+  color: #fff;
+}
+
+/* Title */
+.card-title {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+/* Divider line under title */
+.card-divider {
+  margin: 0.25rem 0;
+  height: 1px;
+  background: #FF8BF4; /* pink color directly */
+  width: 100%;
+}
+
+/* Date under divider */
+.card-date {
+  display: block;
+  font-size: 0.85rem;
+  color: #fff;
+  margin-bottom: 0.6rem;
+}
+
+/* Description */
+.card-description {
+  margin: 0.6rem 0 1rem;
+  color: #fff;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+/* Footer */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* "View more" link */
+.card-view-more {
+  font-weight: 600;
+  color: #FF8BF4; /* pink */
+  cursor: pointer;
+}
