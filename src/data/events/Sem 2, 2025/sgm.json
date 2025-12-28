@@ -1,0 +1,20 @@
+{
+  "id": "sgm",
+  "overview": {
+    "title": "Special General Meeting",
+    "date": "2025-08-19",
+    "dateLabel": "19th August 2025",
+    "category": "Meeting",
+    "excerpt": "Join us for the Special General Meeting to affiliate with the Faculty of Engineering and elect new members of our executive body.",
+    "image": "/images/sgm.jpg",
+    "url": "/events/sgm"
+  },
+  "details": {
+    "title": "Special General Meeting",
+    "fullDate": "Tuesday, 19 August 2025",
+    "time": "5:30 PM – 7:30 PM",
+    "location": "QUT GP-B223",
+    "longDescription": "The Special General Meeting is a key event where we will formalize our affiliation with the Faculty of Engineering and elect new members of our executive body. This is an important opportunity for all members to have their say and shape the future of our club.",
+    "isCollab": "false"
+  }
+}

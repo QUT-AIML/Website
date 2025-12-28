@@ -58,6 +58,9 @@ function parseSemesterFolder(folderName) {
 const groups = {};
 
 for (const [path, mod] of Object.entries(modules)) {
+
+  if (path.endsWith('template.json')) continue;
+
   // path looks like './2024-sem1/winter-hackathon.json' or './Sem 2, 2026/event.json'
   const match = path.match(/^\.\/([^/]+)\//);
   const semesterFolder = match ? match[1] : 'unknown';

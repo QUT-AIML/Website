@@ -1,0 +1,39 @@
+{
+  "id": "<file_name>", 
+  "overview": {
+    "title": "<Event Title>",
+    "date": "<YYYY-MM-DD>",
+    "dateLabel": "<Readable Date, e.g., September 21st>",
+    "category": "<Category, e.g., Hackathon, Meeting, Workshop>",
+    "excerpt": "<Short description of the event>",
+    "image": "<Path to event image, e.g., /images/event.jpg>",
+    "url": "<URL path to event page, e.g., /events/event-id>"
+  },
+  "details": {
+    "title": "<Event Title>",
+    "fullDate": "<Full readable date, e.g., Saturday, 21 September 2026>",
+    "time": "<Start time – End time, e.g., 9:00 AM – 5:00 PM>",
+    "location": "<Physical location or online, e.g., Zoom / QUT Room 101>",
+    "longDescription": "<Detailed description of the event>",
+    "isCollab": "<true/false>",
+    "schedule": [
+      { "time": "<HH:MM>", "activity": "<Activity description>" },
+      { "time": "<HH:MM>", "activity": "<Activity description>" }
+    ],
+    "speakers": [
+      { "name": "<Speaker Name>", "role": "<Speaker Role>" },
+      { "name": "<Speaker Name>", "role": "<Speaker Role>" }
+    ],
+    "registration": {
+      "required": "<true/false>",
+      "link": "<Registration URL>",
+      "capacity": "<Number of participants>",
+      "price": "<Free / Paid price>"
+    },
+    "contact": { 
+      "email": "<Contact email>", 
+      "phone": "<Contact phone number (optional)>" 
+    },
+    "gallery": ["<Image path 1>", "<Image path 2>"]
+  }
+}

@@ -3,9 +3,22 @@ import "@/styles/global.css";
 import "@/styles/about.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
-import teamData from "../data/2026_team.json";
 
-/* Filter out overview on the server */
+// Import all JSON files eagerly
+const teamFiles = import.meta.glob('/src/data/teams/*.json', { eager: true, query: '?json' });
+
+// Get the latest team JSON based on the year in the filename
+const latestTeamFile = Object.keys(teamFiles)
+  .map(path => ({
+    path,
+    year: parseInt(path.match(/(\d{4})/)[0]) // extract year
+  }))
+  .sort((a, b) => b.year - a.year)[0].path;
+
+// Get the JSON array from the file
+const teamData = teamFiles[latestTeamFile].default;
+
+// Filter out overview
 const teamsForClient = teamData.filter(t => t.id !== "overview");
 ---
 

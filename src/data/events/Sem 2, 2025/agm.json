@@ -1,0 +1,20 @@
+{
+  "id": "agm",
+  "overview": {
+    "title": "Annual General Meeting",
+    "date": "2025-09-23",
+    "dateLabel": "23rd September 2025",
+    "category": "Meeting",
+    "excerpt": "Join us for the Annual General Meeting to review the year, hear reports, and re-elect all club positions.",
+    "image": "/images/agm.jpg",
+    "url": "/events/agm"
+  },
+  "details": {
+    "title": "Annual General Meeting",
+    "fullDate": "Tuesday, 23 September 2025",
+    "time": "5:30 PM – 7:30 PM",
+    "location": "QUT GP-D108",
+    "longDescription": "The Annual General Meeting (AGM) is a key event where we review the club's activities throughout the year, hear the President's and Treasurer's reports, and re-elect all club positions. All members are encouraged to attend and have their say in shaping the future of the club.",
+    "isCollab": "false"
+  }
+}

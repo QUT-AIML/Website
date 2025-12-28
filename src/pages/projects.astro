@@ -1,0 +1,51 @@
+---
+import "@/styles/global.css";
+import "@/styles/about.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+import teamData from "../data/2026_team.json";
+
+/* Filter out overview on the server */
+const teamsForClient = teamData.filter(t => t.id !== "overview");
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning."
+    />
+    <title>QUT AIML</title>
+  </head>
+
+  <body class="background-dots">
+    <Navigation />
+
+    <div class="content-wrapper about-space">
+      <!-- ABOUT -->
+      <section class="pink-panel">
+        <p class="pink-title">Club Projects</p>
+      </section>
+
+		<div class="info-panel-wrapper">
+			<div class="thick-line-behind"></div>			
+			<section class="info-panel">
+				The QUT AI & ML Society runs collaborative projects that bring students, researchers, and industry partners together to build practical AI and machine‑learning solutions. 
+        Projects range from developer tools and data‑driven apps to research prototypes and everyday innovations, with clear roles for contributors at every skill level. 
+        We pair hands‑on work with mentorship, workshops, and hackathons to help members learn, share code, and grow their portfolios while applying AI responsibly. 
+        Join to contribute, learn from peers, and help shape projects that make a real impact.
+				</p>
+			</section>
+			</div>
+ 
+      
+
+    </div>
+
+    <Footer />
+
+  </body>
+</html>

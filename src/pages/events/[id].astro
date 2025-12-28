@@ -1,16 +1,15 @@
 ---
-// src/pages/events/[id].astro
 import "@/styles/global.css";
-import "@/styles/about.css";
+import "@/styles/events/event-details.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
+// Required for dynamic routes
 export async function getStaticPaths() {
   const modules = import.meta.glob('../../data/events/**/*.json', { eager: true });
 
   const paths = Object.keys(modules)
     .map((filePath) => {
-      // filePath examples: './2026-sem2/winter-hackathon.json'
       const match = filePath.match(/\/([^/]+)\.json$/);
       const id = match ? match[1] : null;
       return id ? { params: { id } } : null;
@@ -20,13 +19,10 @@ export async function getStaticPaths() {
   return paths;
 }
 
-// Page frontmatter: load the matched JSON lazily for this route
 const { params } = Astro;
 const id = params.id;
 
-// Lazy import map (non-eager) so only the matched file is imported for this page
 const modules = import.meta.glob('../../data/events/**/*.json');
-
 const matchKey = Object.keys(modules).find((k) => k.endsWith(`/${id}.json`));
 
 let notFound = false;
@@ -55,49 +51,49 @@ const pageTitle = event ? `${details.title ?? overview.title} — QUT AIML` : "E
   <body class="background-dots">
     <Navigation />
 
-    <main class="content-wrapper about-space" style="padding:2rem;">
+    <main class="unique-event-space">
       {notFound ? (
-        <section style="background:#fff;border-radius:10px;padding:1.25rem;box-shadow:0 8px 24px rgba(0,0,0,0.06);">
-          <h1 style="margin:0 0 0.5rem 0;">Event not found</h1>
-          <p style="margin:0 0 1rem 0;">We couldn't find an event with the id <strong>{id}</strong>.</p>
-          <p style="margin:0;"><a href="/events" style="color:#1a73e8;text-decoration:none;">Back to events</a></p>
+        <section class="unique-event-card unique-event-notfound">
+          <h1>Event not found</h1>
+          <p>We couldn't find an event with the id <strong>{id}</strong>.</p>
+          <p><a href="/events" class="unique-link">Back to events</a></p>
         </section>
       ) : (
-        <article style="background:#fff;border-radius:10px;padding:1.25rem;box-shadow:0 8px 24px rgba(0,0,0,0.06);">
-          <nav style="margin-bottom:1rem;">
-            <a href="/events" style="color:#1a73e8;text-decoration:none;">← Back to events</a>
+        <article class="unique-event-card">
+          <nav class="unique-nav">
+            <a href="/events" class="unique-link">← Back to events</a>
           </nav>
 
-          <header style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
-            <div style="flex:1;min-width:220px;">
-              <h1 style="margin:0 0 0.25rem 0;">{details.title ?? overview.title}</h1>
-              <div style="color:#666;font-size:0.95rem;margin-bottom:0.5rem;">
-                <time>{details.fullDate ?? overview.dateLabel ?? overview.date}</time>
-                {details.time ? <span> · {details.time}</span> : null}
-                {details.location ? <span> · {details.location}</span> : null}
-              </div>
-
-              {(overview.category || (details.tags && details.tags.length)) ? (
-                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.5rem;">
-                  {overview.category ? <span style="font-size:0.85rem;color:#888;">{overview.category}</span> : null}
-                  {(details.tags ?? []).map(tag => <span style="font-size:0.85rem;color:#888;">{tag}</span>)}
-                </div>
-              ) : null}
+          {/* TOP IMAGE */}
+          {overview.image ? (
+            <div class="unique-top-image-wrapper">
+              <img src={overview.image} alt={overview.title} class="unique-top-image" />
             </div>
+          ) : null}
 
-            {overview.image ? (
-              <div style="width:220px;height:140px;flex-shrink:0;border-radius:8px;overflow:hidden;background:#f3f3f3;">
-                <img src={overview.image} alt={overview.title} style="width:100%;height:100%;object-fit:cover;" />
+          <header class="unique-header">
+            <h1 class="unique-title">{details.title ?? overview.title}</h1>
+            <div class="unique-meta">
+              <time>{details.fullDate ?? overview.dateLabel ?? overview.date}</time>
+              {details.time ? <span> · {details.time}</span> : null}
+              {details.location ? <span> · {details.location}</span> : null}
+            </div>
+            <div class="unique-meta-divider"></div>
+
+            {(overview.category || (details.tags && details.tags.length)) ? (
+              <div class="unique-tags">
+                {overview.category ? <span class="unique-tag">{overview.category}</span> : null}
+                {(details.tags ?? []).map(tag => <span class="unique-tag">{tag}</span>)}
               </div>
             ) : null}
           </header>
 
-          <section style="margin-top:1rem;color:#333;line-height:1.6;">
-            <p style="margin:0 0 1rem 0;">{details.longDescription ?? overview.excerpt}</p>
+          <section class="unique-body">
+            <p>{details.longDescription ?? overview.excerpt}</p>
 
             {details.schedule ? (
-              <div style="margin-bottom:1rem;">
-                <h3 style="margin:0 0 0.5rem 0;">Schedule</h3>
+              <div class="unique-section">
+                <h3 class="unique-section-title">Schedule</h3>
                 <ul>
                   {details.schedule.map(item => <li>{item.time ? `${item.time} — ` : ''}{item.activity}</li>)}
                 </ul>
@@ -105,8 +101,8 @@ const pageTitle = event ? `${details.title ?? overview.title} — QUT AIML` : "E
             ) : null}
 
             {details.agenda ? (
-              <div style="margin-bottom:1rem;">
-                <h3 style="margin:0 0 0.5rem 0;">Agenda</h3>
+              <div class="unique-section">
+                <h3 class="unique-section-title">Agenda</h3>
                 <ul>
                   {details.agenda.map(a => <li>{a.item}</li>)}
                 </ul>
@@ -114,8 +110,8 @@ const pageTitle = event ? `${details.title ?? overview.title} — QUT AIML` : "E
             ) : null}
 
             {details.speakers ? (
-              <div style="margin-bottom:1rem;">
-                <h3 style="margin:0 0 0.5rem 0;">Speakers</h3>
+              <div class="unique-section">
+                <h3 class="unique-section-title">Speakers</h3>
                 <ul>
                   {details.speakers.map(s => <li>{s.name}{s.role ? ` — ${s.role}` : ''}</li>)}
                 </ul>
@@ -123,15 +119,15 @@ const pageTitle = event ? `${details.title ?? overview.title} — QUT AIML` : "E
             ) : null}
 
             {details.format ? (
-              <div style="margin-bottom:1rem;">
-                <h3 style="margin:0 0 0.5rem 0;">Format</h3>
-                <p style="margin:0;">{details.format}</p>
+              <div class="unique-section">
+                <h3 class="unique-section-title">Format</h3>
+                <p>{details.format}</p>
               </div>
             ) : null}
 
             {details.prizes ? (
-              <div style="margin-bottom:1rem;">
-                <h3 style="margin:0 0 0.5rem 0;">Prizes</h3>
+              <div class="unique-section">
+                <h3 class="unique-section-title">Prizes</h3>
                 <ul>
                   {details.prizes.map(p => <li>{p}</li>)}
                 </ul>
@@ -139,30 +135,30 @@ const pageTitle = event ? `${details.title ?? overview.title} — QUT AIML` : "E
             ) : null}
 
             {details.registration ? (
-              <div style="margin-top:1rem;padding:0.75rem;border-radius:8px;background:#f7f9ff;border:1px solid #e6eefc;">
-                <h3 style="margin:0 0 0.5rem 0;">Registration</h3>
-                <p style="margin:0 0 0.5rem 0;">{details.registration.required ? 'Registration required' : 'No registration required'}</p>
-                {details.registration.link ? <p style="margin:0;"><a href={details.registration.link} style="color:#1a73e8;">Register / More info</a></p> : null}
-                {details.registration.price ? <p style="margin:0.5rem 0 0 0;color:#444;">Price: {details.registration.price}</p> : null}
+              <div class="unique-registration">
+                <h3 class="unique-section-title">Registration</h3>
+                <p>{details.registration.required ? 'Registration required' : 'No registration required'}</p>
+                {details.registration.link ? <p><a href={details.registration.link} class="unique-link">Register / More info</a></p> : null}
+                {details.registration.price ? <p class="unique-price">Price: {details.registration.price}</p> : null}
               </div>
             ) : null}
 
             {details.documents ? (
-              <div style="margin-top:1rem;">
-                <h3 style="margin:0 0 0.5rem 0;">Documents</h3>
+              <div class="unique-section">
+                <h3 class="unique-section-title">Documents</h3>
                 <ul>
-                  {details.documents.map(d => <li><a href={d.url} style="color:#1a73e8;">{d.label}</a></li>)}
+                  {details.documents.map(d => <li><a href={d.url} class="unique-link">{d.label}</a></li>)}
                 </ul>
               </div>
             ) : null}
 
             {details.gallery ? (
-              <div style="margin-top:1rem;">
-                <h3 style="margin:0 0 0.5rem 0;">Gallery</h3>
-                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <div class="unique-section">
+                <h3 class="unique-section-title">Gallery</h3>
+                <div class="unique-gallery">
                   {details.gallery.map(src => (
-                    <div style="width:120px;height:80px;border-radius:6px;overflow:hidden;background:#f3f3f3;">
-                      <img src={src} alt={overview.title} style="width:100%;height:100%;object-fit:cover;" />
+                    <div class="unique-gallery-item">
+                      <img src={src} alt={overview.title} class="unique-gallery-image" />
                     </div>
                   ))}
                 </div>
@@ -171,10 +167,10 @@ const pageTitle = event ? `${details.title ?? overview.title} — QUT AIML` : "E
           </section>
 
           {details.contact ? (
-            <footer style="margin-top:1.25rem;border-top:1px solid #eee;padding-top:1rem;color:#444;">
+            <footer class="unique-footer">
               <strong>Contact</strong>
-              <div style="margin-top:0.25rem;">
-                {details.contact.email ? <div>Email: <a href={`mailto:${details.contact.email}`} style="color:#1a73e8;">{details.contact.email}</a></div> : null}
+              <div>
+                {details.contact.email ? <div>Email: <a href={`mailto:${details.contact.email}`} class="unique-link">{details.contact.email}</a></div> : null}
                 {details.contact.phone ? <div>Phone: {details.contact.phone}</div> : null}
               </div>
             </footer>

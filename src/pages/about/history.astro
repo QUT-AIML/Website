@@ -5,11 +5,11 @@ import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
 // Import all JSON files from /src/data
-const teamFiles = import.meta.glob('/src/data/*.json', { eager: true, query: '?json' });
+const teamFiles = import.meta.glob('/src/data/teams/*.json', { eager: true, query: '?json' });
 
 // Convert imported files into an array of datasets with year info
 const teamsByYear = Object.entries(teamFiles).map(([filepath, mod]) => {
-  const yearMatch = filepath.match(/(\d{4})_team\.json$/);
+  const yearMatch = filepath.match(/(\d{4})\.json$/);
   const year = yearMatch ? parseInt(yearMatch[1]) : null;
   const data = mod.default;
   return {

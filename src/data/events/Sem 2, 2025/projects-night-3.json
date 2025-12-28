@@ -1,0 +1,23 @@
+{
+  "id": "projects-night-2",
+  "overview": {
+    "title": "Projects Night - How to Maintain a ML Portfolio",
+    "date": "2025-08-12",
+    "dateLabel": "12th August 2025",
+    "category": "Projects",
+    "excerpt": "Learn how to maintain a strong machine learning portfolio, collaborate on projects, and get feedback from fellow members.",
+    "image": "/images/projects-night-ml.jpg",
+    "url": "/events/projects-night-3"
+  },
+  "details": {
+    "title": "Projects Night - How to Maintain a ML Portfolio",
+    "fullDate": "Tuesday, 12 August 2025",
+    "time": "5:30 PM – 7:30 PM",
+    "location": "QUT GP-B223",
+    "longDescription": "Join us for Projects Night focused on maintaining a machine learning portfolio. We'll guide you through best practices, showcase project ideas, and provide opportunities to collaborate with fellow members. Bring your ideas, get feedback, and leave with concrete steps to strengthen your portfolio!",
+    "isCollab": "true",
+    "speakers": [
+      { "name": "Albert Dai", "role": "Sessional Academic & Data Scientist" }
+    ]
+  }
+}

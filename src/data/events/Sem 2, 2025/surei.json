@@ -1,0 +1,20 @@
+{
+  "id": "surei",
+  "overview": {
+    "title": "Symposium of Undergraduate Robotics, Engineering & IT",
+    "date": "2025-11-21",
+    "dateLabel": "21st November 2025",
+    "category": "Projects",
+    "excerpt": "Join us for SUREI, a project showcase event where students present their robotics, engineering, and IT projects to share ideas and innovations.",
+    "image": "/images/surei.jpg",
+    "url": "/events/surei"
+  },
+  "details": {
+    "title": "Symposium of Undergraduate Robotics, Engineering & IT",
+    "fullDate": "Friday, 21 November 2025",
+    "time": "2:00 PM – 7:00 PM",
+    "location": "QUT GP-Z Block, Level 4",
+    "longDescription": "SUREI is a project showcase where undergraduate students present their work in robotics, engineering, and IT. This is a fantastic opportunity to explore innovative projects, collaborate with peers, and gain inspiration from the ideas and achievements of fellow students.",
+    "isCollab": "true"
+  }
+}

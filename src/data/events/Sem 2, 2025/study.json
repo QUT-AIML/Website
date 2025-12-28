@@ -1,0 +1,20 @@
+{
+  "id": "study",
+  "overview": {
+    "title": "Study Night",
+    "date": "2025-10-07",
+    "dateLabel": "7th October 2025",
+    "category": "Study",
+    "excerpt": "Join us for Study Night to focus, collaborate, and prepare for upcoming assessments with fellow members.",
+    "image": "/images/study-1.jpg",
+    "url": "/events/study-1"
+  },
+  "details": {
+    "title": "Study Night",
+    "fullDate": "Tuesday, 7 October 2025",
+    "time": "5:30 PM – 7:30 PM",
+    "location": "QUT GP-B223",
+    "longDescription": "Study Night is a dedicated session to focus on coursework, collaborate with fellow members, and prepare for upcoming assessments. Bring your notes, questions, and projects, and make the most of a productive evening with a supportive study environment.",
+    "isCollab": "false"
+  }
+}

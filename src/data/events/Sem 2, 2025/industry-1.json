@@ -1,0 +1,25 @@
+{
+  "id": "industry-1",
+  "overview": {
+    "title": "Industry Speaker Event - Alumni Insights: Lessons in AI & Life",
+    "date": "2025-09-30",
+    "dateLabel": "30th September 2025",
+    "category": "Industry",
+    "excerpt": "Hear from alumni about their experiences in AI and their career journeys, and gain valuable insights for your own path.",
+    "image": "/images/industry-1.jpg",
+    "url": "/events/industry-1"
+  },
+  "details": {
+    "title": "Industry Speaker Event - Alumni Insights: Lessons in AI & Life",
+    "fullDate": "Tuesday, 30 September 2025",
+    "time": "5:30 PM – 7:30 PM",
+    "location": "QUT GP-B223",
+    "longDescription": "Join us for an inspiring industry speaker event where alumni share their experiences in AI, the lessons they’ve learned throughout their careers, and insights on navigating professional and personal growth. This event is perfect for anyone interested in AI, career development, and learning from real-world experiences.",
+    "isCollab": "false",
+    "speakers": [
+      { "name": "Drayko Medlyn", "role": "Associate Cloud Engineer, Former Code Network President. Bachelor of IT (Comp Sci)" },
+      { "name": "Hebe Bickham", "role": "ACS Young Tech Ambdassador, Former Women in Tech Vice President, Bachelor of IT (Comp Sci)" },
+      { "name": "Mazhar Huq", "role": "Former BANDS Events Officer, Bachelor of IT (Info Systems)" }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "projects-night-1",
+  "overview": {
+    "title": "Projects Night",
+    "date": "2025-07-29",
+    "dateLabel": "29th July 2025",
+    "category": "Projects",
+    "excerpt": "Join us for Projects Night to work on exciting challenges, showcase your ideas, and collaborate with fellow members.",
+    "image": "/images/projects-night.jpg",
+    "url": "/events/projects-night-1"
+  },
+  "details": {
+    "title": "Projects Night",
+    "fullDate": "Tuesday, 29th July 2025",
+    "time": "5:30 PM – 7:30 PM",
+    "location": "QUT GP-B223",
+    "longDescription": "Projects Night is an opportunity to collaborate with fellow members on interesting challenges, share your ideas, and showcase any projects you’re working on. Whether you want to brainstorm, get feedback, or just see what others are building, this event is for you!",
+    "isCollab": "false"
+  }
+}

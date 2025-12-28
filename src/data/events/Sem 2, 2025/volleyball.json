@@ -1,0 +1,20 @@
+{
+  "id": "volleyball",
+  "overview": {
+    "title": "Volleyball Tournament",
+    "date": "2025-09-25",
+    "dateLabel": "25th September 2025",
+    "category": "Social",
+    "excerpt": "Join us for a fun Volleyball Tournament with Women in Tech to connect, play, and socialize with fellow members.",
+    "image": "/images/volleyball.jpg",
+    "url": "/events/volleyball"
+  },
+  "details": {
+    "title": "Volleyball Tournament",
+    "fullDate": "Thursday, 25 September 2025",
+    "time": "10:30 AM – 12:30 PM",
+    "location": "QUT KG Indoor Sports Courts",
+    "longDescription": "Join us for a Volleyball Tournament in collaboration with Women in Tech! This is a great opportunity to get active, meet new people, and enjoy some friendly competition while connecting with fellow members of our community.",
+    "isCollab": "true"
+  }
+}

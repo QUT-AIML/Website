@@ -1,0 +1,20 @@
+{
+  "id": "mech",
+  "overview": {
+    "title": "Mech Mayhem",
+    "date": "2025-10-11",
+    "dateLabel": "11th October 2025",
+    "category": "Industry",
+    "excerpt": "Join us for Mech Mayhem, an exciting robotics and engineering challenge where participants test their mechanical creations in a fun and competitive environment.",
+    "image": "/images/mech.jpg",
+    "url": "/events/mech"
+  },
+  "details": {
+    "title": "Mech Mayhem",
+    "fullDate": "Saturday, 11 October 2025",
+    "time": "10:00 AM – 2:00 PM",
+    "location": "QUT GP-O134",
+    "longDescription": "Mech Mayhem is a hands-on event where participants bring their mechanical and robotics projects to compete in a series of fun challenges. This is a great opportunity to showcase engineering skills, test innovative ideas, and engage with fellow students in a friendly, competitive atmosphere.",
+    "isCollab": "true"
+  }
+}
