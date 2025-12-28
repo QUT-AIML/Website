@@ -1,0 +1,184 @@
+---
+import "@/styles/global.css";
+import "@/styles/team.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+
+// Import all JSON files from /src/data
+const teamFiles = import.meta.glob('/src/data/*.json', { eager: true, query: '?json' });
+
+// Convert imported files into an array of datasets with year info
+const teamsByYear = Object.entries(teamFiles).map(([filepath, mod]) => {
+  const yearMatch = filepath.match(/(\d{4})_team\.json$/);
+  const year = yearMatch ? parseInt(yearMatch[1]) : null;
+  const data = mod.default;
+  return {
+    year,
+    teams: Array.isArray(data) ? data : []
+  };
+})
+.sort((a, b) => (b.year || 0) - (a.year || 0));
+
+console.log("Teams by year:", teamsByYear);
+
+function groupByRole(items) {
+  const map = {};
+  items.forEach(p => {
+    if (!map[p.role]) map[p.role] = [];
+    map[p.role].push(p.name);
+  });
+  return map;
+}
+
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>QUT AIML</title>
+    <meta name="viewport" content="width=device-width" />
+  </head>
+  <body class="background-network">
+    <Navigation />
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">Executive Team History</h1>
+      </div>
+
+      {teamsByYear.map(({ year, teams }, yearIndex) => {
+        if (!teams.length) return null;
+
+        const overviewSection = teams.find(t => t.id === 'overview');
+        const heroImg = overviewSection?.items?.[0]?.img || '';
+        const sectionTitle = overviewSection?.title || `Team ${year}`;
+
+        return (
+          <section class="info-panel history-box" key={yearIndex}>
+            <h2 class="section-title">{sectionTitle}</h2>
+
+            <div class="team-split static-layout">
+              {/* LEFT: Yearbook Table */}
+              <aside class="yearbook">
+                <table class="yearbook-table">
+                  {teams
+                    .filter(t => t.id !== 'overview')
+                    .map((t, index, arr) => {
+                      const grouped = groupByRole(t.items);
+                      return (
+                        <>
+                          <tbody class="team-group" key={t.id}>
+                            {Object.entries(grouped).map(([role, names]) => (
+                              <tr class="yearbook-row" key={role}>
+                                <td class="role-cell">{role}</td>
+                                <td class="names-cell">{names.join(', ')}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+
+                          {index < arr.length - 1 && (
+                            <tbody>
+                              <tr class="team-spacer">
+                                <td colSpan="2"></td>
+                              </tr>
+                            </tbody>
+                          )}
+                        </>
+                      );
+                    })}
+                </table>
+              </aside>
+
+              {/* RIGHT: Hero Image with Loader */}
+              <div class="team-photo-large">
+                {heroImg && heroImg !== "N/A" ? (
+                  <div class="image-wrapper" style="position: relative;">
+                    <div class="loader" id={`loader-${yearIndex}`}>
+                      <div class="spinner"></div>
+                    </div>
+                    <img
+                      src={heroImg}
+                      alt={sectionTitle}
+                      class="team-hero"
+                      id={`teamHero-${yearIndex}`}
+                      onload={`document.getElementById('loader-${yearIndex}').style.display='none'`}
+                      style="display: block;"
+                    />
+                  </div>
+                ) : (
+                  <div class="team-placeholder">
+                    Photo coming soon!
+                  </div>
+                )}
+              </div>
+
+
+              {/* Modal */}
+              <div id={`photoModal-${yearIndex}`} class="modal">
+                <span class="modal-close" id={`modalClose-${yearIndex}`}>&times;</span>
+                <img class="modal-content" id={`modalImg-${yearIndex}`} />
+              </div>
+            </div>
+          </section>
+        );
+      })}
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+/* Loader Styles */
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #555;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+  // Handle multiple modals automatically
+  document.querySelectorAll('.team-hero').forEach((img, i) => {
+    const modal = document.getElementById(`photoModal-${i}`);
+    const modalImg = document.getElementById(`modalImg-${i}`);
+    const closeBtn = document.getElementById(`modalClose-${i}`);
+
+    img.onclick = () => {
+      modal.style.display = "block";
+      modalImg.src = img.src;
+      document.body.classList.add("modal-open");
+    }
+
+    closeBtn.onclick = () => {
+      modal.style.display = "none";
+      document.body.classList.remove("modal-open");
+    }
+
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+        document.body.classList.remove("modal-open");
+      }
+    }
+  });
+</script>
