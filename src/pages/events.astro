@@ -1,228 +1,170 @@
 ---
-import "@/styles/global.css"
-import "@/styles/ml-topics.css"
-import "@/styles/events.css"
-import Navigation from "@/components/Navigation.astro"
-import Footer from '@/components/Footer.astro';
----
+import "@/styles/global.css";
+import "@/styles/about.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+import events from "@/data/events/index.js";
 
+// Normalize to an array of overview objects so the template can rely on consistent fields.
+// This handles three common shapes:
+//  - index.js already returns overview objects
+//  - index.js returns full event objects with `overview`
+//  - index.js returns objects with `_raw.overview` (kept for compatibility)
+const overviews = (events ?? []).map((ev) => {
+  const o = ev.overview ?? ev._raw?.overview ?? ev;
+  return {
+    id: ev.id ?? o.id ?? (o.title ? o.title.toLowerCase().replace(/\s+/g, "-") : ""),
+    title: o.title ?? "",
+    date: o.date ?? "",
+    dateLabel: o.dateLabel ?? o.date ?? "",
+    category: o.category ?? "Other",
+    excerpt: o.excerpt ?? "",
+    image: o.image ?? "",
+    url: o.url ?? `/events/${ev.id ?? o.id ?? ""}`,
+  };
+});
+---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning through events, workshops, and collaboration." />
-    <title>QUT AIML</title>
+    <meta
+      name="description"
+      content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning."
+    />
+    <title>QUT AIML — Events</title>
   </head>
-  <body class="background-network">
+
+  <body class="background-dots">
     <Navigation />
 
-    <main class="main-content">
-      <div class="page-header">
-        <h1 class="page-title">Events</h1>
-      </div>
+    <div class="content-wrapper about-space">
+      <!-- HERO / TITLE -->
+      <section class="pink-panel">
+        <p class="pink-title">What's on at QUT AIML</p>
+      </section>
 
-      <div class="tab-switch">
-        <button class="tab-btn active" data-tab="projects">Project Nights</button>
-        <button class="tab-btn" data-tab="industry">Industry Nights</button>
-        <button class="tab-btn" data-tab="social">Social Nights</button>
-      </div>
+      <!-- SEARCH & FILTERS -->
+      <section class="events-controls" style="margin: 2rem 0;">
+        <div class="controls-row" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+          <label style="flex:1;min-width:220px;">
+            <input id="events-search" type="search" placeholder="Search events..." style="width:100%;padding:0.6rem;border-radius:6px;border:1px solid #ddd;" />
+          </label>
 
-      <div class="content-wrapper tab-panels">
-        <div id="projects" class="tab-panel active">
-      
-          <!-- Project Nights panel -->
-          <section class="info-panel">
-            <h2 class="section-title">Project Nights</h2>
-            <p class="section-content">
-              Our Project Nights are an opportunity for our members to learn about AI 
-              and get hands on experience building. We provide topics for our 
-              members to learn about and work on, from beginner, to intermediate, 
-              and then to advanced difficulty.
-            </p>
-            <br>
-            <p class="section-content padding-bottom">
-              Members will work on these topics in pairs, ideally with one IT and one 
-              non-IT student. This way, IT students can reinforce their knowledge while 
-              non-IT students get the support they need. This makes it rewarding for 
-              both. Each topic is run like a mini course: we explain the concept, give 
-              its background and practical uses, and share an annotated example 
-              solution. Members then complete three challenge projects to build the 
-              ML model themselves.
-            </p>
+          <div id="category-filters" style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <button class="filter-btn active" data-category="All" type="button" style="padding:0.5rem 0.8rem;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;">All</button>
+            <button class="filter-btn" data-category="Hackathons" type="button" style="padding:0.5rem 0.8rem;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;">Hackathons</button>
+            <button class="filter-btn" data-category="Games" type="button" style="padding:0.5rem 0.8rem;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;">Games</button>
+            <button class="filter-btn" data-category="Meetings" type="button" style="padding:0.5rem 0.8rem;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;">Meetings</button>
+            <button class="filter-btn" data-category="Projects" type="button" style="padding:0.5rem 0.8rem;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;">Projects</button>
+          </div>
 
-            <p class="section-content">
-              <div class="carousel" id="projects-carousel">
-                <button class="carousel-btn prev">&#10094;</button>
-                <div class="carousel-track">
-                  <img src="/events/Projects Night - 1.jpg" alt="projects night photo 1" />
-                  <img src="/events/Projects Night - 2.jpg" alt="projects night photo 2" />
-                  <img src="/events/Projects Night - 3.jpg" alt="projects night photo 3" />
-                  <img src="/events/Projects Night - 4.jpg" alt="projects night photo 3" />
-                </div>
-                <button class="carousel-btn next">&#10095;</button>
-              </div>
-            </p>
-          </section>
+          <div style="margin-left:auto;">
+            <label for="sort-select" style="font-size:0.9rem;color:#666;margin-right:0.5rem;">Sort</label>
+            <select id="sort-select" style="padding:0.4rem;border-radius:6px;border:1px solid #ddd;">
+              <option value="date-asc">Date ascending</option>
+              <option value="date-desc" selected>Date descending</option>
+              <option value="title-asc">Title A–Z</option>
+            </select>
+          </div>
         </div>
+      </section>
 
-        <div id="industry" class="tab-panel">
-          
-          <!-- Industry Nights panel -->
-          <section class="info-panel">
-            <h2 class="section-title">Industry Nights</h2>
-            <p class="section-content">
-              Our Industry Nights are an opportunity for our members to gain valuable 
-              insights and guidance directly from alumni, professionals, and leaders in 
-              the AI and ML industry. These events help bridge the gap between academic 
-              learning and real-world applications, giving students firsthand exposure 
-              to industry trends, career pathways, and practical advice for navigating 
-              the field.
-            </p>
-            <br>
-            <p class="section-content padding-bottom">
-              Industry Nights also provide a welcoming space to connect and network 
-              with fellow students, researchers, and professionals within the AI, ML, 
-              and broader tech community. These connections can lead to 
-              mentorship opportunities, internships, and collaborations, helping 
-              members grow their professional network and stay informed about the 
-              evolving landscape of AI and machine learning.
-            </p>
-
-            <p class="section-content">
-              <div class="carousel" id="projects-carousel">
-                <button class="carousel-btn prev">&#10094;</button>
-                <div class="carousel-track">
-                  <img src="/events/Industry Night - 1.jpg" alt="industry speaker photo" />
-                  <img src="/events/Industry Night - 2.jpg" alt="industry speaker photo" />
-                  <img src="/events/Industry Night - 3.jpg" alt="industry speaker photo" />
-                </div>
-                <button class="carousel-btn next">&#10095;</button>
+      <!-- EVENTS GRID -->
+      <section id="events-grid" class="events-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;">
+        {overviews.map((ev) => (
+          <article class="event-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date} style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06);">
+            <a href={ev.url} style="display:block;color:inherit;text-decoration:none;">
+              <div class="card-media" style="height:140px;background:#f3f3f3;display:flex;align-items:center;justify-content:center;">
+                {ev.image ? <img src={ev.image} alt={ev.title} style="width:100%;height:100%;object-fit:cover;" /> : <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#999;">No image</div>}
               </div>
-            </p>
-          </section>
-        </div>
 
-        <div id="social" class="tab-panel">
-
-          <!-- Social Nights panel -->
-          <section class="info-panel">
-            <h2 class="section-title">Social Nights</h2>
-            <p class="section-content">
-              Our Social Nights are designed to give our members a chance to unwind, 
-              relax, and take a well-deserved break from the pressures of studies and 
-              assessments. These nights bring everyone together in a fun, casual 
-              environment where you can enjoy activities that help you de-stress and 
-              recharge.
-            </p>
-            <br>
-            <p class="section-content padding-bottom">
-              Whether you’re solving puzzles, teaming up for friendly games, or 
-              testing your wits in lively group challenges, Social Nights are all about 
-              building connections and having a good time. They’re the perfect way to 
-              meet new people, strengthen friendships, and create lasting memories 
-              while balancing the demands of student life.
-            </p>
-
-            <p class="section-content">
-              <div class="carousel" id="projects-carousel">
-                <button class="carousel-btn prev">&#10094;</button>
-                <div class="carousel-track">
-                  <img src="/events/Social Night - 1.jpg" alt="social night photo" />
-                  <video src="/events/Social Night - 3.mp4" muted loop playsinline style="width: 100%; border-radius: 8px;"></video>
-                  <img src="/events/Social Night - 2.jpg" alt="social night photo" />
+              <div class="card-body" style="padding:1rem;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">
+                  <h3 style="margin:0;font-size:1.05rem;">{ev.title}</h3>
+                  <time style="font-size:0.85rem;color:#666;">{ev.dateLabel}</time>
                 </div>
-                <button class="carousel-btn next">&#10095;</button>
+
+                <p style="margin:0.6rem 0 1rem;color:#444;font-size:0.95rem;line-height:1.35;">{ev.excerpt}</p>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span style="font-size:0.85rem;color:#888;">{ev.category}</span>
+                  <span style="font-weight:600;color:#1a73e8;">View more →</span>
+                </div>
               </div>
-            </p>
-          </section>
-        </div>
-      </div>
-    </main>
+            </a>
+          </article>
+        ))}
+      </section>
+    </div>
+
     <Footer />
+
+    <!-- Client-side script for search, filter, sort -->
+    <script type="module">
+      const searchInput = document.getElementById('events-search');
+      const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+      const sortSelect = document.getElementById('sort-select');
+      const grid = document.getElementById('events-grid');
+
+      // Helper to get current list of cards (re-query in case DOM changes)
+      function getCards() {
+        return Array.from(grid.querySelectorAll('.event-card'));
+      }
+
+      function applyFilters() {
+        const cards = getCards();
+        const query = searchInput.value.trim().toLowerCase();
+        const activeCategoryBtn = filterButtons.find(b => b.classList.contains('active'));
+        const category = activeCategoryBtn ? activeCategoryBtn.dataset.category : 'All';
+
+        cards.forEach(card => {
+          const title = card.dataset.title || '';
+          const cardCategory = card.dataset.category || '';
+          const matchesQuery = !query || title.includes(query) || card.querySelector('p')?.textContent.toLowerCase().includes(query);
+          const matchesCategory = category === 'All' || cardCategory === category;
+
+          card.style.display = (matchesQuery && matchesCategory) ? '' : 'none';
+        });
+
+        applySort(); // keep sort consistent after filtering
+      }
+
+      function applySort() {
+        const mode = sortSelect.value;
+        const cards = getCards();
+        const visibleCards = cards.filter(c => c.style.display !== 'none');
+
+        visibleCards.sort((a, b) => {
+          if (mode === 'title-asc') {
+            return a.dataset.title.localeCompare(b.dataset.title);
+          }
+          if (mode === 'date-asc') {
+            return new Date(a.dataset.date) - new Date(b.dataset.date);
+          }
+          // default date-desc
+          return new Date(b.dataset.date) - new Date(a.dataset.date);
+        });
+
+        // Re-append in sorted order
+        visibleCards.forEach(c => grid.appendChild(c));
+      }
+
+      // Wire up events
+      searchInput.addEventListener('input', () => applyFilters());
+      sortSelect.addEventListener('change', () => applySort());
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          applyFilters();
+        });
+      });
+
+      // Initial sort
+      applySort();
+    </script>
   </body>
 </html>
-
-<script type="module">
-  document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.tab-btn');
-    const panels = document.querySelectorAll('.tab-panel');
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
-      });
-    });
-
-    document.querySelectorAll('.carousel').forEach(initCarousel);
-
-    function initCarousel(carousel) {
-      const track = carousel.querySelector('.carousel-track');
-      const slides = Array.from(track.children).filter(el =>
-        el.tagName === 'IMG' || el.tagName === 'VIDEO'
-      );
-
-      const prevBtn = carousel.querySelector('.carousel-btn.prev');
-      const nextBtn = carousel.querySelector('.carousel-btn.next');
-      const dotsContainer = document.createElement('div');
-      dotsContainer.className = 'carousel-dots';
-      carousel.appendChild(dotsContainer);
-
-      let index = 0;
-
-      function updateCarousel() {
-        track.style.transform = `translateX(-${index * 100}%)`;
-
-        // Update dots
-        dotsContainer.querySelectorAll('.dot').forEach((dot, i) => {
-          dot.classList.toggle('active', i === index);
-          dot.setAttribute('aria-current', i === index ? 'true' : 'false');
-        });
-
-        // Pause all videos except the active one
-        slides.forEach((slide, i) => {
-          if (slide.tagName === 'VIDEO') {
-            if (i === index) {
-              slide.play().catch(() => {});
-            } else {
-              slide.pause();
-              slide.currentTime = 0; // optional: reset to start
-            }
-          }
-        });
-      }
-
-      slides.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'dot';
-        dot.type = 'button';
-        dot.addEventListener('click', () => {
-          index = i;
-          updateCarousel();
-        });
-        dotsContainer.appendChild(dot);
-      });
-
-      if (slides.length <= 1) {
-        prevBtn.style.display = 'none';
-        nextBtn.style.display = 'none';
-        carousel.classList.add('hide-arrows');
-      } else {
-        prevBtn.addEventListener('click', () => {
-          index = (index - 1 + slides.length) % slides.length;
-          updateCarousel();
-        });
-        nextBtn.addEventListener('click', () => {
-          index = (index + 1) % slides.length;
-          updateCarousel();
-        });
-      }
-
-      window.addEventListener('resize', updateCarousel);
-      updateCarousel();
-    }
-  });
-</script>

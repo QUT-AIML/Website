@@ -1,0 +1,228 @@
+---
+import "@/styles/global.css"
+import "@/styles/ml-topics.css"
+import "@/styles/events.css"
+import Navigation from "@/components/Navigation.astro"
+import Footer from '@/components/Footer.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning through events, workshops, and collaboration." />
+    <title>QUT AIML</title>
+  </head>
+  <body class="background-network">
+    <Navigation />
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">Events</h1>
+      </div>
+
+      <div class="tab-switch">
+        <button class="tab-btn active" data-tab="projects">Project Nights</button>
+        <button class="tab-btn" data-tab="industry">Industry Nights</button>
+        <button class="tab-btn" data-tab="social">Social Nights</button>
+      </div>
+
+      <div class="content-wrapper tab-panels">
+        <div id="projects" class="tab-panel active">
+      
+          <!-- Project Nights panel -->
+          <section class="info-panel">
+            <h2 class="section-title">Project Nights</h2>
+            <p class="section-content">
+              Our Project Nights are an opportunity for our members to learn about AI 
+              and get hands on experience building. We provide topics for our 
+              members to learn about and work on, from beginner, to intermediate, 
+              and then to advanced difficulty.
+            </p>
+            <br>
+            <p class="section-content padding-bottom">
+              Members will work on these topics in pairs, ideally with one IT and one 
+              non-IT student. This way, IT students can reinforce their knowledge while 
+              non-IT students get the support they need. This makes it rewarding for 
+              both. Each topic is run like a mini course: we explain the concept, give 
+              its background and practical uses, and share an annotated example 
+              solution. Members then complete three challenge projects to build the 
+              ML model themselves.
+            </p>
+
+            <p class="section-content">
+              <div class="carousel" id="projects-carousel">
+                <button class="carousel-btn prev">&#10094;</button>
+                <div class="carousel-track">
+                  <img src="/events/Projects Night - 1.jpg" alt="projects night photo 1" />
+                  <img src="/events/Projects Night - 2.jpg" alt="projects night photo 2" />
+                  <img src="/events/Projects Night - 3.jpg" alt="projects night photo 3" />
+                  <img src="/events/Projects Night - 4.jpg" alt="projects night photo 3" />
+                </div>
+                <button class="carousel-btn next">&#10095;</button>
+              </div>
+            </p>
+          </section>
+        </div>
+
+        <div id="industry" class="tab-panel">
+          
+          <!-- Industry Nights panel -->
+          <section class="info-panel">
+            <h2 class="section-title">Industry Nights</h2>
+            <p class="section-content">
+              Our Industry Nights are an opportunity for our members to gain valuable 
+              insights and guidance directly from alumni, professionals, and leaders in 
+              the AI and ML industry. These events help bridge the gap between academic 
+              learning and real-world applications, giving students firsthand exposure 
+              to industry trends, career pathways, and practical advice for navigating 
+              the field.
+            </p>
+            <br>
+            <p class="section-content padding-bottom">
+              Industry Nights also provide a welcoming space to connect and network 
+              with fellow students, researchers, and professionals within the AI, ML, 
+              and broader tech community. These connections can lead to 
+              mentorship opportunities, internships, and collaborations, helping 
+              members grow their professional network and stay informed about the 
+              evolving landscape of AI and machine learning.
+            </p>
+
+            <p class="section-content">
+              <div class="carousel" id="projects-carousel">
+                <button class="carousel-btn prev">&#10094;</button>
+                <div class="carousel-track">
+                  <img src="/events/Industry Night - 1.jpg" alt="industry speaker photo" />
+                  <img src="/events/Industry Night - 2.jpg" alt="industry speaker photo" />
+                  <img src="/events/Industry Night - 3.jpg" alt="industry speaker photo" />
+                </div>
+                <button class="carousel-btn next">&#10095;</button>
+              </div>
+            </p>
+          </section>
+        </div>
+
+        <div id="social" class="tab-panel">
+
+          <!-- Social Nights panel -->
+          <section class="info-panel">
+            <h2 class="section-title">Social Nights</h2>
+            <p class="section-content">
+              Our Social Nights are designed to give our members a chance to unwind, 
+              relax, and take a well-deserved break from the pressures of studies and 
+              assessments. These nights bring everyone together in a fun, casual 
+              environment where you can enjoy activities that help you de-stress and 
+              recharge.
+            </p>
+            <br>
+            <p class="section-content padding-bottom">
+              Whether you’re solving puzzles, teaming up for friendly games, or 
+              testing your wits in lively group challenges, Social Nights are all about 
+              building connections and having a good time. They’re the perfect way to 
+              meet new people, strengthen friendships, and create lasting memories 
+              while balancing the demands of student life.
+            </p>
+
+            <p class="section-content">
+              <div class="carousel" id="projects-carousel">
+                <button class="carousel-btn prev">&#10094;</button>
+                <div class="carousel-track">
+                  <img src="/events/Social Night - 1.jpg" alt="social night photo" />
+                  <video src="/events/Social Night - 3.mp4" muted loop playsinline style="width: 100%; border-radius: 8px;"></video>
+                  <img src="/events/Social Night - 2.jpg" alt="social night photo" />
+                </div>
+                <button class="carousel-btn next">&#10095;</button>
+              </div>
+            </p>
+          </section>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<script type="module">
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.carousel').forEach(initCarousel);
+
+    function initCarousel(carousel) {
+      const track = carousel.querySelector('.carousel-track');
+      const slides = Array.from(track.children).filter(el =>
+        el.tagName === 'IMG' || el.tagName === 'VIDEO'
+      );
+
+      const prevBtn = carousel.querySelector('.carousel-btn.prev');
+      const nextBtn = carousel.querySelector('.carousel-btn.next');
+      const dotsContainer = document.createElement('div');
+      dotsContainer.className = 'carousel-dots';
+      carousel.appendChild(dotsContainer);
+
+      let index = 0;
+
+      function updateCarousel() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+
+        // Update dots
+        dotsContainer.querySelectorAll('.dot').forEach((dot, i) => {
+          dot.classList.toggle('active', i === index);
+          dot.setAttribute('aria-current', i === index ? 'true' : 'false');
+        });
+
+        // Pause all videos except the active one
+        slides.forEach((slide, i) => {
+          if (slide.tagName === 'VIDEO') {
+            if (i === index) {
+              slide.play().catch(() => {});
+            } else {
+              slide.pause();
+              slide.currentTime = 0; // optional: reset to start
+            }
+          }
+        });
+      }
+
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'dot';
+        dot.type = 'button';
+        dot.addEventListener('click', () => {
+          index = i;
+          updateCarousel();
+        });
+        dotsContainer.appendChild(dot);
+      });
+
+      if (slides.length <= 1) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+        carousel.classList.add('hide-arrows');
+      } else {
+        prevBtn.addEventListener('click', () => {
+          index = (index - 1 + slides.length) % slides.length;
+          updateCarousel();
+        });
+        nextBtn.addEventListener('click', () => {
+          index = (index + 1) % slides.length;
+          updateCarousel();
+        });
+      }
+
+      window.addEventListener('resize', updateCarousel);
+      updateCarousel();
+    }
+  });
+</script>
