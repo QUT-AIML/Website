@@ -1,0 +1,188 @@
+---
+// src/pages/events/[id].astro
+import "@/styles/global.css";
+import "@/styles/about.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+
+export async function getStaticPaths() {
+  const modules = import.meta.glob('../../data/events/**/*.json', { eager: true });
+
+  const paths = Object.keys(modules)
+    .map((filePath) => {
+      // filePath examples: './2026-sem2/winter-hackathon.json'
+      const match = filePath.match(/\/([^/]+)\.json$/);
+      const id = match ? match[1] : null;
+      return id ? { params: { id } } : null;
+    })
+    .filter(Boolean);
+
+  return paths;
+}
+
+// Page frontmatter: load the matched JSON lazily for this route
+const { params } = Astro;
+const id = params.id;
+
+// Lazy import map (non-eager) so only the matched file is imported for this page
+const modules = import.meta.glob('../../data/events/**/*.json');
+
+const matchKey = Object.keys(modules).find((k) => k.endsWith(`/${id}.json`));
+
+let notFound = false;
+let event = null;
+
+if (!matchKey) {
+  notFound = true;
+} else {
+  const mod = await modules[matchKey]();
+  event = mod.default ?? mod;
+}
+
+const overview = event ? (event.overview ?? event) : null;
+const details = event ? (event.details ?? {}) : {};
+const pageTitle = event ? `${details.title ?? overview.title} — QUT AIML` : "Event not found";
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={overview ? (overview.excerpt ?? details.longDescription ?? `Event details for ${overview.title}`) : "Event not found"} />
+    <title>{pageTitle}</title>
+  </head>
+
+  <body class="background-dots">
+    <Navigation />
+
+    <main class="content-wrapper about-space" style="padding:2rem;">
+      {notFound ? (
+        <section style="background:#fff;border-radius:10px;padding:1.25rem;box-shadow:0 8px 24px rgba(0,0,0,0.06);">
+          <h1 style="margin:0 0 0.5rem 0;">Event not found</h1>
+          <p style="margin:0 0 1rem 0;">We couldn't find an event with the id <strong>{id}</strong>.</p>
+          <p style="margin:0;"><a href="/events" style="color:#1a73e8;text-decoration:none;">Back to events</a></p>
+        </section>
+      ) : (
+        <article style="background:#fff;border-radius:10px;padding:1.25rem;box-shadow:0 8px 24px rgba(0,0,0,0.06);">
+          <nav style="margin-bottom:1rem;">
+            <a href="/events" style="color:#1a73e8;text-decoration:none;">← Back to events</a>
+          </nav>
+
+          <header style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
+            <div style="flex:1;min-width:220px;">
+              <h1 style="margin:0 0 0.25rem 0;">{details.title ?? overview.title}</h1>
+              <div style="color:#666;font-size:0.95rem;margin-bottom:0.5rem;">
+                <time>{details.fullDate ?? overview.dateLabel ?? overview.date}</time>
+                {details.time ? <span> · {details.time}</span> : null}
+                {details.location ? <span> · {details.location}</span> : null}
+              </div>
+
+              {(overview.category || (details.tags && details.tags.length)) ? (
+                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+                  {overview.category ? <span style="font-size:0.85rem;color:#888;">{overview.category}</span> : null}
+                  {(details.tags ?? []).map(tag => <span style="font-size:0.85rem;color:#888;">{tag}</span>)}
+                </div>
+              ) : null}
+            </div>
+
+            {overview.image ? (
+              <div style="width:220px;height:140px;flex-shrink:0;border-radius:8px;overflow:hidden;background:#f3f3f3;">
+                <img src={overview.image} alt={overview.title} style="width:100%;height:100%;object-fit:cover;" />
+              </div>
+            ) : null}
+          </header>
+
+          <section style="margin-top:1rem;color:#333;line-height:1.6;">
+            <p style="margin:0 0 1rem 0;">{details.longDescription ?? overview.excerpt}</p>
+
+            {details.schedule ? (
+              <div style="margin-bottom:1rem;">
+                <h3 style="margin:0 0 0.5rem 0;">Schedule</h3>
+                <ul>
+                  {details.schedule.map(item => <li>{item.time ? `${item.time} — ` : ''}{item.activity}</li>)}
+                </ul>
+              </div>
+            ) : null}
+
+            {details.agenda ? (
+              <div style="margin-bottom:1rem;">
+                <h3 style="margin:0 0 0.5rem 0;">Agenda</h3>
+                <ul>
+                  {details.agenda.map(a => <li>{a.item}</li>)}
+                </ul>
+              </div>
+            ) : null}
+
+            {details.speakers ? (
+              <div style="margin-bottom:1rem;">
+                <h3 style="margin:0 0 0.5rem 0;">Speakers</h3>
+                <ul>
+                  {details.speakers.map(s => <li>{s.name}{s.role ? ` — ${s.role}` : ''}</li>)}
+                </ul>
+              </div>
+            ) : null}
+
+            {details.format ? (
+              <div style="margin-bottom:1rem;">
+                <h3 style="margin:0 0 0.5rem 0;">Format</h3>
+                <p style="margin:0;">{details.format}</p>
+              </div>
+            ) : null}
+
+            {details.prizes ? (
+              <div style="margin-bottom:1rem;">
+                <h3 style="margin:0 0 0.5rem 0;">Prizes</h3>
+                <ul>
+                  {details.prizes.map(p => <li>{p}</li>)}
+                </ul>
+              </div>
+            ) : null}
+
+            {details.registration ? (
+              <div style="margin-top:1rem;padding:0.75rem;border-radius:8px;background:#f7f9ff;border:1px solid #e6eefc;">
+                <h3 style="margin:0 0 0.5rem 0;">Registration</h3>
+                <p style="margin:0 0 0.5rem 0;">{details.registration.required ? 'Registration required' : 'No registration required'}</p>
+                {details.registration.link ? <p style="margin:0;"><a href={details.registration.link} style="color:#1a73e8;">Register / More info</a></p> : null}
+                {details.registration.price ? <p style="margin:0.5rem 0 0 0;color:#444;">Price: {details.registration.price}</p> : null}
+              </div>
+            ) : null}
+
+            {details.documents ? (
+              <div style="margin-top:1rem;">
+                <h3 style="margin:0 0 0.5rem 0;">Documents</h3>
+                <ul>
+                  {details.documents.map(d => <li><a href={d.url} style="color:#1a73e8;">{d.label}</a></li>)}
+                </ul>
+              </div>
+            ) : null}
+
+            {details.gallery ? (
+              <div style="margin-top:1rem;">
+                <h3 style="margin:0 0 0.5rem 0;">Gallery</h3>
+                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                  {details.gallery.map(src => (
+                    <div style="width:120px;height:80px;border-radius:6px;overflow:hidden;background:#f3f3f3;">
+                      <img src={src} alt={overview.title} style="width:100%;height:100%;object-fit:cover;" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </section>
+
+          {details.contact ? (
+            <footer style="margin-top:1.25rem;border-top:1px solid #eee;padding-top:1rem;color:#444;">
+              <strong>Contact</strong>
+              <div style="margin-top:0.25rem;">
+                {details.contact.email ? <div>Email: <a href={`mailto:${details.contact.email}`} style="color:#1a73e8;">{details.contact.email}</a></div> : null}
+                {details.contact.phone ? <div>Phone: {details.contact.phone}</div> : null}
+              </div>
+            </footer>
+          ) : null}
+        </article>
+      )}
+    </main>
+
+    <Footer />
+  </body>
+</html>

@@ -1,11 +1,11 @@
 {
-  "id": "winter-hackathon",
+  "id": "projects-night",
   "overview": {
-    "title": "Winter Hackathon",
+    "title": "Projects Night",
     "date": "2024-09-21",
-    "dateLabel": "September 21th",
-    "category": "Hackathons",
-    "excerpt": "Join our coding hackathon to solve challenges, build innovative solutions, and connect with fellow tech enthusiasts.",
+    "dateLabel": "September 9th",
+    "category": "Projects",
+    "excerpt": "Join our projects night to solve challenges, build innovative solutions, and connect with fellow tech enthusiasts.",
     "image": "/images/hackathon.jpg",
     "url": "/events/winter-hackathon"
   },
