@@ -3,26 +3,11 @@ import "@/styles/global.css";
 import "@/styles/about.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
-import events from "@/data/events/index.js";
+import eventsIndex from "@/data/events/index.js";
 
-// Normalize to an array of overview objects so the template can rely on consistent fields.
-// This handles three common shapes:
-//  - index.js already returns overview objects
-//  - index.js returns full event objects with `overview`
-//  - index.js returns objects with `_raw.overview` (kept for compatibility)
-const overviews = (events ?? []).map((ev) => {
-  const o = ev.overview ?? ev._raw?.overview ?? ev;
-  return {
-    id: ev.id ?? o.id ?? (o.title ? o.title.toLowerCase().replace(/\s+/g, "-") : ""),
-    title: o.title ?? "",
-    date: o.date ?? "",
-    dateLabel: o.dateLabel ?? o.date ?? "",
-    category: o.category ?? "Other",
-    excerpt: o.excerpt ?? "",
-    image: o.image ?? "",
-    url: o.url ?? `/events/${ev.id ?? o.id ?? ""}`,
-  };
-});
+const semesters = eventsIndex?.semesters ?? [];
+// default to first semester if available
+const defaultSemester = semesters.length ? semesters[0].id : '';
 ---
 <html lang="en">
   <head>
@@ -45,8 +30,24 @@ const overviews = (events ?? []).map((ev) => {
         <p class="pink-title">What's on at QUT AIML</p>
       </section>
 
+      <!-- SEMESTER TABS -->
+      <section style="margin:1.25rem 0;">
+        <div id="semester-tabs" style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          {semesters.map((s, i) => (
+            <button
+              class={`semester-tab ${s.id === defaultSemester ? 'active' : ''}`}
+              data-semester={s.id}
+              type="button"
+              style="padding:0.5rem 0.9rem;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;"
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
       <!-- SEARCH & FILTERS -->
-      <section class="events-controls" style="margin: 2rem 0;">
+      <section class="events-controls" style="margin: 1.5rem 0;">
         <div class="controls-row" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
           <label style="flex:1;min-width:220px;">
             <input id="events-search" type="search" placeholder="Search events..." style="width:100%;padding:0.6rem;border-radius:6px;border:1px solid #ddd;" />
@@ -73,68 +74,95 @@ const overviews = (events ?? []).map((ev) => {
 
       <!-- EVENTS GRID -->
       <section id="events-grid" class="events-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;">
-        {overviews.map((ev) => (
-          <article class="event-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date} style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06);">
-            <a href={ev.url} style="display:block;color:inherit;text-decoration:none;">
-              <div class="card-media" style="height:140px;background:#f3f3f3;display:flex;align-items:center;justify-content:center;">
-                {ev.image ? <img src={ev.image} alt={ev.title} style="width:100%;height:100%;object-fit:cover;" /> : <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#999;">No image</div>}
-              </div>
-
-              <div class="card-body" style="padding:1rem;">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">
-                  <h3 style="margin:0;font-size:1.05rem;">{ev.title}</h3>
-                  <time style="font-size:0.85rem;color:#666;">{ev.dateLabel}</time>
+        {semesters.map((s) =>
+          s.events.map((ev) => (
+            <article
+              class={`event-card ${s.id === defaultSemester ? '' : 'hidden'}`}
+              data-semester={s.id}
+              data-category={ev.category}
+              data-title={ev.title.toLowerCase()}
+              data-date={ev.date}
+              style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06);"
+            >
+              <a href={ev.url} style="display:block;color:inherit;text-decoration:none;">
+                <div class="card-media" style="height:140px;background:#f3f3f3;display:flex;align-items:center;justify-content:center;">
+                  {ev.image ? <img src={ev.image} alt={ev.title} style="width:100%;height:100%;object-fit:cover;" /> : <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#999;">No image</div>}
                 </div>
 
-                <p style="margin:0.6rem 0 1rem;color:#444;font-size:0.95rem;line-height:1.35;">{ev.excerpt}</p>
+                <div class="card-body" style="padding:1rem;">
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">
+                    <h3 style="margin:0;font-size:1.05rem;">{ev.title}</h3>
+                    <time style="font-size:0.85rem;color:#666;">{ev.dateLabel}</time>
+                  </div>
 
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                  <span style="font-size:0.85rem;color:#888;">{ev.category}</span>
-                  <span style="font-weight:600;color:#1a73e8;">View more →</span>
+                  <p style="margin:0.6rem 0 1rem;color:#444;font-size:0.95rem;line-height:1.35;">{ev.excerpt}</p>
+
+                  <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:0.85rem;color:#888;">{ev.category}</span>
+                    <span style="font-weight:600;color:#1a73e8;">View more →</span>
+                  </div>
                 </div>
-              </div>
-            </a>
-          </article>
-        ))}
+              </a>
+            </article>
+          ))
+        )}
       </section>
     </div>
 
     <Footer />
 
-    <!-- Client-side script for search, filter, sort -->
+    <!-- Client-side script for semester tabs, search, filter, sort -->
     <script type="module">
+      const semesterTabs = Array.from(document.querySelectorAll('.semester-tab'));
       const searchInput = document.getElementById('events-search');
       const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
       const sortSelect = document.getElementById('sort-select');
       const grid = document.getElementById('events-grid');
 
-      // Helper to get current list of cards (re-query in case DOM changes)
       function getCards() {
         return Array.from(grid.querySelectorAll('.event-card'));
       }
 
+      function setActiveSemester(semesterId) {
+        // toggle active tab
+        semesterTabs.forEach(t => t.classList.toggle('active', t.dataset.semester === semesterId));
+        // show/hide cards by data-semester
+        getCards().forEach(card => {
+          const matchesSemester = card.dataset.semester === semesterId;
+          card.classList.toggle('hidden', !matchesSemester);
+        });
+        // reset filters UI (optional)
+        filterButtons.forEach(b => b.classList.remove('active'));
+        filterButtons[0]?.classList.add('active'); // All
+        searchInput.value = '';
+        sortSelect.value = 'date-desc';
+        applySort(); // sort visible cards
+      }
+
       function applyFilters() {
-        const cards = getCards();
         const query = searchInput.value.trim().toLowerCase();
         const activeCategoryBtn = filterButtons.find(b => b.classList.contains('active'));
         const category = activeCategoryBtn ? activeCategoryBtn.dataset.category : 'All';
 
-        cards.forEach(card => {
+        getCards().forEach(card => {
+          // only consider cards for the active semester
+          if (card.classList.contains('hidden')) return;
+
           const title = card.dataset.title || '';
           const cardCategory = card.dataset.category || '';
-          const matchesQuery = !query || title.includes(query) || card.querySelector('p')?.textContent.toLowerCase().includes(query);
+          const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+          const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
           const matchesCategory = category === 'All' || cardCategory === category;
 
           card.style.display = (matchesQuery && matchesCategory) ? '' : 'none';
         });
 
-        applySort(); // keep sort consistent after filtering
+        applySort();
       }
 
       function applySort() {
         const mode = sortSelect.value;
-        const cards = getCards();
-        const visibleCards = cards.filter(c => c.style.display !== 'none');
+        const visibleCards = getCards().filter(c => c.style.display !== 'none' && !c.classList.contains('hidden'));
 
         visibleCards.sort((a, b) => {
           if (mode === 'title-asc') {
@@ -147,11 +175,17 @@ const overviews = (events ?? []).map((ev) => {
           return new Date(b.dataset.date) - new Date(a.dataset.date);
         });
 
-        // Re-append in sorted order
         visibleCards.forEach(c => grid.appendChild(c));
       }
 
-      // Wire up events
+      // Wire up semester tabs
+      semesterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          setActiveSemester(tab.dataset.semester);
+        });
+      });
+
+      // Wire up filters and search
       searchInput.addEventListener('input', () => applyFilters());
       sortSelect.addEventListener('change', () => applySort());
 
@@ -163,8 +197,16 @@ const overviews = (events ?? []).map((ev) => {
         });
       });
 
-      // Initial sort
-      applySort();
+      // Initialize: ensure default semester is active
+      const initial = document.querySelector('.semester-tab.active')?.dataset.semester || document.querySelector('.semester-tab')?.dataset.semester;
+      if (initial) setActiveSemester(initial);
     </script>
+
+    <style>
+      /* small helper styles */
+      .hidden { display: none !important; }
+      .semester-tab.active { background:#1a73e8; color:#fff; border-color: #1a73e8; }
+      .filter-btn.active { background:#1a73e8; color:#fff; border-color:#1a73e8; }
+    </style>
   </body>
 </html>
