@@ -318,6 +318,14 @@
 .events-controls {
   display: block; /* ensures they stack vertically */
   width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.controls-row {
+  display:flex;
+  gap:1rem;
+  align-items:center;
+  flex-wrap:wrap;
 }
 
 /* === EVENT CARD === */
@@ -418,4 +426,34 @@
   font-weight: 600;
   color: #FF8BF4; /* pink */
   cursor: pointer;
+}
+
+
+
+/* === FEATURED EVENTS === */
+.featured-events-panel {
+  margin-top: 0.1rem;
+  margin-right: 3rem;
+  margin-bottom: 5rem;
+  margin-left: 3rem;
+  padding: 1.5rem;
+  background: #1f1f1f;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.featured-events-grid {
+  display: grid;
+  justify-content: start; /* aligns cards to the left instead of stretching */
+  grid-template-columns: repeat(auto-fit, 360px); /* 360px cards, auto-fit columns */
+  gap: 1.5rem; /* same gap as main grid */
+  padding: 1rem; /* inner spacing */
+  width: 100%;
+}
+
+.featured-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #FF8BF4; /* match pink accent */
+  margin-bottom: 1rem;
 }

@@ -13,6 +13,7 @@ function normalizeOverview(ev, filePath) {
     category: o.category ?? 'Other',
     excerpt: o.excerpt ?? '',
     image: o.image ?? '',
+    featured: o.featured ?? false,  
     url: o.url ?? `/events/${id}`,
     _raw: raw,
     _filePath: filePath

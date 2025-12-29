@@ -1,0 +1,39 @@
+{
+  "id": "ai-workshop",
+  "overview": {
+    "title": "AI Workshop",
+    "date": "2026-03-15",
+    "dateLabel": "March 15, 2026",
+    "category": "Workshop",
+    "excerpt": "Hands-on workshop on AI tools.",
+    "image": "/images/ai-workshop.jpg",
+    "url": "/events/ai-workshop",
+    "featured": true
+  },
+  "details": {
+    "title": "AI Workshop",
+    "fullDate": "Saturday, 16 March 2026",
+    "time": "9:00 AM – 5:00 PM",
+    "location": "QUT Room 101",
+    "longDescription": "Detailed description of the workshop",
+    "isCollab": false,
+    "schedule": [
+      { "time": "09:00", "activity": "Introduction" },
+      { "time": "10:00", "activity": "Hands-on session" }
+    ],
+    "speakers": [
+      { "name": "Dr. Jane Doe", "role": "Instructor" }
+    ],
+    "registration": {
+      "required": true,
+      "link": "https://register.aiworkshop.com",
+      "capacity": 50,
+      "price": "Free"
+    },
+    "contact": {
+      "email": "events@qutaiml.com",
+      "phone": ""
+    },
+    "gallery": ["/images/event1.jpg", "/images/event2.jpg"]
+  }
+}

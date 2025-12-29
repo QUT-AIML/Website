@@ -23,6 +23,18 @@ const preferredExisting = preferred.filter(p => allTypesSet.has(p));
 const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
 remaining.sort((a, b) => a.localeCompare(b));
 const types = ["All", ...preferredExisting, ...remaining];
+
+const today = new Date();
+today.setHours(0, 0, 0, 0); // normalize to start of the day
+
+const featuredEvents = eventsBySemester
+  .filter(ev => ev.featured)
+  .filter(ev => {
+    const eventDate = new Date(ev.date);
+    eventDate.setHours(0, 0, 0, 0); // normalize to start of the day
+    return eventDate >= today;
+  });
+  
 ---
 <html lang="en">
   <head>
@@ -40,13 +52,49 @@ const types = ["All", ...preferredExisting, ...remaining];
     <Navigation />
 
     <div class="content-wrapper events-space">
+      
+      {featuredEvents.length > 0 && (
+        <>
+          <section class="pink-panel">
+            <p class="pink-title">Featured Events</p>
+          </section>
+
+          <section class="featured-events-panel">
+            <div class="featured-events-grid">
+              {featuredEvents.map(ev => (
+                <article class="event-card" data-semester={ev.semesterId} data-category={ev.category} data-type={ev.type ?? ev.category ?? "Other"} data-title={ev.title.toLowerCase()} data-date={ev.date}>
+                  <a href={ev.url}>
+                    <div class="card-media">
+                      {ev.image ? (
+                        <img src={ev.image} alt={ev.title} />
+                      ) : (
+                        <div class="no-image">No image</div>
+                      )}
+                    </div>
+                    <div class="card-body">
+                      <h3 class="card-title">{ev.title}</h3>
+                      <div class="card-divider"></div>
+                      <time class="card-date">{ev.dateLabel}</time>
+                      <p class="card-description">{ev.excerpt}</p>
+                      <div class="card-footer">
+                        <span class="card-view-more">View more →</span>
+                      </div>
+                    </div>
+                  </a>
+                </article>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+
       <section class="pink-panel">
         <p class="pink-title">What's on at QUT AIML</p>
       </section>
 
       <div class="key-content">
-        <section class="events-controls" style="margin: 1.25rem 0;">
-          <div class="controls-row" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+        <section class="events-controls">
+          <div class="controls-row">
             <div class="search-wrapper">
               <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="11" cy="11" r="7" />

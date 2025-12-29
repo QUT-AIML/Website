@@ -7,7 +7,9 @@
     "category": "<Category, e.g., Hackathon, Meeting, Workshop>",
     "excerpt": "<Short description of the event>",
     "image": "<Path to event image, e.g., /images/event.jpg>",
-    "url": "<URL path to event page, e.g., /events/event-id>"
+    "url": "<URL path to event page, e.g., /events/event-id>",
+    "featured": "<true/false"
+
   },
   "details": {
     "title": "<Event Title>",
