@@ -4,7 +4,6 @@
 
 .site-footer {
   position: relative;
-  padding: 2.5rem 4rem 1.8rem;
   overflow: hidden;
   color: #fff;
   margin-top: auto;
@@ -23,14 +22,17 @@
 ================================ */
 
 .footer-inner {
-  position: relative;
-  z-index: 2;
   display: grid;
-  grid-template-columns: 10% 22% 68%; /* updated ratio */
+  grid-template-columns: 1fr 2.3fr; /* left + right */
   gap: 1rem;
-  max-width: 1400px;
-  margin: 0 auto;
 }
+
+.footer-left-inner {
+  padding-left: 2rem; /* add padding only inside the left half */
+  display: flex;       /* optional: align columns horizontally */
+  gap: 2rem;           /* spacing between columns */
+}
+
 
 /* Right-align the social icons and copyright */
 .footer-right .footer-social,
@@ -39,16 +41,23 @@
   display: flex; /* ensures flex behavior for the icons */
   align-items: center;
   justify-content: flex-end;
+  padding-right: 2rem;
 }
 
 /* Optional: add spacing between social icons and copyright */
 .footer-right .copyright {
-  margin-top: 0.5rem; 
+  margin-top: 0.2rem; 
+  padding-bottom: 1.5rem;
 }
 
 /* ===============================
    COLUMNS
 ================================ */
+
+.footer-column {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
 
 .footer-column h4 {
   color: var(--color-secondary);
@@ -121,6 +130,8 @@
   position: relative;
   z-index: 2;
 }
+
+
 
 /* ===============================
    SOCIAL ICONS
