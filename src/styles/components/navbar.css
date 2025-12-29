@@ -10,6 +10,7 @@
   top: 0;
   left: 0;
   right: 0;
+  
   z-index: 1000;
 
   display: flex;
@@ -466,7 +467,7 @@ body.no-scroll {
     z-index: 100;
     gap: 0.4rem !important; /* <-- Equal vertical spacing between links */
   }
-
+  
   .main-links .dropdown {
     width: 100%;
     display: flex;

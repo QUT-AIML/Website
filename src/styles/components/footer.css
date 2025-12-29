@@ -183,31 +183,45 @@
 ================================ */
 
 @media (max-width: 900px) {
+
+  /* Stack left columns vertically without gap */
+  .footer-left-inner {
+    flex-direction: column;
+    padding-left: 1.5rem;   /* keep some horizontal padding */
+    gap: 1rem;                 /* remove vertical gap */
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Remove padding inside columns */
+  .footer-left-inner .footer-column {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
   .footer-inner {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
+    grid-template-columns: 1fr; /* stack left + right */
   }
 
   .footer-right {
-    align-items: flex-start;
-  }
-
-  .footer-shape {
-    display: none;
+    align-items: center;
+    justify-content: center;
   }
 
   .footer-social {
-    flex-wrap: wrap;           /* allow icons to flow into multiple rows */
-    gap: 0.75rem;              /* spacing between icons */
-    justify-content: flex-start; /* align rows to left; use center if preferred */
+    flex-wrap: wrap;       /* allow icons to wrap */
+    gap: 0.75rem;          /* spacing between icons */
+    justify-content: center; /* center horizontally */
+    padding-top: 1rem;
+    padding-left: 5rem;
   }
 
   .footer-right .footer-social,
   .footer-right .copyright {
-    justify-content: flex-start;
+    justify-content: center;
   }
 
   .footer-social a {
-    flex: 0 1 calc(33.33% - 0.5rem); /* 3 per row, minus gap */
+    flex: 0 1 calc(33.33% - 0.5rem); /* 3 icons per row */
   }
 }
