@@ -1,0 +1,111 @@
+---
+import "@/styles/global.css";
+import "@/styles/projects/project-details.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+
+// Required for dynamic routes
+export async function getStaticPaths() {
+  const modules = import.meta.glob('../../data/projects/**/*.json', { eager: true });
+
+  const paths = Object.keys(modules)
+    .map((filePath) => {
+      const match = filePath.match(/\/([^/]+)\.json$/);
+      const id = match ? match[1] : null;
+      return id ? { params: { id } } : null;
+    })
+    .filter(Boolean);
+
+  return paths;
+}
+
+const { params } = Astro;
+const id = params.id;
+
+const modules = import.meta.glob('../../data/projects/**/*.json');
+const matchKey = Object.keys(modules).find((k) => k.endsWith(`/${id}.json`));
+
+let notFound = false;
+let project = null;
+
+if (!matchKey) {
+  notFound = true;
+} else {
+  const mod = await modules[matchKey]();
+  project = mod.default ?? mod;
+}
+
+const overview = project ? (project.overview ?? project) : null;
+const details = project ? (project.details ?? {}) : {};
+const pageTitle = project ? `QUT AIML` : "Project not found";
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={overview ? (overview.excerpt ?? details.longDescription ?? `Project details for ${overview.title}`) : "Project not found"} />
+    <title>{pageTitle}</title>
+  </head>
+
+  <body class="background-dots">
+    <Navigation />
+
+        <main class="unique-project-space">
+            {notFound ? (
+                <section class="unique-project-card unique-project-notfound">
+                <h1>Project not found</h1>
+                <p>We couldn't find a project with the id <strong>{id}</strong>.</p>
+                <p><a href="/projects" class="unique-link">Back to projects</a></p>
+                </section>
+            ) : (
+                <article class="unique-project-card">
+                <nav class="unique-nav">
+                    <a href="/projects" class="unique-link">← Back to projects</a>
+                </nav>
+
+                {/* TOP IMAGE */}
+                {overview.image && (
+                    <div class="unique-top-image-wrapper">
+                    <img src={overview.image} alt={overview.title} class="unique-top-image" />
+                    </div>
+                )}
+
+                <header class="unique-header">
+                    <h1 class="unique-title">{details.title ?? overview.title}</h1>
+                    <div class="unique-tags">
+                    {overview.category && <span class="unique-tag">{overview.category}</span>}
+                    </div>
+                </header>
+
+                <section class="unique-body">
+                    <p>{details.longDescription ?? overview.excerpt}</p>
+
+                    {details.github && (
+                    <div class="unique-section">
+                        <h3 class="unique-section-title">GitHub</h3>
+                        <p><a href={details.github} class="unique-link" target="_blank">View Repository</a></p>
+                    </div>
+                    )}
+
+                    {details.gallery && details.gallery.length > 0 && (
+                    <div class="unique-section">
+                        <h3 class="unique-section-title">Gallery</h3>
+                        <div class="unique-gallery">
+                        {details.gallery.map(src => (
+                            <div class="unique-gallery-item">
+                            <img src={src} alt={overview.title} class="unique-gallery-image" />
+                            </div>
+                        ))}
+                        </div>
+                    </div>
+                    )}
+                </section>
+                </article>
+            )}
+            </main>
+
+
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "id": "project-2", 
+  "overview": {
+    "title": "Random Forest",
+    "category": "RF",
+    "excerpt": "A short description of the project",
+    "image": "/images/project-2.jpg",
+    "url": "/projects/project-2"
+  },
+  "details": {
+    "title": "RF",
+    "github": "https://github.com/QUT-AIML/random-forest",
+    "longDescription": "A detailed description of the project",
+    "gallery": ["/images/project-2-1.jpg", "/images/project-2-2.jpg"]
+  }
+}

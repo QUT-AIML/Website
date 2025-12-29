@@ -1,0 +1,16 @@
+{
+  "id": "project-1", 
+  "overview": {
+    "title": "CNN",
+    "category": "CNN",
+    "excerpt": "<Short description of the project>",
+    "image": "<Path to project image, e.g., /images/project.jpg>",
+    "url": "<URL path to project page, e.g., /projects/project-id>"
+  },
+  "details": {
+    "title": "CNN",
+    "github": "<link>",
+    "longDescription": "<Detailed description of the project>",
+    "gallery": ["<Image path 1>", "<Image path 2>"]
+  }
+}
