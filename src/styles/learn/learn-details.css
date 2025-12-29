@@ -1,4 +1,4 @@
-.unique-learn-space {
+.unique-learning-space {
   padding-top: 10rem;
   padding-left: 3rem;
   padding-right: 3rem;
@@ -7,7 +7,7 @@
   justify-content: center;
 }
 
-.unique-learn-card {
+.unique-learning-card {
   background-color: #1f1f1f;
   color: #eaeaea;
   border-radius: 12px;
@@ -17,9 +17,10 @@
   padding: 2rem;
 }
 
-.unique-learn-notfound {
+.unique-learning-notfound {
   text-align: center;
 }
+
 
 .unique-top-image-wrapper {
   width: 100%;

@@ -50,8 +50,8 @@ const featuredLearnings = learnings
         <section class="featured-learning-panel">
           <div class="featured-learning-grid">
             {featuredLearnings.map(ev => (
-              <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-                <a href={ev.url}>
+             <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
+                <a href={`/learn/${ev.id}`}>
                   <div class="card-media">
                     {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                   </div>
@@ -66,6 +66,7 @@ const featuredLearnings = learnings
                   </div>
                 </a>
               </article>
+
             ))}
           </div>
         </section>
@@ -128,21 +129,21 @@ const featuredLearnings = learnings
         <section id="learning-grid" class="learning-grid">
           {learnings.map(ev => (
             <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-              <a href={ev.url}>
-                <div class="card-media">
-                  {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
-                </div>
-                <div class="card-body">
-                  <h3 class="card-title">{ev.title}</h3>
-                  <div class="card-divider"></div>
-                  <time class="card-date">{ev.dateLabel}</time>
-                  <p class="card-description">{ev.excerpt}</p>
-                  <div class="card-footer">
-                    <span class="card-view-more">View more →</span>
+                <a href={`./learn/${ev.id}`}>
+                  <div class="card-media">
+                    {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                   </div>
-                </div>
-              </a>
-            </article>
+                  <div class="card-body">
+                    <h3 class="card-title">{ev.title}</h3>
+                    <div class="card-divider"></div>
+                    <time class="card-date">{ev.dateLabel}</time>
+                    <p class="card-description">{ev.excerpt}</p>
+                    <div class="card-footer">
+                      <span class="card-view-more">View more →</span>
+                    </div>
+                  </div>
+                </a>
+              </article>
           ))}
         </section>
       </section>
