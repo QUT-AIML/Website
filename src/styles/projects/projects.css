@@ -289,6 +289,11 @@
   width: 100%;
 }
 
+.current-projects-panel {
+  margin: 0rem 3rem;
+}
+
+
 /* The dark grey background block behind the grid */
 .projects-panel::before {
   content: "";
@@ -318,6 +323,14 @@
 .projects-controls {
   display: block; /* ensures they stack vertically */
   width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.controls-row {
+  display:flex;
+  gap:1rem;
+  align-items:center;
+  flex-wrap:wrap;
 }
 
 /* === PROJECT CARD === */
@@ -418,4 +431,8 @@
   font-weight: 600;
   color: #FF8BF4; /* pink */
   cursor: pointer;
+}
+
+.full-width-panel {
+  width: 100%;
 }

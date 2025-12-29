@@ -33,7 +33,7 @@
     "contact": {
       "email": "events@qutaiml.com",
       "phone": ""
-    },
+    }, 
     "gallery": ["/images/event1.jpg", "/images/event2.jpg"]
   }
 }

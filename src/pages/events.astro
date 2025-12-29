@@ -211,228 +211,234 @@ const featuredEvents = eventsBySemester
     </div>
 
     <Footer />
+  </body>
+  </html>
 
     
     
 
-        <script type="module">
-      const searchInput = document.getElementById('events-search');
-      const grid = document.getElementById('events-grid');
+<script type="module">
+  const searchInput = document.getElementById('events-search');
+  const grid = document.getElementById('events-grid');
 
-      // Pagination container must exist in HTML
-      let paginationContainer = document.getElementById('events-pagination');
-      if (!paginationContainer) {
-        paginationContainer = document.createElement('div');
-        paginationContainer.id = 'events-pagination';
-        paginationContainer.style.textAlign = 'center';
-        paginationContainer.style.marginTop = '2rem';
-        grid.parentNode.appendChild(paginationContainer);
-      }
+  // Pagination container must exist in HTML
+  let paginationContainer = document.getElementById('events-pagination');
+  if (!paginationContainer) {
+    paginationContainer = document.createElement('div');
+    paginationContainer.id = 'events-pagination';
+    paginationContainer.style.textAlign = 'center';
+    paginationContainer.style.marginTop = '2rem';
+    grid.parentNode.appendChild(paginationContainer);
+  }
 
-      const filtersToggle = document.getElementById('filters-toggle');
-      const filtersPopover = document.getElementById('filters-popover');
-      const semesterSelectPop = document.getElementById('semester-select-pop');
-      const sortSelectPop = document.getElementById('sort-select-pop');
-      const filtersApply = document.getElementById('filters-apply');
-      const filtersCancel = document.getElementById('filters-cancel');
+  const filtersToggle = document.getElementById('filters-toggle');
+  const filtersPopover = document.getElementById('filters-popover');
+  const semesterSelectPop = document.getElementById('semester-select-pop');
+  const sortSelectPop = document.getElementById('sort-select-pop');
+  const filtersApply = document.getElementById('filters-apply');
+  const filtersCancel = document.getElementById('filters-cancel');
 
-      const EVENTS_PER_PAGE = 6;
-      let currentPage = 1;
-      let currentSemester = 'all';
-      let currentSort = 'upcoming';
-      let filteredCards = [];
-      let typeButtons = [];
+  const EVENTS_PER_PAGE = 6;
+  let currentPage = 1;
+  let currentSemester = 'all';
+  let currentSort = 'upcoming';
+  let filteredCards = [];
+  let typeButtons = [];
 
-      // Get all event cards
-      function getCards() {
-        return Array.from(grid.querySelectorAll('.event-card'));
-      }
+  function getCards() {
+    return Array.from(grid.querySelectorAll('.event-card'));
+  }
 
-      // Generate types based on selected semester
-      function getTypesForSemester(semesterId) {
-        const cards = getCards().filter(card => semesterId === 'all' || card.dataset.semester === semesterId);
-        const typeSet = new Set();
+  // Generate types based on current filters (semester + sort + search)
+  function getTypesForFilteredCards() {
+    const query = searchInput.value.trim().toLowerCase();
+    const today = new Date(); today.setHours(0,0,0,0);
 
-        cards.forEach(card => {
-          const t = card.dataset.type || 'Other';
-          typeSet.add(t);
-        });
+    const cards = getCards().filter(card => {
+      const cardSemester = card.dataset.semester || '';
+      const cardType = card.dataset.type || '';
+      const title = card.dataset.title || '';
+      const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+      const cardDate = new Date(card.dataset.date); cardDate.setHours(0,0,0,0);
 
-        const preferred = ["Social", "Industry", "Projects", "Major"];
-        const preferredExisting = preferred.filter(p => typeSet.has(p));
-        const remaining = Array.from(typeSet).filter(t => !preferredExisting.includes(t)).sort((a,b) => a.localeCompare(b));
+      const matchesSemester = currentSemester === 'all' || cardSemester === currentSemester;
+      let matchesSort = true;
+      if (currentSort === 'upcoming') matchesSort = cardDate >= today;
+      if (currentSort === 'past') matchesSort = cardDate < today;
 
-        return ['All', ...preferredExisting, ...remaining];
-      }
+      const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
 
-      // Render type buttons dynamically
-      function renderTypeButtons(types) {
-        const container = document.getElementById('type-filters');
-        container.innerHTML = '';
+      return matchesSemester && matchesSort && matchesQuery;
+    });
 
-        types.forEach(t => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.dataset.type = t;
-          btn.textContent = t;
-          btn.className = `type-btn ${t === 'All' ? 'active' : ''}`;
-          btn.addEventListener('click', () => {
-            typeButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            applyFilters();
-          });
-          container.appendChild(btn);
-        });
+    const typeSet = new Set();
+    cards.forEach(card => typeSet.add(card.dataset.type || 'Other'));
 
-        // Update typeButtons reference
-        typeButtons.length = 0;
-        typeButtons.push(...Array.from(container.querySelectorAll('.type-btn')));
-      }
+    const preferred = ["Social", "Industry", "Projects", "Major"];
+    const preferredExisting = preferred.filter(p => typeSet.has(p));
+    const remaining = Array.from(typeSet).filter(t => !preferredExisting.includes(t)).sort((a,b) => a.localeCompare(b));
 
-      // Apply filters, search, type, semester, sort
-      function applyFilters() {
-        const query = searchInput.value.trim().toLowerCase();
-        const activeTypeBtn = typeButtons.find(b => b.classList.contains('active'));
-        const selectedType = activeTypeBtn ? activeTypeBtn.dataset.type : 'All';
+    return ['All', ...preferredExisting, ...remaining];
+  }
 
-        filteredCards = getCards().filter(card => {
-          const title = card.dataset.title || '';
-          const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
-          const cardType = card.dataset.type || '';
-          const cardSemester = card.dataset.semester || '';
+  function renderTypeButtons(types) {
+    const container = document.getElementById('type-filters');
+    container.innerHTML = '';
 
-          const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
-          const matchesType = selectedType === 'All' || cardType === selectedType;
-          const matchesSemester = currentSemester === 'all' || cardSemester === currentSemester;
-
-          const cardDate = new Date(card.dataset.date); cardDate.setHours(0,0,0,0);
-          const today = new Date(); today.setHours(0,0,0,0);
-
-          let matchesSort = true;
-          if (currentSort === 'upcoming') matchesSort = cardDate >= today;
-          if (currentSort === 'past') matchesSort = cardDate < today;
-
-          return matchesQuery && matchesType && matchesSemester && matchesSort;
-        });
-
-        currentPage = 1; // reset to first page
-        applySort();
-        renderPage();
-        renderPagination();
-
-        // No events message
-        let noEventsMessage = document.getElementById('no-events-message');
-        if (!noEventsMessage) {
-          noEventsMessage = document.createElement('div');
-          noEventsMessage.id = 'no-events-message';
-          noEventsMessage.textContent = 'No events found';
-          noEventsMessage.style.textAlign = 'center';
-          noEventsMessage.style.padding = '2rem';
-          noEventsMessage.style.gridColumn = '1 / -1';
-          grid.appendChild(noEventsMessage);
-        }
-        noEventsMessage.style.display = filteredCards.length === 0 ? 'block' : 'none';
-      }
-
-      function applySort() {
-        const today = new Date(); today.setHours(0,0,0,0);
-
-        filteredCards.sort((a, b) => {
-          const dateA = new Date(a.dataset.date); dateA.setHours(0,0,0,0);
-          const dateB = new Date(b.dataset.date); dateB.setHours(0,0,0,0);
-
-          if (currentSort === 'title-asc') return a.dataset.title.localeCompare(b.dataset.title);
-          if (currentSort === 'upcoming') return dateA - dateB;
-          if (currentSort === 'past') return dateB - dateA;
-          return 0;
-        });
-      }
-
-      function renderPage() {
-        const start = (currentPage - 1) * EVENTS_PER_PAGE;
-        const end = start + EVENTS_PER_PAGE;
-
-        getCards().forEach(card => card.style.display = 'none');
-        filteredCards.slice(start, end).forEach(card => card.style.display = '');
-      }
-
-      function renderPagination() {
-        const totalPages = Math.ceil(filteredCards.length / EVENTS_PER_PAGE);
-
-        if (totalPages <= 1) {
-          paginationContainer.innerHTML = '';
-          return;
-        }
-
-        let html = '';
-        html += `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''} style="margin:0 0.25rem; padding:0.5rem 1rem;">Prev</button>`;
-        for (let i = 1; i <= totalPages; i++) {
-          html += `<button class="pagination-btn" data-page="${i}" style="margin:0 0.25rem; padding:0.5rem 1rem; ${i===currentPage?'background:#1a73e8;color:#fff;':''}">${i}</button>`;
-        }
-        html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''} style="margin:0 0.25rem; padding:0.5rem 1rem;">Next</button>`;
-
-        paginationContainer.innerHTML = html;
-        Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
-          btn.addEventListener('click', () => {
-            let page = parseInt(btn.dataset.page);
-            if (page < 1) page = 1;
-            if (page > totalPages) page = totalPages;
-            currentPage = page;
-            renderPage();
-            renderPagination();
-          });
-        });
-      }
-
-      // Event listeners
-      searchInput.addEventListener('input', () => applyFilters());
-
-      filtersToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (filtersPopover.style.display === 'block') closePopover();
-        else openPopover();
-      });
-
-      filtersApply.addEventListener('click', () => {
-        currentSemester = semesterSelectPop.value;
-        currentSort = sortSelectPop.value;
-
-        // regenerate type buttons for selected semester
-        const newTypes = getTypesForSemester(currentSemester);
-        renderTypeButtons(newTypes);
-
-        closePopover();
+    types.forEach(t => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.dataset.type = t;
+      btn.textContent = t;
+      btn.className = `type-btn ${t === 'All' ? 'active' : ''}`;
+      btn.addEventListener('click', () => {
+        typeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         applyFilters();
       });
+      container.appendChild(btn);
+    });
 
-      filtersCancel.addEventListener('click', closePopover);
+    typeButtons.length = 0;
+    typeButtons.push(...Array.from(container.querySelectorAll('.type-btn')));
+  }
 
-      function openPopover() {
-        filtersPopover.style.display = 'block';
-        filtersToggle.setAttribute('aria-expanded', 'true');
-        semesterSelectPop.value = currentSemester;
-        sortSelectPop.value = currentSort;
-        semesterSelectPop.focus();
-        document.addEventListener('click', onDocClick);
-        document.addEventListener('keydown', onKeyDown);
-      }
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    const activeTypeBtn = typeButtons.find(b => b.classList.contains('active'));
+    const selectedType = activeTypeBtn ? activeTypeBtn.dataset.type : 'All';
+    const today = new Date(); today.setHours(0,0,0,0);
 
-      function closePopover() {
-        filtersPopover.style.display = 'none';
-        filtersToggle.setAttribute('aria-expanded', 'false');
-        document.removeEventListener('click', onDocClick);
-        document.removeEventListener('keydown', onKeyDown);
-      }
+    filteredCards = getCards().filter(card => {
+      const title = card.dataset.title || '';
+      const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+      const cardType = card.dataset.type || '';
+      const cardSemester = card.dataset.semester || '';
+      const cardDate = new Date(card.dataset.date); cardDate.setHours(0,0,0,0);
 
-      function onDocClick(e) {
-        if (!filtersPopover.contains(e.target) && e.target !== filtersToggle) closePopover();
-      }
+      const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
+      const matchesType = selectedType === 'All' || cardType === selectedType;
+      const matchesSemester = currentSemester === 'all' || cardSemester === currentSemester;
 
-      function onKeyDown(e) {
-        if (e.key === 'Escape') closePopover();
-      }
+      let matchesSort = true;
+      if (currentSort === 'upcoming') matchesSort = cardDate >= today;
+      if (currentSort === 'past') matchesSort = cardDate < today;
 
-      // Initialize type buttons for "all" semester first
-      renderTypeButtons(getTypesForSemester('all'));
-      applyFilters();
+      return matchesQuery && matchesType && matchesSemester && matchesSort;
+    });
+
+    currentPage = 1;
+    applySort();
+    renderPage();
+    renderPagination();
+
+    let noEventsMessage = document.getElementById('no-events-message');
+    if (!noEventsMessage) {
+      noEventsMessage = document.createElement('div');
+      noEventsMessage.id = 'no-events-message';
+      noEventsMessage.textContent = 'No events found';
+      noEventsMessage.style.textAlign = 'center';
+      noEventsMessage.style.padding = '2rem';
+      noEventsMessage.style.gridColumn = '1 / -1';
+      grid.appendChild(noEventsMessage);
+    }
+    noEventsMessage.style.display = filteredCards.length === 0 ? 'block' : 'none';
+
+    // Update type buttons dynamically to match current filtered events
+    const newTypes = getTypesForFilteredCards();
+    renderTypeButtons(newTypes);
+  }
+
+  function applySort() {
+    const today = new Date(); today.setHours(0,0,0,0);
+    filteredCards.sort((a, b) => {
+      const dateA = new Date(a.dataset.date); dateA.setHours(0,0,0,0);
+      const dateB = new Date(b.dataset.date); dateB.setHours(0,0,0,0);
+
+      if (currentSort === 'title-asc') return a.dataset.title.localeCompare(b.dataset.title);
+      if (currentSort === 'upcoming') return dateA - dateB;
+      if (currentSort === 'past') return dateB - dateA;
+      return 0;
+    });
+  }
+
+  function renderPage() {
+    const start = (currentPage - 1) * EVENTS_PER_PAGE;
+    const end = start + EVENTS_PER_PAGE;
+
+    getCards().forEach(card => card.style.display = 'none');
+    filteredCards.slice(start, end).forEach(card => card.style.display = '');
+  }
+
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredCards.length / EVENTS_PER_PAGE);
+    if (totalPages <= 1) {
+      paginationContainer.innerHTML = '';
+      return;
+    }
+
+    let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''} style="margin:0 0.25rem; padding:0.5rem 1rem;">Prev</button>`;
+    for (let i = 1; i <= totalPages; i++) {
+      html += `<button class="pagination-btn" data-page="${i}" style="margin:0 0.25rem; padding:0.5rem 1rem; ${i===currentPage?'background:#1a73e8;color:#fff;':''}">${i}</button>`;
+    }
+    html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''} style="margin:0 0.25rem; padding:0.5rem 1rem;">Next</button>`;
+
+    paginationContainer.innerHTML = html;
+    Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
+      btn.addEventListener('click', () => {
+        let page = parseInt(btn.dataset.page);
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+        currentPage = page;
+        renderPage();
+        renderPagination();
+      });
+    });
+  }
+
+  // Event listeners
+  searchInput.addEventListener('input', applyFilters);
+
+  filtersToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (filtersPopover.style.display === 'block') closePopover();
+    else openPopover();
+  });
+
+  filtersApply.addEventListener('click', () => {
+    currentSemester = semesterSelectPop.value;
+    currentSort = sortSelectPop.value;
+    closePopover();
+    applyFilters();
+  });
+
+  filtersCancel.addEventListener('click', closePopover);
+
+  function openPopover() {
+    filtersPopover.style.display = 'block';
+    filtersToggle.setAttribute('aria-expanded', 'true');
+    semesterSelectPop.value = currentSemester;
+    sortSelectPop.value = currentSort;
+    semesterSelectPop.focus();
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKeyDown);
+  }
+
+  function closePopover() {
+    filtersPopover.style.display = 'none';
+    filtersToggle.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('click', onDocClick);
+    document.removeEventListener('keydown', onKeyDown);
+  }
+
+  function onDocClick(e) {
+    if (!filtersPopover.contains(e.target) && e.target !== filtersToggle) closePopover();
+  }
+
+  function onKeyDown(e) {
+    if (e.key === 'Escape') closePopover();
+  }
+
+  // Initialize
+  applyFilters();
 </script>

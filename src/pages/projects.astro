@@ -7,23 +7,55 @@ import projectsIndex from "@/data/projects/index.js";
 
 const semesters = projectsIndex?.semesters ?? [];
 
+// Sort semesters: newest year first, then highest semester
+semesters.sort((a, b) => {
+  if (a.year && b.year) {
+    if (a.year !== b.year) return b.year - a.year; // newest year first
+    const aSem = a.sem ?? -1;
+    const bSem = b.sem ?? -1;
+    return bSem - aSem; // highest semester first
+  }
+  if (a.year && !b.year) return -1;
+  if (!a.year && b.year) return 1;
+  return b.folder.localeCompare(a.folder);
+});
+
 // Flatten projects and attach semester id
 const projectsBySemester = semesters
-  .map(s => s.projects.map(ev => ({ ...ev, semesterId: s.id })))
+  .map(s => (s.projects ?? []).map(ev => ({ ...ev, semesterId: s.id })))
   .flat();
 
-// Determine dynamic types
+// Current projects: always the latest semester
+const latestSemester = semesters[0] ?? null;
+const currentProjects = (latestSemester?.projects ?? []).map(p => ({
+  ...p,
+  semesterId: latestSemester.id
+}));
+
+// Past projects: exclude latest semester and empty semesters
+const pastProjects = semesters
+  .filter(s => s.id !== latestSemester?.id && (s.projects?.length ?? 0) > 0)
+  .flatMap(s => (s.projects ?? []).map(p => ({ ...p, semesterId: s.id })));
+
+// Flatten all projects for filtering
+const allProjects = [...currentProjects, ...pastProjects];
+
+// Determine dynamic types safely
 const preferred = ["CNN", "Linear Regression"];
 const allTypesSet = new Set();
-projectsBySemester.forEach(ev => {
-  const t = (ev.type ?? ev.category ?? "Other").toString();
-  if (t) allTypesSet.add(t);
+
+allProjects.forEach(ev => {
+  const t = (ev.type ?? ev.category ?? "Other")?.toString() ?? "Other";
+  allTypesSet.add(t);
 });
+
 const preferredExisting = preferred.filter(p => allTypesSet.has(p));
 const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
 remaining.sort((a, b) => a.localeCompare(b));
+
 const types = ["All", ...preferredExisting, ...remaining];
 ---
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -45,20 +77,81 @@ const types = ["All", ...preferredExisting, ...remaining];
         <p class="pink-title">Club Projects</p>
       </section>
 
-		<div class="info-panel-wrapper">
-			<div class="thick-line-behind"></div>			
-			<section class="info-panel">
-				The QUT AI & ML Society runs collaborative projects that bring students, researchers, and industry partners together to build practical AI and machine‑learning solutions. 
-        Projects range from developer tools and data‑driven apps to research prototypes and everyday innovations, with clear roles for contributors at every skill level. 
-        We pair hands‑on work with mentorship, workshops, and hackathons to help members learn, share code, and grow their portfolios while applying AI responsibly. 
-        Join to contribute, learn from peers, and help shape projects that make a real impact.
-				</p>
-			</section>
+      <div class="info-panel-wrapper">
+          <div class="thick-line-behind"></div>			
+          <section class="info-panel">
+            The QUT AI & ML Society runs collaborative projects that bring students, researchers, and industry partners together to build practical AI and machine‑learning solutions. 
+            Projects range from developer tools and data‑driven apps to research prototypes and everyday innovations, with clear roles for contributors at every skill level. 
+            We pair hands‑on work with mentorship, workshops, and hackathons to help members learn, share code, and grow their portfolios while applying AI responsibly. 
+            Join to contribute, learn from peers, and help shape projects that make a real impact.
+            </p>
+          </section>
 			</div>
 
+
+
+
+
+
+        <!-- CURRENT PROJECTS -->
+        <section class="pink-panel">
+          <p class="pink-title">Current Projects ({latestSemester.label})</p>
+        </section>
+
+        {currentProjects.length === 0 ? (
+          <div class="info-panel-wrapper full-width-panel">
+            <div class="thick-line-behind"></div>			
+            <section class="info-panel">
+              Latest project is still to be confirmed at this stage
+            </section>
+          </div>
+        ) : (
+          <section class="projects-panel current-projects-panel">
+            <section id="current-projects-grid" class="projects-grid">
+              {currentProjects.map(ev => {
+                const type = ev.type ?? ev.category ?? "Other";
+                return (
+                  <article
+                    class="project-card"
+                    data-semester={ev.semesterId}
+                    data-category={ev.category}
+                    data-type={type}
+                    data-title={ev.title.toLowerCase()}
+                  >
+                    <a href={ev.url}>
+                      <div class="card-media">
+                        {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
+                      </div>
+
+                      <div class="card-body">
+                        <h3 class="card-title">{ev.title}</h3>
+                        <div class="card-divider"></div>
+                        <time class="card-date">{ev.dateLabel}</time>
+                        <p class="card-description">{ev.excerpt}</p>
+                        <div class="card-footer">
+                          <h3 class="card-title">{ev.url}</h3>
+                          <span class="card-view-more">View more →</span>
+                        </div>
+                      </div>
+                    </a>
+                  </article>
+                );
+              })}
+            </section>
+          </section>
+        )}
+
+
+
+
+
+      <section class="pink-panel">
+        <p class="pink-title">Previous Projects</p>
+      </section>
+
       <div class="key-content">
-        <section class="projects-controls" style="margin: 1.25rem 0;">
-          <div class="controls-row" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+        <section class="projects-controls">
+          <div class="controls-row">
             <div class="search-wrapper">
               <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="11" cy="11" r="7" />
@@ -99,10 +192,13 @@ const types = ["All", ...preferredExisting, ...remaining];
                   <div class="filter-group">
                     <label for="semester-select-pop">Semester</label>
                     <select id="semester-select-pop">
-                      <option value="all" selected>All semesters</option>
-                      {semesters.map(s => (
-                        <option value={s.id}>{s.label}</option>
-                      ))}
+                      <option value="all" selected>All past semesters</option>
+                      {semesters
+                        .filter(s => s.id !== latestSemester?.id) // exclude latest semester
+                        .map(s => (
+                          <option value={s.id}>{s.label}</option>
+                        ))
+                      }
                     </select>
                   </div>
 
