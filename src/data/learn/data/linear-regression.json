@@ -2,7 +2,7 @@
   "title": "Linear Regression",
   "slug": "linear-regression",
   "description": "Learn the fundamentals of Linear Regression with step-by-step tutorials, video guides, and practical applications.",
-  
+  "category": "Tutorial",
   "overview": {
     "definition": "Linear Regression is a supervised learning algorithm used to model the relationship between a dependent variable (target) and one or more independent variables (features) by fitting a linear equation to observed data.",
     "types": [

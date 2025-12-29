@@ -5,30 +5,26 @@ import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 import articlesIndex from "@/data/learn/index.js";
 
-const articles = articlesIndex?.topics ?? [];
+const learnings = articlesIndex?.topics ?? [];
 
-// Determine dynamic types
-const preferred = ["Social", "Industry", "Projects", "Major"];
-const allTypesSet = new Set();
-articles.forEach(ev => {
-  const t = (ev.type ?? ev.category ?? "Other").toString();
-  if (t) allTypesSet.add(t);
+// Determine dynamic categories
+const allCategoriesSet = new Set();
+learnings.forEach(ev => {
+  const c = ev.category ?? "Other";
+  if (c) allCategoriesSet.add(c);
 });
-const preferredExisting = preferred.filter(p => allTypesSet.has(p));
-const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
-remaining.sort((a, b) => a.localeCompare(b));
-const types = ["All", ...preferredExisting, ...remaining];
+const categories = ["All", ...Array.from(allCategoriesSet).sort()];
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
-// Featured articles (upcoming)
-const featuredArticles = articles
+// Featured learnings (upcoming)
+const featuredLearnings = learnings
   .filter(ev => ev.featured)
   .filter(ev => {
-    const articleDate = new Date(ev.date);
-    articleDate.setHours(0, 0, 0, 0);
-    return articleDate >= today;
+    const learningDate = new Date(ev.date);
+    learningDate.setHours(0, 0, 0, 0);
+    return learningDate >= today;
   });
 ---
 
@@ -45,16 +41,16 @@ const featuredArticles = articles
   <Navigation />
 
   <div class="content-wrapper learning-space">
-    <!-- Featured Articles -->
-    {featuredArticles.length > 0 && (
+    <!-- Featured Learnings -->
+    {featuredLearnings.length > 0 && (
       <>
         <section class="pink-panel">
-          <p class="pink-title">Featured Articles</p>
+          <p class="pink-title">Featured Learnings</p>
         </section>
         <section class="featured-learning-panel">
           <div class="featured-learning-grid">
-            {featuredArticles.map(ev => (
-              <article class="article-card" data-category={ev.category} data-type={ev.type ?? ev.category ?? "Other"} data-title={ev.title.toLowerCase()} data-date={ev.date}>
+            {featuredLearnings.map(ev => (
+              <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
                 <a href={ev.url}>
                   <div class="card-media">
                     {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
@@ -76,7 +72,7 @@ const featuredArticles = articles
       </>
     )}
 
-    <!-- All Articles -->
+    <!-- All Learnings -->
     <section class="pink-panel">
       <p class="pink-title">Learn about AI & ML</p>
     </section>
@@ -93,10 +89,10 @@ const featuredArticles = articles
           </div>
 
           <div class="type-filter-wrapper">
-            <span class="type-filter-label">Sort by:</span>
+            <span class="type-filter-label">Category:</span>
             <div id="type-filters" class="type-filter-pill">
-              {types.map(t => (
-                <button class={`type-btn ${t === "All" ? "active" : ""}`} data-type={t} type="button">{t}</button>
+              {categories.map(c => (
+                <button class={`type-btn ${c === "All" ? "active" : ""}`} data-category={c} type="button">{c}</button>
               ))}
             </div>
           </div>
@@ -113,9 +109,8 @@ const featuredArticles = articles
                 <div class="filter-group">
                   <label for="sort-select-pop">Sort</label>
                   <select id="sort-select-pop">
-                    <option value="upcoming" selected>Upcoming articles</option>
-                    <option value="past">Past articles</option>
-                    <option value="title-asc">Title A–Z</option>
+                    <option value="title-asc" selected>Title A–Z</option>
+                    <option value="title-desc">Title Z–A</option>
                   </select>
                 </div>
 
@@ -131,27 +126,24 @@ const featuredArticles = articles
 
       <section class="learning-panel">
         <section id="learning-grid" class="learning-grid">
-          {articles.map(ev => {
-            const type = ev.type ?? ev.category ?? "Other";
-            return (
-              <article class="article-card" data-category={ev.category} data-type={type} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-                <a href={ev.url}>
-                  <div class="card-media">
-                    {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
+          {learnings.map(ev => (
+            <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
+              <a href={ev.url}>
+                <div class="card-media">
+                  {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
+                </div>
+                <div class="card-body">
+                  <h3 class="card-title">{ev.title}</h3>
+                  <div class="card-divider"></div>
+                  <time class="card-date">{ev.dateLabel}</time>
+                  <p class="card-description">{ev.excerpt}</p>
+                  <div class="card-footer">
+                    <span class="card-view-more">View more →</span>
                   </div>
-                  <div class="card-body">
-                    <h3 class="card-title">{ev.title}</h3>
-                    <div class="card-divider"></div>
-                    <time class="card-date">{ev.dateLabel}</time>
-                    <p class="card-description">{ev.excerpt}</p>
-                    <div class="card-footer">
-                      <span class="card-view-more">View more →</span>
-                    </div>
-                  </div>
-                </a>
-              </article>
-            );
-          })}
+                </div>
+              </a>
+            </article>
+          ))}
         </section>
       </section>
 
@@ -163,175 +155,144 @@ const featuredArticles = articles
 </body>
 </html>
 
-
-
-    
-
-
 <script type="module">
-  const searchInput = document.getElementById('learning-search');
-  const grid = document.getElementById('learning-grid');
-  const sortSelectPop = document.getElementById('sort-select-pop');
-  const filtersToggle = document.getElementById('filters-toggle');
-  const filtersPopover = document.getElementById('filters-popover');
-  const filtersApply = document.getElementById('filters-apply');
-  const filtersCancel = document.getElementById('filters-cancel');
-  let paginationContainer = document.getElementById('learning-pagination');
+const searchInput = document.getElementById('learning-search');
+const grid = document.getElementById('learning-grid');
+const sortSelectPop = document.getElementById('sort-select-pop');
+const filtersToggle = document.getElementById('filters-toggle');
+const filtersPopover = document.getElementById('filters-popover');
+const filtersApply = document.getElementById('filters-apply');
+const filtersCancel = document.getElementById('filters-cancel');
+let paginationContainer = document.getElementById('learning-pagination');
 
-  if (!paginationContainer) {
-    paginationContainer = document.createElement('div');
-    paginationContainer.id = 'learning-pagination';
-    paginationContainer.style.textAlign = 'center';
-    paginationContainer.style.marginTop = '2rem';
-    grid.parentNode.appendChild(paginationContainer);
-  }
+if (!paginationContainer) {
+  paginationContainer = document.createElement('div');
+  paginationContainer.id = 'learning-pagination';
+  paginationContainer.style.textAlign = 'center';
+  paginationContainer.style.marginTop = '2rem';
+  grid.parentNode.appendChild(paginationContainer);
+}
 
-  const ARTICLES_PER_PAGE = 6;
-  let currentPage = 1;
-  let currentSort = 'upcoming';
-  let filteredCards = [];
-  let typeButtons = [];
+const LEARNINGS_PER_PAGE = 6;
+let currentPage = 1;
+let currentSort = 'title-asc';
+let filteredCards = [];
+let categoryButtons = [];
 
-  function getCards() {
-    return Array.from(grid.querySelectorAll('.article-card'));
-  }
+// FIXED: select learn-cards instead of article-card
+function getCards() { return Array.from(grid.querySelectorAll('.learn-card')); }
 
-  function getTypesForFilteredCards() {
-    const query = searchInput.value.trim().toLowerCase();
-    const today = new Date(); today.setHours(0,0,0,0);
+function getCategoriesForFilteredCards() {
+  const query = searchInput.value.trim().toLowerCase();
+  const cards = getCards().filter(card => {
+    const title = card.dataset.title || '';
+    const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+    return !query || title.includes(query) || excerpt.includes(query);
+  });
+  const set = new Set(cards.map(c => c.dataset.category || 'Other'));
+  return set.size <= 1 ? ['All'] : ['All', ...Array.from(set).sort()];
+}
 
-    const cards = getCards().filter(card => {
-      const title = card.dataset.title || '';
-      const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
-      const cardType = card.dataset.type || '';
-      const cardDate = new Date(card.dataset.date); cardDate.setHours(0,0,0,0);
-
-      const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
-      let matchesSort = true;
-      if (currentSort === 'upcoming') matchesSort = cardDate >= today;
-      if (currentSort === 'past') matchesSort = cardDate < today;
-
-      return matchesQuery && matchesSort;
+function renderCategoryButtons(categories) {
+  const container = document.getElementById('type-filters');
+  container.innerHTML = '';
+  categories.forEach(c => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset.category = c;
+    btn.textContent = c;
+    btn.className = `type-btn ${c === 'All' ? 'active' : ''}`;
+    btn.addEventListener('click', () => {
+      categoryButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
     });
+    container.appendChild(btn);
+  });
+  categoryButtons = Array.from(container.querySelectorAll('.type-btn'));
+}
 
-    const typeSet = new Set(cards.map(c => c.dataset.type || 'Other'));
-    const preferred = ["Social", "Industry", "Projects", "Major"];
-    const preferredExisting = preferred.filter(p => typeSet.has(p));
-    const remaining = Array.from(typeSet).filter(t => !preferredExisting.includes(t)).sort();
-    const allTypes = [...preferredExisting, ...remaining];
+function applyFilters() {
+  const query = searchInput.value.trim().toLowerCase();
+  const activeBtn = categoryButtons.find(b => b.classList.contains('active'));
+  const selectedCategory = activeBtn ? activeBtn.dataset.category : 'All';
 
-    return allTypes.length <= 1 ? ['All'] : ['All', ...allTypes];
+  filteredCards = getCards().filter(card => {
+    const title = card.dataset.title || '';
+    const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+    const cardCategory = card.dataset.category || '';
+
+    const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
+    const matchesCategory = selectedCategory === 'All' || cardCategory === selectedCategory;
+    return matchesQuery && matchesCategory;
+  });
+
+  currentPage = 1;
+  applySort();
+  renderPage();
+  renderPagination();
+
+  let noLearningsMessage = document.getElementById('no-learning-message');
+  if (!noLearningsMessage) {
+    noLearningsMessage = document.createElement('div');
+    noLearningsMessage.id = 'no-learning-message';
+    noLearningsMessage.textContent = 'No learnings found';
+    noLearningsMessage.style.textAlign = 'center';
+    noLearningsMessage.style.padding = '2rem';
+    noLearningsMessage.style.gridColumn = '1 / -1';
+    grid.appendChild(noLearningsMessage);
   }
+  noLearningsMessage.style.display = filteredCards.length === 0 ? 'block' : 'none';
 
-  function renderTypeButtons(types) {
-    const container = document.getElementById('type-filters');
-    container.innerHTML = '';
-    types.forEach(t => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.dataset.type = t;
-      btn.textContent = t;
-      btn.className = `type-btn ${t === 'All' ? 'active' : ''}`;
-      btn.addEventListener('click', () => {
-        typeButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        applyFilters();
-      });
-      container.appendChild(btn);
+  const newCategories = getCategoriesForFilteredCards();
+  renderCategoryButtons(newCategories);
+}
+
+function applySort() {
+  filteredCards.sort((a,b) => {
+    if(currentSort==='title-asc') return a.dataset.title.localeCompare(b.dataset.title);
+    if(currentSort==='title-desc') return b.dataset.title.localeCompare(a.dataset.title);
+    return 0;
+  });
+}
+
+function renderPage() {
+  const start = (currentPage-1)*LEARNINGS_PER_PAGE;
+  const end = start+LEARNINGS_PER_PAGE;
+  getCards().forEach(c => c.style.display='none');
+  filteredCards.slice(start,end).forEach(c => c.style.display='');
+}
+
+function renderPagination() {
+  const totalPages = Math.ceil(filteredCards.length/LEARNINGS_PER_PAGE);
+  if(totalPages<=1){paginationContainer.innerHTML=''; return;}
+  let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
+  for(let i=1;i<=totalPages;i++){
+    html+=`<button class="pagination-btn" data-page="${i}" ${i===currentPage?'style="background:#1a73e8;color:#fff;"':''}>${i}</button>`;
+  }
+  html+=`<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
+  paginationContainer.innerHTML=html;
+  Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      let page = parseInt(btn.dataset.page);
+      if(page<1) page=1;
+      if(page>totalPages) page=totalPages;
+      currentPage=page;
+      renderPage();
+      renderPagination();
     });
-    typeButtons = Array.from(container.querySelectorAll('.type-btn'));
-  }
+  });
+}
 
-  function applyFilters() {
-    const query = searchInput.value.trim().toLowerCase();
-    const activeTypeBtn = typeButtons.find(b => b.classList.contains('active'));
-    const selectedType = activeTypeBtn ? activeTypeBtn.dataset.type : 'All';
-    const today = new Date(); today.setHours(0,0,0,0);
+// Events
+searchInput.addEventListener('input', applyFilters);
+filtersToggle.addEventListener('click', e => {
+  e.stopPropagation();
+  filtersPopover.style.display==='block'?filtersPopover.style.display='none':filtersPopover.style.display='block';
+});
+filtersApply.addEventListener('click', () => { currentSort = sortSelectPop.value; filtersPopover.style.display='none'; applyFilters(); });
+filtersCancel.addEventListener('click', () => { filtersPopover.style.display='none'; });
 
-    filteredCards = getCards().filter(card => {
-      const title = card.dataset.title || '';
-      const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
-      const cardType = card.dataset.type || '';
-      const cardDate = new Date(card.dataset.date); cardDate.setHours(0,0,0,0);
-
-      const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
-      const matchesType = selectedType === 'All' || cardType === selectedType;
-
-      let matchesSort = true;
-      if (currentSort === 'upcoming') matchesSort = cardDate >= today;
-      if (currentSort === 'past') matchesSort = cardDate < today;
-
-      return matchesQuery && matchesType && matchesSort;
-    });
-
-    currentPage = 1;
-    applySort();
-    renderPage();
-    renderPagination();
-
-    let noArticlesMessage = document.getElementById('no-learning-message');
-    if (!noArticlesMessage) {
-      noArticlesMessage = document.createElement('div');
-      noArticlesMessage.id = 'no-learning-message';
-      noArticlesMessage.textContent = 'No articles found';
-      noArticlesMessage.style.textAlign = 'center';
-      noArticlesMessage.style.padding = '2rem';
-      noArticlesMessage.style.gridColumn = '1 / -1';
-      grid.appendChild(noArticlesMessage);
-    }
-    noArticlesMessage.style.display = filteredCards.length === 0 ? 'block' : 'none';
-
-    const newTypes = getTypesForFilteredCards();
-    renderTypeButtons(newTypes);
-  }
-
-  function applySort() {
-    const today = new Date(); today.setHours(0,0,0,0);
-    filteredCards.sort((a,b) => {
-      const dateA = new Date(a.dataset.date); dateA.setHours(0,0,0,0);
-      const dateB = new Date(b.dataset.date); dateB.setHours(0,0,0,0);
-
-      if (currentSort === 'title-asc') return a.dataset.title.localeCompare(b.dataset.title);
-      if (currentSort === 'upcoming') return dateA - dateB;
-      if (currentSort === 'past') return dateB - dateA;
-      return 0;
-    });
-  }
-
-  function renderPage() {
-    const start = (currentPage-1)*ARTICLES_PER_PAGE;
-    const end = start + ARTICLES_PER_PAGE;
-    getCards().forEach(c => c.style.display='none');
-    filteredCards.slice(start,end).forEach(c => c.style.display='');
-  }
-
-  function renderPagination() {
-    const totalPages = Math.ceil(filteredCards.length/ARTICLES_PER_PAGE);
-    if(totalPages<=1){paginationContainer.innerHTML=''; return;}
-    let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
-    for(let i=1;i<=totalPages;i++){
-      html+=`<button class="pagination-btn" data-page="${i}" ${i===currentPage?'style="background:#1a73e8;color:#fff;"':''}>${i}</button>`;
-    }
-    html+=`<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
-    paginationContainer.innerHTML=html;
-    Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        let page = parseInt(btn.dataset.page);
-        if(page<1) page=1;
-        if(page>totalPages) page=totalPages;
-        currentPage=page;
-        renderPage();
-        renderPagination();
-      });
-    });
-  }
-
-  // Popover & events
-  searchInput.addEventListener('input', applyFilters);
-  filtersToggle.addEventListener('click', e => { e.stopPropagation(); filtersPopover.style.display==='block'?filtersPopover.style.display='none':filtersPopover.style.display='block'; });
-  filtersApply.addEventListener('click', () => { currentSort = sortSelectPop.value; filtersPopover.style.display='none'; applyFilters(); });
-  filtersCancel.addEventListener('click', () => { filtersPopover.style.display='none'; });
-
-  // Initialize
-  applyFilters();
+// Initialize
+applyFilters();
 </script>

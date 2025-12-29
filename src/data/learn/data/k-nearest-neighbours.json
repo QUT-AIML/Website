@@ -2,7 +2,7 @@
   "title": "K-Nearest Neighbors",
   "slug": "k-nearest-neighbors",
   "description": "Learn the fundamentals of K-Nearest Neighbors (KNN) with step-by-step tutorials, video guides, and practical applications.",
-
+  "category": "Tutorial",
   "overview": {
     "definition": "K-Nearest Neighbors (KNN) is a simple, instance-based supervised learning algorithm used for classification and regression. It predicts the output for a new data point based on the majority label or average of its k closest neighbors.",
     "types": [

@@ -3,7 +3,7 @@
   "slug": "transformers",
   "description": "Transformers are a type of deep learning model primarily used in NLP and increasingly in computer vision. They excel at capturing long-range dependencies in sequences.",
   "date": "2024-10-20",
-
+  "category": "Tutorial",
   "overview": {
     "definition": "A Transformer is a neural network architecture designed to handle sequential data, using self-attention mechanisms to process input in parallel.",
     "types": [

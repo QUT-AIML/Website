@@ -10,7 +10,6 @@ function normalizeTopic(raw, filePath) {
     description: raw.description ?? '',
     excerpt: raw.excerpt ?? raw.description ?? '',
     category: raw.category ?? 'Other',
-    type: raw.type ?? raw.category ?? 'Other',
     image: raw.image ?? '',
     featured: raw.featured ?? false,
     url: raw.url ?? `/learn/${raw.slug}`,
