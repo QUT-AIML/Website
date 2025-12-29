@@ -3,6 +3,8 @@
   "slug": "convolutional-neural-networks",
   "description": "Learn the fundamentals of Convolutional Neural Networks (CNNs) with step-by-step tutorials, video guides, and practical applications.",
   "category": "Tutorial",
+  "date": "2024-4-2",
+  "featured": false,
   "overview": {
     "definition": "Convolutional Neural Networks (CNNs) are a class of deep learning models specifically designed for processing structured grid data, such as images. They use convolutional layers to automatically learn spatial hierarchies of features.",
     "types": [

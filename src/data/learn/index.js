@@ -7,20 +7,27 @@ function getIdFromPath(filePath) {
   return match ? match[1] : null;
 }
 
-function normalizeTopic(raw, filePath) {
-  const id = getIdFromPath(filePath);
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('en-AU', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
 
+function normalizeTopic(raw, filePath) {
   return {
-    id,             
+    id: filePath.match(/\/([^/]+)\.json$/)?.[1],
     title: raw.title,
     description: raw.description ?? '',
     excerpt: raw.excerpt ?? raw.description ?? '',
     category: raw.category ?? 'Other',
     image: raw.image ?? '',
     featured: raw.featured ?? false,
-    url: `/learn/${id}`, 
+    url: `/learn/${filePath.match(/\/([^/]+)\.json$/)?.[1]}`,
     date: raw.date ?? '',
-    dateLabel: raw.date ?? raw.dateLabel ?? '',
+    dateLabel: formatDate(raw.date), 
     overview: raw.overview ?? null,
     tutorials: raw.tutorials ?? [],
     videos: raw.videos ?? [],

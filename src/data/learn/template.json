@@ -4,6 +4,7 @@
   "description": "Brief overview of what this topic is about and why it's worth learning.",
   "date": "2024-10-20",
   "type": "Tutorial/Video/Application/Tip/Resource/Research", 
+  "featured": false,
   "overview": {
     "definition": "Short definition or explanation of the topic.",
     "types": [

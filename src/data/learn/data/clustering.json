@@ -1,8 +1,10 @@
 {
   "title": "Clustering",
   "slug": "clustering",
+  "date": "2024-2-2",
   "description": "Learn the fundamentals of Clustering with step-by-step tutorials, video guides, and practical applications.",
   "category": "Tutorial",
+  "featured": false,
   "overview": {
     "definition": "Clustering is an unsupervised learning technique used to group similar data points together based on their features, without predefined labels.",
     "types": [

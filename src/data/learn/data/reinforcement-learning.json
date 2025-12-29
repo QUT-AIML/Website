@@ -3,6 +3,8 @@
   "slug": "reinforcement-learning",
   "description": "Learn the fundamentals of Reinforcement Learning (RL) with tutorials, video guides, and practical applications.",
   "category": "Tutorial",
+  "date": "2024-8-2",
+  "featured": false,
   "overview": {
     "definition": "Reinforcement Learning is a type of machine learning where an agent learns to make decisions by interacting with an environment to maximize cumulative rewards.",
     "types": [

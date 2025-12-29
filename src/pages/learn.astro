@@ -19,13 +19,7 @@ const today = new Date();
 today.setHours(0, 0, 0, 0);
 
 // Featured learnings (upcoming)
-const featuredLearnings = learnings
-  .filter(ev => ev.featured)
-  .filter(ev => {
-    const learningDate = new Date(ev.date);
-    learningDate.setHours(0, 0, 0, 0);
-    return learningDate >= today;
-  });
+const featuredLearnings = learnings.filter(ev => ev.featured === true);
 ---
 
 <html lang="en">
@@ -58,8 +52,10 @@ const featuredLearnings = learnings
                   <div class="card-body">
                     <h3 class="card-title">{ev.title}</h3>
                     <div class="card-divider"></div>
-                    <time class="card-date">{ev.dateLabel}</time>
-                    <p class="card-description">{ev.excerpt}</p>
+                      <time class="card-date">
+                        {ev.dateLabel || ev.date}
+                      </time>                    
+                      <p class="card-description">{ev.excerpt}</p>
                     <div class="card-footer">
                       <span class="card-view-more">View more →</span>
                     </div>
@@ -136,7 +132,9 @@ const featuredLearnings = learnings
                   <div class="card-body">
                     <h3 class="card-title">{ev.title}</h3>
                     <div class="card-divider"></div>
-                    <time class="card-date">{ev.dateLabel}</time>
+                      <time class="card-date">
+                        {ev.dateLabel || ev.date}
+                      </time>                    
                     <p class="card-description">{ev.excerpt}</p>
                     <div class="card-footer">
                       <span class="card-view-more">View more →</span>
