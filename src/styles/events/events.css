@@ -630,3 +630,43 @@
   
 }
 
+
+
+
+
+/* === PAGINATION BUTTONS === */
+#events-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+#events-pagination button.pagination-btn {
+  background: #1f1f1f; /* dark grey */
+  border: 1px solid #333 !important;
+  border-radius: 999px !important;
+  padding: 0.5rem 1rem !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#events-pagination button.pagination-btn:hover:not(:disabled) {
+  background: rgba(255, 139, 244, 0.15) !important;
+  color: #FF8BF4 !important;
+}
+
+#events-pagination button.pagination-btn:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+/* Force active state */
+#events-pagination button.pagination-btn.active {
+  background: #FF8BF4 !important; /* pink background */
+  color: #1f0f1b !important;      /* dark text */
+  border: none !important;
+}

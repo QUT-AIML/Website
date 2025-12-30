@@ -741,3 +741,40 @@
 }
 }
 
+
+
+
+#projects-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+#projects-pagination button.pagination-btn {
+  background: #1f1f1f !important;
+  border: 1px solid #333 !important;
+  border-radius: 999px !important;
+  padding: 0.5rem 1rem !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#projects-pagination button.pagination-btn:hover:not(:disabled) {
+  background: rgba(255, 139, 244, 0.15) !important;
+  color: #FF8BF4 !important;
+}
+
+#projects-pagination button.pagination-btn:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+#projects-pagination button.pagination-btn.active {
+  background: #FF8BF4 !important;
+  color: #1f0f1b !important;
+  border: none !important;
+}

@@ -401,13 +401,36 @@ const featuredEvents = eventsBySemester
         return;
       }
 
-      let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''} style="margin:0 0.25rem; padding:0.5rem 1rem;">Prev</button>`;
-      for (let i = 1; i <= totalPages; i++) {
-        html += `<button class="pagination-btn" data-page="${i}" style="margin:0 0.25rem; padding:0.5rem 1rem; ${i===currentPage?'background:#1a73e8;color:#fff;':''}">${i}</button>`;
+      const isMobile = window.innerWidth < 768;
+      let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
+
+      if (isMobile) {
+        // Mobile: show current page and previous page if exists, plus next page if exists
+        const pagesToShow = [];
+        
+        if (currentPage > 1) pagesToShow.push(currentPage - 1);
+        pagesToShow.push(currentPage);
+        if (currentPage < totalPages) pagesToShow.push(currentPage + 1);
+
+        // Ensure only max 2 numbers shown: prefer current and previous if possible
+        if (pagesToShow.length > 2) pagesToShow.shift(); // remove oldest to keep max 2
+
+        pagesToShow.forEach(p => {
+          html += `<button class="pagination-btn${p === currentPage ? ' active' : ''}" data-page="${p}">${p}</button>`;
+        });
+
+      } else {
+        // Desktop: show all pages
+        for (let i = 1; i <= totalPages; i++) {
+          html += `<button class="pagination-btn${i === currentPage ? ' active' : ''}" data-page="${i}">${i}</button>`;
+        }
       }
-      html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''} style="margin:0 0.25rem; padding:0.5rem 1rem;">Next</button>`;
+
+      html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
 
       paginationContainer.innerHTML = html;
+
+      // Re-attach click listeners
       Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
         btn.addEventListener('click', () => {
           let page = parseInt(btn.dataset.page);
@@ -419,6 +442,8 @@ const featuredEvents = eventsBySemester
         });
       });
     }
+
+
 
     // Event listeners
     searchInput.addEventListener('input', applyFilters);

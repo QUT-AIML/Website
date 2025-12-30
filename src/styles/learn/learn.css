@@ -458,7 +458,6 @@
     flex-wrap: wrap;
   }
 
-
   /* ------------------------- */
   /* SEARCH + FILTER ROW */
   /* ------------------------- */
@@ -506,6 +505,14 @@
   }
   
 
+  .learning-panel {
+    margin-top: 0.1rem;
+    margin-right: 1rem;
+    margin-bottom: 5rem;
+    margin-left: 1rem;
+    padding: 1.5rem;
+  }
+
   /* Adjust grid layout for mobile */
   .learning-grid,
   .featured-learning-grid {
@@ -521,7 +528,7 @@
   .key-content {
     margin-left: 1.3rem;
     margin-right: 1.3rem;
-    margin-bottom: 3rem;
+    margin-bottom: 0.1rem;
     width: 100%;
   }
 
@@ -529,6 +536,11 @@
     margin-left: 1rem;
     margin-right: 1rem;
   }
+
+  .learning-panel {
+    margin-bottom: 1rem;
+  }
+
 
   /* Panel adjustments */
   .learning-panel,
@@ -556,6 +568,11 @@
     flex-wrap: wrap;
     gap: 0.75rem;
   }
+
+  .learning-controls {
+      margin-bottom: 0.1rem !important;
+    }
+
 
   /* Full-width popover */
   .filters-popover {
@@ -595,5 +612,83 @@
 @media (min-width: 769px) {
   .filters-wrapper {
     position: relative;
+  }
+}
+
+@media (max-width: 768px) {
+  .learning-panel {
+    margin-bottom: 0 !important; /* remove extra spacing */
+    padding-bottom: 0 !important; /* remove inner padding at bottom */
+  }
+
+  #learning-pagination {
+    margin-top: 0.5rem; /* small gap, adjust as needed */
+  }
+}
+
+
+/* Remove extra bottom margin from learning panel */
+.learning-panel {
+  margin-bottom: 1rem; /* was 5rem on desktop, 1rem for tighter spacing */
+  padding-bottom: 1rem; /* optional: reduce inner padding if needed */
+}
+
+/* Pagination spacing */
+#learning-pagination {
+  margin-top: 0.5rem; /* reduce from 2rem to 0.5rem */
+}
+
+
+
+/* === PAGINATION BUTTONS === */
+#learning-pagination {
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center;
+  margin: 2rem auto 0 auto; /* auto left/right to center */
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: fit-content; /* shrink to fit the buttons */
+  margin-bottom: 5rem;
+}
+
+#learning-pagination button.pagination-btn {
+  background: #1f1f1f; /* dark grey */
+  border: 1px solid #333 !important;
+  border-radius: 999px !important;
+  padding: 0.5rem 1rem !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#learning-pagination button.pagination-btn:hover:not(:disabled) {
+  background: rgba(255, 139, 244, 0.15) !important;
+  color: #FF8BF4 !important;
+}
+
+#learning-pagination button.pagination-btn:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+/* Active page */
+#learning-pagination button.pagination-btn.active {
+  background: #FF8BF4 !important; /* pink background */
+  color: #1f0f1b !important;      /* dark text */
+  border: none !important;
+}
+
+
+
+/* Desktop adjustments */
+@media (min-width: 769px) {
+  .learning-panel {
+    margin-bottom: 0; /* remove extra spacing */
+    padding-bottom: 0; /* remove inner padding at bottom */
+  }
+
+  #learning-pagination {
+    margin-top: 0.5rem; /* small gap, adjust as needed */
   }
 }
