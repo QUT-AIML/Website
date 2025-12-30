@@ -301,6 +301,13 @@
 
 
 
+
+
+.team-card.empty-card {
+  box-shadow: none;
+  pointer-events: none;
+}
+
 .team-section {
   width: 100%;
 }
@@ -329,34 +336,55 @@
 }
 
 
+
+/* Side bars: visible, rounded inward edges */
 .side-bar {
   display: flex;
+  justify-content: center;
   align-items: center;
   background-color: var(--color-secondary);
-  height: 100px;
+  height: 100px;   /* fixed height so visible */
   flex-shrink: 0;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .side-bar.left,
 .side-bar.right {
-  flex: 0 0 12%;
+  flex: 0 0 12%; /* fixed 15% width, don't shrink */
   height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Left bar */
+/* Left: round inner side only, no margin outside */
 .side-bar.left {
   border-radius: 0 30px 30px 0;
-  justify-content: flex-end;
-  padding-right: 1.5rem;
+  margin-left: 0;
   margin-right: 3rem;
 }
 
-/* Right bar */
+/* Right: round inner side only, no margin outside */
 .side-bar.right {
   border-radius: 30px 0 0 30px;
-  justify-content: flex-start;
-  padding-left: 1.5rem;
   margin-left: 3rem;
+  margin-right: 0;
+}
+
+/* Arrows inside side bars */
+.carousel-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: black;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -403,6 +431,7 @@
   gap: 1.5rem;
 }
 
+/* Team card */
 .team-card {
   display: flex;
   gap: 1rem;
@@ -413,10 +442,6 @@
   flex: 1 1 45%; /* two cards per row in grid */
   opacity: 1;
   transition: opacity 0.6s ease;
-
-  /* Ensure all cards have a consistent minimum height */
-  min-height: 220px; /* match filled card's height including photo & padding */
-  box-sizing: border-box;
 }
 
 /* Empty cards still maintain height even with hidden photo */
@@ -439,8 +464,6 @@
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-
-  /* DOT BACKGROUND */
   background-color: #000;
   background-image: radial-gradient(circle, #393939 1px, transparent 1px);
   background-size: 30px 30px;
@@ -493,12 +516,6 @@
   font-size: 1.5rem;
   cursor: pointer;
   color: black;
-
-  display: flex;              /* force flex layout */
-  align-items: center;        /* vertical center for glyph */
-  justify-content: center;    /* horizontal center */
-
-  line-height: 1;             /* CRITICAL: removes font vertical offset */
 }
 
 .carousel-arrow:hover {
