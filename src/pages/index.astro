@@ -3,7 +3,29 @@ import "@/styles/global.css";
 import "@/styles/home.css";
 import KeyLogo from "@/logos/Logo-Full.svg";
 import Navigation from "@/components/Navigation.astro";
-import Footer from '../components/Footer.astro';
+import Footer from "@/components/Footer.astro";
+import eventsIndex from "@/data/events/index.js";
+
+const semesters = eventsIndex?.semesters ?? [];
+
+// Flatten events and attach semester id
+const eventsBySemester = semesters
+  .map(s => s.events.map(ev => ({ ...ev, semesterId: s.id })))
+  .flat();
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+// Featured events (optional)
+const featuredEvents = eventsBySemester
+  .filter(ev => ev.featured)
+  .filter(ev => new Date(ev.date) >= today);
+
+// Next 3 upcoming events
+const upcomingEvents = eventsBySemester
+  .filter(ev => new Date(ev.date) >= today)
+  .sort((a, b) => new Date(a.date) - new Date(b.date))
+  .slice(0, 3);
 ---
 
 <html lang="en">
@@ -11,7 +33,7 @@ import Footer from '../components/Footer.astro';
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning through events, workshops, and collaboration." />
+    <meta name="description" content="The QUT AI & ML Society is a student-led community exploring AI and ML through events, workshops, and collaboration." />
     <title>QUT AIML</title>
   </head>
   <body class="background-dots">
@@ -19,46 +41,171 @@ import Footer from '../components/Footer.astro';
 
     <main class="main-container">
       <div>
-		<div class="header-section">
-        <KeyLogo class="site-logo" />
+        <div class="header-section">
+          <KeyLogo class="site-logo" />
+          <div class="pink-divider"></div>
 
-			<div class="pink-divider"></div>
+          <div class="content-wrapper centered-box">
+            <section class="minimal-padding-panel">
+              <p class="section-content">
+                Empowering the Future through AI & Machine Learning
+              </p>
+            </section>
+          </div>
+        </div>
 
-			<div class="content-wrapper centered-box">
-				<section class="minimal-padding-panel">
-					<p class="section-content">
-						Empowering the Future through AI & Machine Learning
-					</p>
+			<div class="content-wrapper large-space">
+				<section class="pink-panel">
+					<p class="pink-title">Welcome to QUT AIML</p>
 				</section>
-			</div>
-		</div>
 
-		<div class="content-wrapper large-space">
-		
+				<div class="info-panel-wrapper">
+					<div class="thick-line-behind"></div>
+					<section class="info-panel">
+					<p class="section-content">
+						Where students come together to explore, experiment, and innovate in the world of AI and ML. 
+					</p>
+					<p class="section-content section-space">
+						Join the QUT AI & ML Society as we host hands-on workshops, competitions, and industry-sponsored events designed to challenge your skills and spark your creativity.
+					</p>
+					<p class="section-content section-space">
+						Ready to take your AI journey to the next level? Let’s learn, build, and innovate together.
+					</p>
+					</section>
+				</div>
+			</div>
+
+
+			<div class="content-wrapper large-space">
+				<!-- Section header -->
+				<section class="pink-panel">
+				<p class="pink-title">Machine Learning Engineer's Toolkit</p>
+				</section>
+
+				<section class="toolkit-section">
+				<div class="toolkit-inner">
+
+					<div class="toolkit-grid">
+						<div class="toolkit-line-behind"></div>
+
+
+						<!-- COLUMN 1 -->
+						<div class="toolkit-column">
+							<div class="toolkit-header-card">
+							Programming Languages
+							</div>
+
+							<article class="toolkit-card">
+							<ul class="card-list">
+								<li>
+								<strong>Python</strong> — Core language for AI, ML, and data science.
+								</li>
+								<li>
+								Learn Python for ML:
+								<a href="https://www.freecodecamp.org/learn" target="_blank" rel="noopener">
+									freeCodeCamp Python
+								</a>
+								</li>
+								<li>
+								Scientific computing & ML libraries:
+								NumPy, Pandas, PyTorch, TensorFlow
+								</li>
+							</ul>
+							</article>
+						</div>
+
+						<!-- COLUMN 2 -->
+						<div class="toolkit-column">
+							<div class="toolkit-header-card">
+							Essential Tools
+							</div>
+
+							<article class="toolkit-card">
+							<ul class="card-list">
+								<li>
+								<strong>Jupyter Notebooks</strong> — Interactive experiments & visualisation.
+								</li>
+								<li>
+								<strong>Google Colab</strong> — Free GPUs, zero setup, perfect for ML.
+								</li>
+								<li>
+								<strong>PyCharm</strong> — Professional Python IDE for larger projects.
+								</li>
+								<li>
+								<strong>VS Code</strong> — Lightweight editor with strong ML extensions.
+								</li>
+							</ul>
+							</article>
+						</div>
+
+						<!-- COLUMN 3 -->
+						<div class="toolkit-column">
+							<div class="toolkit-header-card">
+							AI & ML Tips
+							</div>
+
+							<article class="toolkit-card">
+							<ul class="card-list">
+								<li>
+								Start simple — baseline models beat complex ones done poorly.
+								</li>
+								<li>
+								Visualise your data before training any model.
+								</li>
+								<li>
+								Track experiments (metrics, params, datasets).
+								</li>
+								<li>
+								Learn the math intuition, not just the APIs.
+								</li>
+							</ul>
+							</article>
+						</div>
+
+					</div>
+				</div>
+				</section>
+
+			</div>
+
+
+
 			<section class="pink-panel">
-				<p class="pink-title">
-					Welcome to QUT AIML
-				</p>
+			<p class="pink-title">Upcoming Events</p>
 			</section>
 
-		<div class="info-panel-wrapper">
-			<div class="thick-line-behind"></div>			
-			<section class="info-panel">
-				<p class="section-content">
-					Where students come together to explore, experiment, and innovate in the world of artificial intelligence and machine learning. 
-					Whether you’re looking to deepen your AI knowledge, collaborate on cutting-edge projects, or connect with fellow tech enthusiasts, you’ve found your community.
-				</p>
-				<p class="section-content section-space">
-					Join the QUT AI & ML Society as we host hands-on workshops, competitions, and industry-sponsored events designed to challenge your skills and spark your creativity. 
-					Our society is your platform to develop impactful AI projects, tackle real-world problems, and gain invaluable experience in the rapidly evolving field of AI and ML.
-				</p>
-				<p class="section-content section-space">
-					Ready to take your AI journey to the next level? Let’s learn, build, and innovate together.
-				</p>
-			</section>
+			<section class="upcoming-events-panel events-panel">
+			<div id="upcoming-events-grid" class="events-grid">
+				{upcomingEvents.map(ev => {
+				const type = ev.type ?? ev.category ?? "Other";
+				return (
+					<article
+					class="event-card"
+					data-semester={ev.semesterId}
+					data-category={ev.category}
+					data-type={type}
+					data-title={ev.title.toLowerCase()}
+					data-date={ev.date}
+					>
+					<a href={ev.url}>
+						<div class="card-media">
+						{ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
+						</div>
+						<div class="card-body">
+						<h3 class="card-title">{ev.title}</h3>
+						<div class="card-divider"></div>
+						<time class="card-date">{ev.dateLabel}</time>
+						<p class="card-description">{ev.excerpt}</p>
+						<div class="card-footer">
+							<span class="card-view-more">View more →</span>
+						</div>
+						</div>
+					</a>
+					</article>
+				);
+				})}
 			</div>
-
-		</div>
+			</section>
 
       </div>
     </main>
@@ -66,4 +213,3 @@ import Footer from '../components/Footer.astro';
     <Footer />
   </body>
 </html>
-
