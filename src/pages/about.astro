@@ -144,117 +144,124 @@ const teamsForClient = teamData.filter(t => t.id !== "overview");
 
     <Footer />
 
+<script>
+  const grid = document.getElementById("team-grid");
+  const title = document.getElementById("team-title");
+  const dotsContainer = document.getElementById("team-dots");
+  const leftArrow = document.querySelector(".carousel-arrow.left");
+  const rightArrow = document.querySelector(".carousel-arrow.right");
 
-    <!-- CLIENT SCRIPT -->
-    <script>
-      const grid = document.getElementById("team-grid");
-      const title = document.getElementById("team-title");
-      const dotsContainer = document.getElementById("team-dots");
-      const leftArrow = document.querySelector(".carousel-arrow.left");
-      const rightArrow = document.querySelector(".carousel-arrow.right");
+  const teams = JSON.parse(grid.dataset.teams);
+  const AUTO_DELAY = 6000;
 
-      const teams = JSON.parse(grid.dataset.teams);
-      const PAGE_SIZE = 4;
-      const AUTO_DELAY = 6000;
+  let PAGE_SIZE = window.innerWidth <= 768 ? 2 : 4; // 2 on mobile, 4 on desktop
+  let globalPages = [];
+  let currentGlobalIndex = 0;
+  let autoTimer;
 
-      let globalPages = [];
-      let currentGlobalIndex = 0;
-      let autoTimer;
-
-      // Build global pages
-      teams.forEach(team => {
-        for (let i = 0; i < team.items.length; i += PAGE_SIZE) {
-          globalPages.push({
-            teamTitle: team.title,
-            items: team.items.slice(i, i + PAGE_SIZE),
-            pageIndex: i / PAGE_SIZE,
-          });
-        }
-      });
-
-      function renderDots() {
-        dotsContainer.innerHTML = "";
-        globalPages.forEach((_, i) => {
-          const dot = document.createElement("span");
-          dot.className = "team-dot" + (i === currentGlobalIndex ? " active" : "");
-          dot.onclick = () => {
-            currentGlobalIndex = i;
-            resetAuto();
-            renderPage(currentGlobalIndex);
-          };
-          dotsContainer.appendChild(dot);
+  function buildPages() {
+    globalPages = [];
+    teams.forEach(team => {
+      for (let i = 0; i < team.items.length; i += PAGE_SIZE) {
+        globalPages.push({
+          teamTitle: team.title,
+          items: team.items.slice(i, i + PAGE_SIZE),
+          pageIndex: i / PAGE_SIZE,
         });
       }
+    });
+  }
 
-      function renderPage(index) {
-        const page = globalPages[index];
-
-        title.textContent =
-          page.pageIndex > 0
-            ? `${page.teamTitle} – Continued`
-            : page.teamTitle;
-
-        grid.innerHTML = "";
-
-        // Render members
-        page.items.forEach(member => {
-          const card = document.createElement("div");
-          card.className = "team-card";
-          card.innerHTML = `
-            <div class="team-photo">
-              <img
-                src="/people/${member.name.split(" ")[0]}.png"
-                alt="${member.name}"
-                onerror="this.src='/people/Anonymous.png';"
-              />
-            </div>
-            <div class="team-info">
-              <span class="role">${member.role}</span>
-              <h3>${member.name}</h3>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-
-        // Fill remaining slots with empty cards
-        const emptySlots = PAGE_SIZE - page.items.length;
-        for (let i = 0; i < emptySlots; i++) {
-          const emptyCard = document.createElement("div");
-          emptyCard.className = "team-card empty-card";
-          emptyCard.innerHTML = `<div class="team-photo"></div><div class="team-info"></div>`;
-          grid.appendChild(emptyCard);
-        }
-
-        // Handle arrows visibility
-        leftArrow.style.visibility = index === 0 ? "hidden" : "visible";
-        rightArrow.style.visibility = index === globalPages.length - 1 ? "hidden" : "visible";
-
-        renderDots();
-      }
-
-      function next() {
-        currentGlobalIndex =
-          currentGlobalIndex < globalPages.length - 1 ? currentGlobalIndex + 1 : 0;
+  function renderDots() {
+    dotsContainer.innerHTML = "";
+    globalPages.forEach((_, i) => {
+      const dot = document.createElement("span");
+      dot.className = "team-dot" + (i === currentGlobalIndex ? " active" : "");
+      dot.onclick = () => {
+        currentGlobalIndex = i;
+        resetAuto();
         renderPage(currentGlobalIndex);
-      }
+      };
+      dotsContainer.appendChild(dot);
+    });
+  }
 
-      function prev() {
-        currentGlobalIndex =
-          currentGlobalIndex > 0 ? currentGlobalIndex - 1 : globalPages.length - 1;
-        renderPage(currentGlobalIndex);
-      }
+  function renderPage(index) {
+    const page = globalPages[index];
 
-      function resetAuto() {
-        clearInterval(autoTimer);
-        autoTimer = setInterval(next, AUTO_DELAY);
-      }
+    title.textContent =
+      page.pageIndex > 0
+        ? `${page.teamTitle} – Continued`
+        : page.teamTitle;
 
-      rightArrow.onclick = () => { next(); resetAuto(); };
-      leftArrow.onclick = () => { prev(); resetAuto(); };
+    grid.innerHTML = "";
 
-      resetAuto();
+    page.items.forEach(member => {
+      const card = document.createElement("div");
+      card.className = "team-card";
+      card.innerHTML = `
+        <div class="team-photo">
+          <img
+            src="/people/${member.name.split(" ")[0]}.png"
+            alt="${member.name}"
+            onerror="this.src='/people/Anonymous.png';"
+          />
+        </div>
+        <div class="team-info">
+          <span class="role">${member.role}</span>
+          <h3>${member.name}</h3>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Fill remaining slots with empty cards
+    const emptySlots = PAGE_SIZE - page.items.length;
+    for (let i = 0; i < emptySlots; i++) {
+      const emptyCard = document.createElement("div");
+      emptyCard.className = "team-card empty-card";
+      emptyCard.innerHTML = `<div class="team-photo"></div><div class="team-info"></div>`;
+      grid.appendChild(emptyCard);
+    }
+
+    leftArrow.style.visibility = index === 0 ? "hidden" : "visible";
+    rightArrow.style.visibility = index === globalPages.length - 1 ? "hidden" : "visible";
+
+    renderDots();
+  }
+
+  function next() {
+    currentGlobalIndex =
+      currentGlobalIndex < globalPages.length - 1 ? currentGlobalIndex + 1 : 0;
+    renderPage(currentGlobalIndex);
+  }
+
+  function prev() {
+    currentGlobalIndex =
+      currentGlobalIndex > 0 ? currentGlobalIndex - 1 : globalPages.length - 1;
+    renderPage(currentGlobalIndex);
+  }
+
+  function resetAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(next, AUTO_DELAY);
+  }
+
+  rightArrow.onclick = () => { next(); resetAuto(); };
+  leftArrow.onclick = () => { prev(); resetAuto(); };
+
+  // Rebuild pages if window is resized (mobile ↔ desktop)
+  window.addEventListener("resize", () => {
+    const newPageSize = window.innerWidth <= 768 ? 2 : 4;
+    if (newPageSize !== PAGE_SIZE) {
+      PAGE_SIZE = newPageSize;
+      currentGlobalIndex = 0;
+      buildPages();
       renderPage(0);
-    </script>
+    }
+  });
 
-  </body>
-</html>
+  buildPages();
+  resetAuto();
+  renderPage(0);
+</script>
