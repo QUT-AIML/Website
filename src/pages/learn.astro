@@ -88,30 +88,42 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
             </div>
           </div>
 
-          <div style="margin-left:auto; position:relative;">
-            <button id="filters-toggle" aria-haspopup="true" aria-expanded="false" type="button" class="filters-toggle-btn">
-              <svg class="filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
-              </svg>
-            </button>
+          <!-- FILTER POPOVER -->
+            <div class="filters-wrapper">
+              <button
+                id="filters-toggle"
+                aria-haspopup="true"
+                aria-expanded="false"
+                type="button"
+                class="filters-toggle-btn"
+              >
+                <svg class="filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24">
+                  <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
+                </svg>
+              </button>
 
-            <div id="filters-popover" role="dialog" aria-modal="false" class="filters-popover">
-              <div class="filters-popover-content">
+              <div
+                id="filters-popover"
+                role="dialog"
+                aria-modal="false"
+                class="filters-popover"
+              >
+                <div class="filters-popover-content">
+                  <div class="filter-group">
+                    <label for="sort-select-pop">Sort</label>
+                    <select id="sort-select-pop">
+                      <option value="none">None</option>
+                      <option value="title-asc">Title A–Z</option>
+                      <option value="title-desc">Title Z–A</option>
+                      <option value="date-asc">Date Earliest → Latest</option>
+                      <option value="date-desc">Date Latest → Earliest</option>
+                    </select>
+                  </div>
 
-                <div class="filter-group">
-                  <label for="sort-select-pop">Sort</label>
-                  <select id="sort-select-pop">
-                    <option value="none" selected>None</option>
-                    <option value="title-asc">Title A–Z</option>
-                    <option value="title-desc">Title Z–A</option>
-                    <option value="date-asc">Date Earliest → Latest</option>
-                    <option value="date-desc">Date Latest → Earliest</option>
-                  </select>
-                </div>
-
-                <div class="filter-actions">
-                  <button id="filters-apply" type="button" class="btn-secondary">Apply</button>
-                  <button id="filters-cancel" type="button" class="btn-secondary">Cancel</button>
+                  <div class="filter-actions">
+                    <button id="filters-apply" type="button" class="btn-secondary">Apply</button>
+                    <button id="filters-cancel" type="button" class="btn-secondary">Cancel</button>
+                  </div>
                 </div>
               </div>
             </div>

@@ -335,6 +335,10 @@
   width: 100% !important;
 }
 
+.team-grid-wrapper {
+  padding-bottom: 5rem;
+}
+
 
 
 /* Side bars: visible, rounded inward edges */
@@ -570,6 +574,10 @@
 /* MOBILE: show arrows side by side above the team grid */
 @media (max-width: 768px) {
 
+  .team-grid-wrapper {
+    padding-bottom: 0rem;
+  }
+
   .minimal-padding-panel {
     padding: 15px 20px;
   }
@@ -625,11 +633,13 @@
     gap: 1rem;                /* space between buttons */
     width: 90%;               /* smaller than full width for margin around */
     margin: 1rem auto;        /* margin on top/bottom and center horizontally */
+    margin-bottom: 3rem;
     padding: 1rem 1.5rem;     /* inner padding */
     background-color: var(--color-secondary); /* pink border */
     border-radius: 20px;      /* rounded corners */
     box-sizing: border-box;   /* include padding in width */
   }
+
 
   /* Ensure arrows maintain original style */
   .carousel-arrow {

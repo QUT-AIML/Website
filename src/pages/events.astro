@@ -90,90 +90,90 @@ const featuredEvents = eventsBySemester
 
       <div class="key-content">
         <section class="events-controls">
-<div class="controls-row">
+          <div class="controls-row">
 
-  <div class="search-filter-wrapper">
-    <!-- Search bar -->
-    <div class="search-wrapper">
-      <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="11" cy="11" r="7" />
-        <line x1="16.65" y1="16.65" x2="21" y2="21" />
-      </svg>
-      <input
-        id="events-search"
-        type="search"
-        placeholder="Search"
-        aria-label="Search events"
-      />
-    </div>
+            <div class="search-filter-wrapper">
+              <!-- Search bar -->
+              <div class="search-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="16.65" y1="16.65" x2="21" y2="21" />
+                </svg>
+                <input
+                  id="events-search"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search events"
+                />
+              </div>
 
-    <!-- Desktop type pills -->
-    <span class="type-filter-label">Sort by:</span>
-    <div id="type-filters" class="type-filter-pill">
-      {types.map((t) => (
-        <button
-          class={`type-btn ${t === "All" ? "active" : ""}`}
-          data-type={t}
-          type="button"
-        >
-          {t}
-        </button>
-      ))}
-    </div>
+              <!-- Desktop type pills -->
+              <span class="type-filter-label">Sort by:</span>
+              <div id="type-filters" class="type-filter-pill">
+                {types.map((t) => (
+                  <button
+                    class={`type-btn ${t === "All" ? "active" : ""}`}
+                    data-type={t}
+                    type="button"
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
 
-    <!-- Filter dropdown button -->
-    <div class="filters-wrapper">
-      <button id="filters-toggle" aria-haspopup="true" aria-expanded="false" type="button" class="filters-toggle-btn">
-        <svg class="filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
-        </svg>
-      </button>
+              <!-- Filter dropdown button -->
+              <div class="filters-wrapper">
+                <button id="filters-toggle" aria-haspopup="true" aria-expanded="false" type="button" class="filters-toggle-btn">
+                  <svg class="filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
+                  </svg>
+                </button>
 
-      <div id="filters-popover" role="dialog" aria-modal="false" class="filters-popover">
-        <div class="filters-popover-content">
-          <div class="filter-group">
-            <label for="semester-select-pop">Semester</label>
-            <select id="semester-select-pop">
-              <option value="all" selected>All semesters</option>
-              {semesters.map(s => (
-                <option value={s.id}>{s.label}</option>
-              ))}
-            </select>
+                <div id="filters-popover" role="dialog" aria-modal="false" class="filters-popover">
+                  <div class="filters-popover-content">
+                    <div class="filter-group">
+                      <label for="semester-select-pop">Semester</label>
+                      <select id="semester-select-pop">
+                        <option value="all" selected>All semesters</option>
+                        {semesters.map(s => (
+                          <option value={s.id}>{s.label}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <!-- THIS WILL BE VISIBLE ONLY ON MOBILE -->
+                    <div class="filter-group hidden-type">
+                      <label for="type-select-pop">Type</label>
+                      <select id="type-select-pop">
+                        {types.map(t => (
+                          <option value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="sort-select-pop">Sort</label>
+                      <select id="sort-select-pop">
+                        <option value="upcoming" selected>Upcoming events</option>
+                        <option value="past">Past events</option>
+                        <option value="title-asc">Title A–Z</option>
+                      </select>
+                    </div>
+
+                    <div class="filter-actions">
+                      <button id="filters-apply" type="button" class="btn-secondary">
+                        Apply
+                      </button>
+                      <button id="filters-cancel" type="button" class="btn-secondary">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
-
-          <!-- THIS WILL BE VISIBLE ONLY ON MOBILE -->
-          <div class="filter-group hidden-type">
-            <label for="type-select-pop">Type</label>
-            <select id="type-select-pop">
-              {types.map(t => (
-                <option value={t}>{t}</option>
-              ))}
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="sort-select-pop">Sort</label>
-            <select id="sort-select-pop">
-              <option value="upcoming" selected>Upcoming events</option>
-              <option value="past">Past events</option>
-              <option value="title-asc">Title A–Z</option>
-            </select>
-          </div>
-
-          <div class="filter-actions">
-            <button id="filters-apply" type="button" class="btn-secondary">
-              Apply
-            </button>
-            <button id="filters-cancel" type="button" class="btn-secondary">
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
 
         </section>
 

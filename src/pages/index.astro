@@ -175,37 +175,53 @@ const upcomingEvents = eventsBySemester
 			</section>
 
 			<section class="upcoming-events-panel events-panel">
-			<div id="upcoming-events-grid" class="events-grid">
-				{upcomingEvents.map(ev => {
-				const type = ev.type ?? ev.category ?? "Other";
-				return (
-					<article
-					class="event-card"
-					data-semester={ev.semesterId}
-					data-category={ev.category}
-					data-type={type}
-					data-title={ev.title.toLowerCase()}
-					data-date={ev.date}
-					>
-					<a href={ev.url}>
-						<div class="card-media">
-						{ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
-						</div>
-						<div class="card-body">
-						<h3 class="card-title">{ev.title}</h3>
-						<div class="card-divider"></div>
-						<time class="card-date">{ev.dateLabel}</time>
-						<p class="card-description">{ev.excerpt}</p>
-						<div class="card-footer">
-							<span class="card-view-more">View more →</span>
-						</div>
-						</div>
-					</a>
-					</article>
-				);
-				})}
-			</div>
-			</section>
+				{upcomingEvents.length > 0 ? (
+					<div id="upcoming-events-grid" class="events-grid">
+					{upcomingEvents.map(ev => {
+						const type = ev.type ?? ev.category ?? "Other";
+						return (
+						<article
+							class="event-card"
+							data-semester={ev.semesterId}
+							data-category={ev.category}
+							data-type={type}
+							data-title={ev.title.toLowerCase()}
+							data-date={ev.date}
+						>
+							<a href={ev.url}>
+							<div class="card-media">
+								{ev.image ? (
+								<img src={ev.image} alt={ev.title} />
+								) : (
+								<div class="no-image">No image</div>
+								)}
+							</div>
+
+							<div class="card-body">
+								<h3 class="card-title">{ev.title}</h3>
+								<div class="card-divider"></div>
+								<time class="card-date">{ev.dateLabel}</time>
+								<p class="card-description">{ev.excerpt}</p>
+								<div class="card-footer">
+								<span class="card-view-more">View more →</span>
+								</div>
+							</div>
+							</a>
+						</article>
+						);
+					})}
+					</div>
+				) : (
+					<div class="no-events-state">
+					<p class="no-events-title">No upcoming events right now</p>
+					<p class="no-events-text">
+						We’re working on new workshops, talks, and projects.
+						<br />
+						Follow us or join our community to be the first to know.
+					</p>
+					</div>
+				)}
+				</section>
 
       </div>
     </main>

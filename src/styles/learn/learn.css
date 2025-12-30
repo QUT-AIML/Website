@@ -275,43 +275,32 @@
 .key-content {
     margin-left: 3rem;
     margin-right: 3rem;
-    margin-bottom: 5rem;
     width: 100%;
 }
 
 
 /* === LEARNING GRID === */
+
 /* Panel wrapper that creates the dark grey division */
 .learning-panel {
-  position: relative;
-  padding: 1.5rem;               /* space around the grid */
-  display: block;
+  margin-top: 0.1rem;
+  margin-right: 3rem;
+  margin-bottom: 5rem;
+  margin-left: 3rem;
+  padding: 1.5rem;
+  background: #1f1f1f;
+  border-radius: 12px;
   width: 100%;
-}
-
-/* The dark grey background block behind the grid */
-.learning-panel::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0.5rem;                   /* small offset from top of wrapper */
-  bottom: 0.5rem;                /* small offset from bottom of wrapper */
-  background: #272727;           /* dark grey color (adjust as needed) */
-  border-radius: 12px;           /* rounded corners to match cards */
-  z-index: 0;                    /* sits behind the grid */
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25); /* subtle depth */
 }
 
 /* Ensure the grid and cards sit above the panel */
 .learning-grid {
-    position: relative;
-    justify-content: start; /* aligns cards to the left instead of stretching */
-    z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 360px); 
-    gap: 1.5rem;
-    padding: 1rem;                 /* inner spacing so cards don't touch panel edges */
+  display: grid;
+  justify-content: start; /* aligns cards to the left instead of stretching */
+  grid-template-columns: repeat(auto-fit, 360px); /* 360px cards, auto-fit columns */
+  gap: 1.5rem; /* same gap as main grid */
+  padding: 1rem; /* inner spacing */
+  width: 100%;
 }
 
 .pink-panel,
@@ -571,16 +560,13 @@
   /* Full-width popover */
   .filters-popover {
     position: absolute;
-    top: 100%;          /* below the row */
+    top: calc(100% + 8px);
     left: 0;
     right: 0;
     width: 100%;
-    background: #1f1f1f;  /* ensure background shows */
-    border-radius: 12px;
-    border: 3px solid var(--color--primary);
-    padding: 1rem;
-    z-index: 1000;        /* above everything else */
-    display: none;        /* default hidden */
+    z-index: 9999;
+    display: none;
+    pointer-events: auto;
   }
 
   /* Popover content stacks nicely */
@@ -603,4 +589,11 @@
     cursor: pointer;
   }
 
+}
+
+
+@media (min-width: 769px) {
+  .filters-wrapper {
+    position: relative;
+  }
 }
