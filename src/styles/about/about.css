@@ -559,8 +559,88 @@
     width: 67%;
 }
 
-/* Responsive */
-@media (max-width: 1000px) {
+
+
+.team-arrows-mobile {
+  display: none;
+}
+
+/* MOBILE: show arrows side by side above the team grid */
+@media (max-width: 768px) {
+
+  .minimal-padding-panel {
+    padding: 15px 20px;
+  }
+
+    /* Team card */
+  .team-card {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .team-row {
+    flex-direction: column; /* stack arrows + grid vertically */
+    align-items: center;
+    gap: 1rem; /* space between arrows and grid */
+  }
+
+  /* Make the side bars full width and remove rounding */
+  .side-bar.left,
+  .side-bar.right {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    border-radius: 9999px; /* round button nicely */
+    margin: 0;
+    padding: 0;
+    background: none; /* remove side-bar background for mobile */
+  }
+
+  /* Wrap the arrows in a flex row */
+  .team-arrows-mobile {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .team-arrows-mobile-wrapper {
+    display: none; /* hidden by default, only show on mobile */
+    width: 90%; /* slightly smaller than full width */
+    margin: 1rem auto; /* outside margin */
+    padding: 0.75rem 1rem; /* inside padding */
+    border: 2px solid var(--color-secondary); /* pink border */
+    border-radius: 16px;
+    background-color: #1b1b1b; /* optional: dark background like sidebar */
+    box-sizing: border-box;
+  }
+
+    /* Mobile: pink panel around arrows */
+  .team-arrows-mobile-panel {
+    display: flex;
+    justify-content: center;  /* buttons side by side */
+    gap: 1rem;                /* space between buttons */
+    width: 90%;               /* smaller than full width for margin around */
+    margin: 1rem auto;        /* margin on top/bottom and center horizontally */
+    padding: 1rem 1.5rem;     /* inner padding */
+    background-color: var(--color-secondary); /* pink border */
+    border-radius: 20px;      /* rounded corners */
+    box-sizing: border-box;   /* include padding in width */
+  }
+
+  /* Ensure arrows maintain original style */
+  .carousel-arrow {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  /* Hide original side bars so they don't duplicate */
+  .side-bar.left,
+  .side-bar.right {
+    display: none;
+  }
 
     .hero-heading {
     font-size: 1.75rem;

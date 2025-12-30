@@ -137,6 +137,13 @@ const teamsForClient = teamData.filter(t => t.id !== "overview");
 
           <div class="team-dots" id="team-dots"></div>
         </div>
+
+        <!-- Mobile arrow wrapper above the grid -->    
+        <div class="team-arrows-mobile-panel">
+          <button class="carousel-arrow left">‹</button>
+          <button class="carousel-arrow right">›</button>
+        </div>
+
       </section>
 
 
@@ -150,6 +157,14 @@ const teamsForClient = teamData.filter(t => t.id !== "overview");
   const dotsContainer = document.getElementById("team-dots");
   const leftArrow = document.querySelector(".carousel-arrow.left");
   const rightArrow = document.querySelector(".carousel-arrow.right");
+    
+  const mobileLeftArrow = document.querySelector(".team-arrows-mobile-panel .left");
+  const mobileRightArrow = document.querySelector(".team-arrows-mobile-panel .right");
+
+  // Attach click handlers
+  mobileLeftArrow?.addEventListener("click", () => { prev(); resetAuto(); });
+  mobileRightArrow?.addEventListener("click", () => { next(); resetAuto(); });
+
 
   const teams = JSON.parse(grid.dataset.teams);
   const AUTO_DELAY = 6000;
