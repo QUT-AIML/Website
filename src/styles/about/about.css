@@ -1,0 +1,621 @@
+/* ---------- MAIN CONTAINER ---------- */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;        /* horizontally center content */
+  justify-content: flex-start; /* vertically align to top */
+  padding-top: 5rem;          /* adjust distance from top */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ---------- LOGO SECTION ---------- */
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100vw;
+}
+
+/* ---------- PINK DIVIDER ---------- */
+.pink-divider {
+  width: 60px;           /* length of the line */
+  height: 2px;           /* thickness of the line */
+  background-color: #A30093; /* bright pink */
+  margin: 1.5rem auto;     /* vertical spacing and center horizontally */
+  border-radius: 2px;    /* rounded edges */
+  width: 80%;
+}
+
+.header-section {
+  width: 80vw;
+
+  /* center the section itself */
+  margin-left: auto;
+  margin-right: auto;
+
+  /* center children */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+
+.centered-box {
+  display: flex;
+  justify-content: center; /* centers content horizontally */
+  align-items: center;     /* centers content vertically if height is set */
+  text-align: center;      /* optional: center text inside */
+  width: 100%;        
+}
+
+
+
+/* Flex row for pink panel + history button */
+.pink-panel-flex {
+  display: flex;
+  justify-content: space-between; /* header left, button right */
+  align-items: center;
+  margin: 2rem 3rem 1rem 3rem;
+  padding: 0.5rem 2rem;
+  border-radius: 10px;
+  background-color: var(--color-secondary);
+  color: white;
+  box-sizing: border-box;
+}
+
+.pink-panel-flex .pink-title {
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+
+
+/* ---------- LOGO ---------- */
+.site-logo {
+    padding-top: 3rem;
+    display: block; /* ensures centering works reliably */
+    margin-left: auto;
+    margin-right: auto;    
+    width: 65vw; /* desktop default */
+    max-width: 80vw;
+}
+
+/* ---------- HERO HEADING ---------- */
+.hero-heading {
+  font-size: 1.2rem !important;
+}
+
+/* ---------- BUTTON GROUP ---------- */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- PINK BUTTONS ---------- */
+.btn-outline-pink {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #FF00E6; /* pink border */
+  color: #FF00E6;
+  text-decoration: none;
+  border-radius: 9999px; /* pill shape */
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-pink:hover {
+  background-color: #FF00E6;
+  color: black;
+}
+
+.about-space {
+    padding-top: 10rem;
+}
+
+
+
+
+/* ===============================
+   OBJECTIVES WRAPPER + LINE
+================================ */
+
+.objectives-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 8rem 0;
+}
+
+/* reuse concept from info-panel */
+.objectives-wrapper .thick-line-behind {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 11cm;
+  background-color: var(--color-secondary);
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+/* ===============================
+   OBJECTIVES SECTION
+================================ */
+
+.objectives-section {
+  width: 90%;
+  margin: 0 auto;
+  background: var(--color-secondary);
+  border-radius: 24px;
+  padding: 2rem 2rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+.objectives-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ===============================
+   HEADER
+================================ */
+
+.objectives-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.objectives-header h2 {
+  text-align: center;
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 0.9;
+  color: #fff;
+}
+
+.objectives-header h2 span {
+  font-size: 2.4rem;
+  letter-spacing: 0.1em;
+}
+
+/* ===============================
+   SIDE BANNERS (NOT TRIANGLES)
+================================ */
+
+.banner {
+  width: 180px;
+  height: 60px;
+  background: #1b1b1b;
+  border-radius: 12px;
+  position: relative;
+}
+
+/* outward notch */
+.banner::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  background: var(--color-secondary);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/* LEFT banner: notch on the OUTSIDE left */
+.banner.left::after {
+  left: -14px;
+}
+
+/* RIGHT banner: notch on the OUTSIDE right */
+.banner.right::after {
+  right: -14px;
+}
+
+
+/* ===============================
+   CARDS
+================================ */
+
+.objectives-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.objective-card {
+  background: #1b1b1b;
+  border-radius: 20px;
+  padding: 1.8rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  color: #fff;
+  margin-top: 0.8rem;
+}
+
+.objective-number {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #fff;
+  z-index: 2;
+}
+
+.objective-item {
+  position: relative;
+  padding-top: 2.5rem; /* space for number above */
+}
+
+
+/* ----------------------------- */
+/*           THICK LINE          */
+/* ----------------------------- */
+
+.info-panel-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.thick-line-behind {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw; /* full viewport */
+  max-width: 100vw;
+  transform: translate(-50%, -50%); /* center horizontally and vertically */
+  height: 2.5cm;
+  background-color: var(--color-secondary);
+  z-index: -1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.team-section {
+  width: 100%;
+}
+
+
+.team-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 900;
+  font-size: 1.8rem;
+  background: var(--color-secondary);
+  display: inline-block;
+  border-radius: 16px;
+  color: black;
+}
+
+.team-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0; /* optional, margin handled by side bars */
+}
+
+.team-fancy {
+  width: 100% !important;
+}
+
+
+.side-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-secondary);
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.side-bar.left,
+.side-bar.right {
+  flex: 0 0 12%;
+  height: 100px;
+}
+
+/* Left bar */
+.side-bar.left {
+  border-radius: 0 30px 30px 0;
+  justify-content: flex-end;
+  padding-right: 1.5rem;
+  margin-right: 3rem;
+}
+
+/* Right bar */
+.side-bar.right {
+  border-radius: 30px 0 0 30px;
+  justify-content: flex-start;
+  padding-left: 1.5rem;
+  margin-left: 3rem;
+}
+
+
+/* Flex for team header: left title, right button */
+.team-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0 1rem 0;
+  padding: 0 2rem;
+  border-radius: 10px;
+  width: calc(100% - 4rem); /* align with content wrapper/margins */
+  box-sizing: border-box;
+  background-color: var(--color-secondary); /* match pink-panel styling */
+  color: white;
+}
+
+.history-button {
+  padding: 0.5rem 1.5rem;       /* add extra space for arrow */
+  border-radius: 9999px;
+  border: 2px solid white;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;                  /* space between text and arrow */
+  transition: all 0.3s ease;
+}
+
+.history-button:hover {
+  border-color: black;
+  color: black;
+}
+
+/* Optional: animate arrow slightly on hover */
+/* Team grid takes remaining space */
+.team-grid {
+  flex: 1;            /* takes all remaining space */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.team-card {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: #1c1c1c;
+  border-radius: 16px;
+  padding: 1rem;
+  flex: 1 1 45%; /* two cards per row in grid */
+  opacity: 1;
+  transition: opacity 0.6s ease;
+
+  /* Ensure all cards have a consistent minimum height */
+  min-height: 220px; /* match filled card's height including photo & padding */
+  box-sizing: border-box;
+}
+
+/* Empty cards still maintain height even with hidden photo */
+.team-card.empty-card {
+  box-shadow: none;
+  pointer-events: none;
+  min-height: 220px; /* same as above */
+  display: flex;
+  align-items: center;  /* optional: center any content vertically */
+  justify-content: center; /* optional if you want something centered */
+}
+
+.team-grid.fade-out {
+  opacity: 0.3;
+}
+
+.team-photo {
+  width: 150px;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  /* DOT BACKGROUND */
+  background-color: #000;
+  background-image: radial-gradient(circle, #393939 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+.team-card.empty-card .team-photo {
+  display: none;
+}
+
+.team-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  filter:
+    drop-shadow(1px 0 0 #fff)
+    drop-shadow(-1px 0 0 #fff)
+    drop-shadow(0 1px 0 #fff)
+    drop-shadow(0 -1px 0 #fff)
+    drop-shadow(1px 1px 0 #fff)
+    drop-shadow(-1px -1px 0 #fff)
+    drop-shadow(1px -1px 0 #fff)
+    drop-shadow(-1px 1px 0 #fff);
+}
+
+
+.team-info {
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.team-info .role {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.team-info h3 {
+  font-size: 1.2rem;
+  margin: 0.2rem 0;
+}
+
+/* Arrows inside bars */
+.carousel-arrow {
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: black;
+
+  display: flex;              /* force flex layout */
+  align-items: center;        /* vertical center for glyph */
+  justify-content: center;    /* horizontal center */
+
+  line-height: 1;             /* CRITICAL: removes font vertical offset */
+}
+
+.carousel-arrow:hover {
+  transform: scale(1.1);
+}
+
+
+
+
+
+
+/* ===============================
+   TEAM DOTS
+================================ */
+
+.team-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+.team-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #666;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.team-dot.active {
+  background: var(--color-secondary); /* pink */
+  transform: scale(1.3);
+}
+
+
+.spacing-top {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 67%;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+
+    .hero-heading {
+    font-size: 1.75rem;
+  }
+
+  .site-logo {
+    width: 75%;
+  }
+
+  .button-group {
+    gap: 0.75rem;
+  }
+  
+   .objectives-section {
+    width: 90%;
+  }
+
+  .objectives-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .objectives-header {
+    flex-direction: column;
+  }
+
+  .banner {
+    display: none;
+  }
+
+  .objectives-header h2 {
+    font-size: 3rem;
+  }
+
+  .team-row {
+    flex-direction: column;
+  }
+  .side-bar {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 1rem;
+  }
+  .team-grid {
+    width: 100%;
+  }
+  .team-card {
+    flex: 1 1 100%;
+  }
+    
+  .team-header-flex {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  .history-button {
+    font-size: 1.5rem;
+  }
+
+  .pink-panel-flex {
+    flex-direction: column;      /* stack items vertically */
+    align-items: center;         /* center horizontally */
+    gap: 1rem;                   /* space between text and button */
+  }
+
+  .pink-panel-flex .pink-title {
+    text-align: center;          /* center text */
+  }
+
+  .pink-panel-flex .history-button {
+    width: auto;                 /* allow button to size naturally */
+  }
+}
+

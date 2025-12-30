@@ -70,11 +70,11 @@
 }
 
 .main-links a:hover { 
-  color:var(--color-secondary); 
+  color:var(--color-primary); 
 }
 
 .main-links a.active { 
-  color:var(--color-secondary); 
+  color:var(--color-primary); 
 }
 
 .dropdown-content {
@@ -126,7 +126,7 @@ body.no-scroll {
 }
 
 .btn {
-    border: 1px solid var(--color-primary);
+    border: 1px solid #FF00E6;
 }
 
 .btn:hover{
@@ -137,7 +137,7 @@ body.no-scroll {
 .btn-outline {
   position: relative;
   padding: 0.45rem 1.4rem;
-  background: var(--color-primary);
+  background: #FF00E6;
   color: #fff;
   border-radius: 1.2rem;
   text-decoration: none;
@@ -157,7 +157,7 @@ body.no-scroll {
 
 .btn-border rect {
   fill: none;
-  stroke: var(--color-primary);
+  stroke: #FF00E6;
   stroke-width: 2;
   stroke-dasharray: 300;
   stroke-dashoffset: 300;
@@ -166,7 +166,7 @@ body.no-scroll {
 
 .btn-outline .btn-border rect {
   fill: none;
-  stroke: var(--color-primary);
+  stroke: #FF00E6;
   stroke-width: 2;
   stroke-dasharray: 300;       /* total perimeter */
   stroke-dashoffset: 300;      /* start hidden */
@@ -205,7 +205,7 @@ body.no-scroll {
   display: none;
   background:none; 
   border:none;
-  color:var(--color-secondary); 
+  color:var(--color-primary); 
   cursor:pointer;
 }
 
@@ -286,7 +286,7 @@ body.no-scroll {
     position: absolute;
     bottom: 0;
     height: 2px;
-    background: var(--color-primary);
+    background: var(--color-secondary);
     border-radius: 1px;
     pointer-events: none;
     z-index: 50;
@@ -372,7 +372,7 @@ body.no-scroll {
 
   .nav-links .dropbtn.active .arrow {
     transform: translateY(-50%) rotate(180deg);
-    color: var(--color-secondary);
+    color: var(--color-primary);
   }
 
   .dropbtn {
@@ -512,7 +512,7 @@ body.no-scroll {
   }
 
   .dropbtn.active {
-    color: var(--color-secondary);
+    color: var(--color-primary);
   }
 
 
@@ -546,10 +546,10 @@ body.no-scroll {
   }
 
   .pink-button {
-    background: var(--color-primary);
+    background: #FF00E6;
     margin-top: 1.6rem;
     padding:0.7rem 1.2rem;
-    border: 1px solid var(--color-primary);
+    border: 1px solid #FF00E6;
     border-radius:25px; 
     text-align: center;
   }
@@ -567,7 +567,7 @@ body.no-scroll {
         to bottom,
         #090909 0%,
         #090909 93%,
-        var(--color-primary) 97%
+        #FF00E6 97%
     );
   }
 

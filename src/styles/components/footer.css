@@ -59,7 +59,7 @@
 }
 
 .footer-column h4 {
-  color: var(--color-secondary);
+  color: var(--color-primary);
   font-size: 1.1rem;
   margin-bottom: 0.25rem;
 }
@@ -82,7 +82,7 @@
 
 /* 🔒 prevent dark hover */
 .footer-column a:hover {
-  color: var(--color-secondary);
+  color: var(--color-primary);
   opacity: 0.7;
 }
 
