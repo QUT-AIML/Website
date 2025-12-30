@@ -91,15 +91,17 @@
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.type-filter-pill .type-btn:hover {
+/* Hover ONLY applies when NOT active */
+.type-filter-pill .type-btn:not(.active):hover {
   background: rgba(255, 255, 255, 0.08);
 }
 
-/* Active category */
+/* Selected (active) category stays gray */
 .type-filter-pill .type-btn.active {
-  background: rgba(255, 255, 255, 0.15) !important;
+  background: #333333;
   color: #ffffff;
   font-weight: 600;
+  cursor: default;
 }
 
 .type-filter-pill .type-btn.pill-selected:hover {
@@ -632,11 +634,17 @@
 
 
 
-.type-filter-pill .type-btn.active {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: #ffffff;
-  font-weight: 600;
+#sort-filter-group {
+  transition: all 0.2s ease;
 }
+#sort-filter-group[style*="display: none"] {
+  height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+
 
 
 /* === PAGINATION BUTTONS === */

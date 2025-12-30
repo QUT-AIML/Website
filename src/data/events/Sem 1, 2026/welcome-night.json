@@ -6,7 +6,8 @@
     "dateLabel": "24th Feb 2026",
     "category": "Social",
     "excerpt": "Join us for Welcome Night to meet the community, learn about our plans for the semester, and enjoy some fun activities.",
-    "url": "/events/welcome-night"
+    "url": "/events/welcome-night",
+    "featured":true
   },
   "details": {
     "title": "Welcome Night",

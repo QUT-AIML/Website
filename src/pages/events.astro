@@ -151,23 +151,23 @@ const featuredEvents = eventsBySemester
                       </select>
                     </div>
 
-                    <div class="filter-group">
-                      <label for="sort-select-pop">Sort</label>
+                    <div class="filter-group" id="sort-filter-group">
+                      <label for="sort-select-pop">Past/Future</label>
                       <select id="sort-select-pop">
                         <option value="upcoming" selected>Upcoming events</option>
                         <option value="past">Past events</option>
-                        <option value="title-asc">Title A–Z</option>
                       </select>
                     </div>
 
-                    <div class="filter-actions">
-                      <button id="filters-apply" type="button" class="btn-secondary">
-                        Apply
-                      </button>
-                      <button id="filters-cancel" type="button" class="btn-secondary">
-                        Cancel
-                      </button>
+                    <div class="filter-group" id="title-sort-filter-group">
+                      <label for="title-sort-select-pop">Sort by Title</label>
+                      <select id="title-sort-select-pop">
+                        <option value="none" selected>None</option>
+                        <option value="title-asc">A–Z</option>
+                        <option value="title-desc">Z–A</option>
+                      </select>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -223,279 +223,312 @@ const featuredEvents = eventsBySemester
     
     
 
+
   
+
+  
+
   <script type="module">
-    const searchInput = document.getElementById('events-search');
-    const grid = document.getElementById('events-grid');
-    let paginationContainer = document.getElementById('events-pagination');
+  const searchInput = document.getElementById('events-search');
+  const grid = document.getElementById('events-grid');
+  let paginationContainer = document.getElementById('events-pagination');
 
-    if (!paginationContainer) {
-      paginationContainer = document.createElement('div');
-      paginationContainer.id = 'events-pagination';
-      paginationContainer.style.textAlign = 'center';
-      paginationContainer.style.marginTop = '2rem';
-      grid.parentNode.appendChild(paginationContainer);
-    }
+  if (!paginationContainer) {
+    paginationContainer = document.createElement('div');
+    paginationContainer.id = 'events-pagination';
+    grid.parentNode.appendChild(paginationContainer);
+  }
 
-    const filtersToggle = document.getElementById('filters-toggle');
-    const filtersPopover = document.getElementById('filters-popover');
-    const semesterSelectPop = document.getElementById('semester-select-pop');
-    const sortSelectPop = document.getElementById('sort-select-pop');
-    const filtersApply = document.getElementById('filters-apply');
-    const filtersCancel = document.getElementById('filters-cancel');
+  const filtersToggle = document.getElementById('filters-toggle');
+  const filtersPopover = document.getElementById('filters-popover');
+  const semesterSelectPop = document.getElementById('semester-select-pop');
+  const sortSelectPop = document.getElementById('sort-select-pop'); // Upcoming / Past
+  const typeSelectPop = document.getElementById('type-select-pop'); // Mobile type
+  const sortGroup = document.getElementById('sort-filter-group');
 
-    // New: mobile type select
-    const typeSelectPop = document.getElementById('type-select-pop');
+  const titleSortSelectPop = document.getElementById('title-sort-select-pop');
+  const titleSortFilterGroup = document.getElementById('title-sort-filter-group');
 
-    const EVENTS_PER_PAGE = 6;
-    let currentPage = 1;
-    let currentSemester = 'all';
-    let currentSort = 'upcoming';
-    let filteredCards = [];
-    let typeButtons = [];
+  const EVENTS_PER_PAGE = 6;
 
-    function getCards() {
-      return Array.from(grid.querySelectorAll('.event-card'));
-    }
+  let currentPage = 1;
+  let currentSemester = 'all';
+  let currentSort = 'upcoming';
+  let currentTitleSort = 'none';
+  let currentType = 'All';
 
-    // Generate types based on filtered cards
-    function getTypesForFilteredCards() {
-      const query = searchInput.value.trim().toLowerCase();
-      const today = new Date(); today.setHours(0,0,0,0);
+  let filteredCards = [];
+  let typeButtons = [];
 
-      const cards = getCards().filter(card => {
-        const cardSemester = card.dataset.semester || '';
-        const title = card.dataset.title || '';
-        const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
-        const cardDate = new Date(card.dataset.date); cardDate.setHours(0,0,0,0);
+  const latestSemesterId =
+    semesterSelectPop.options[1]?.value ?? null;
 
-        const matchesSemester = currentSemester === 'all' || cardSemester === currentSemester;
-        let matchesSort = true;
-        if (currentSort === 'upcoming') matchesSort = cardDate >= today;
-        if (currentSort === 'past') matchesSort = cardDate < today;
-        const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
+  // Always show title sort
+  titleSortFilterGroup.style.display = 'block';
 
-        return matchesSemester && matchesSort && matchesQuery;
-      });
+  function getCards() {
+    return Array.from(grid.querySelectorAll('.event-card'));
+  }
 
-      const typeSet = new Set();
-      cards.forEach(card => typeSet.add(card.dataset.type || 'Other'));
+  function getTypesForFilteredCards() {
+    const query = searchInput.value.trim().toLowerCase();
+    const today = new Date(); today.setHours(0, 0, 0, 0);
 
-      const preferred = ["Social", "Industry", "Projects", "Major"];
-      const preferredExisting = preferred.filter(p => typeSet.has(p));
-      const remaining = Array.from(typeSet).filter(t => !preferredExisting.includes(t)).sort((a,b) => a.localeCompare(b));
-      const allTypes = [...preferredExisting, ...remaining];
+    const cards = getCards().filter(card => {
+      const semester = card.dataset.semester;
+      const title = card.dataset.title;
+      const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+      const date = new Date(card.dataset.date); date.setHours(0,0,0,0);
 
-      if (allTypes.length <= 1) return ['All'];
-      return ['All', ...preferredExisting, ...remaining];
-    }
+      const matchesSemester =
+        currentSemester === 'all' || semester === currentSemester;
 
-    // Render desktop type pills
-    function renderTypeButtons(types) {
-      const container = document.getElementById('type-filters');
-      container.innerHTML = '';
+      let matchesSort = true;
+      if (currentSort === 'upcoming') matchesSort = date >= today;
+      if (currentSort === 'past') matchesSort = date < today;
 
-      types.forEach(t => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.dataset.type = t;
-        btn.textContent = t;
-        btn.className = `type-btn ${t === 'All' ? 'active' : ''}`;
-        btn.addEventListener('click', () => {
-          typeButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          applyFilters();
-        });
-        container.appendChild(btn);
-      });
+      const matchesQuery =
+        !query || title.includes(query) || excerpt.includes(query);
 
-      typeButtons.length = 0;
-      typeButtons.push(...Array.from(container.querySelectorAll('.type-btn')));
-    }
-
-    // Apply filters (search, type, semester, sort)
-    function applyFilters() {
-      const query = searchInput.value.trim().toLowerCase();
-
-      // Determine type filter
-      let selectedType = 'All';
-      if (window.innerWidth <= 768 && typeSelectPop) {
-        selectedType = typeSelectPop.value;
-      } else {
-        const activeTypeBtn = typeButtons.find(b => b.classList.contains('active'));
-        selectedType = activeTypeBtn ? activeTypeBtn.dataset.type : 'All';
-      }
-
-      const today = new Date(); today.setHours(0,0,0,0);
-
-      filteredCards = getCards().filter(card => {
-        const title = card.dataset.title || '';
-        const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
-        const cardType = card.dataset.type || '';
-        const cardSemester = card.dataset.semester || '';
-        const cardDate = new Date(card.dataset.date); cardDate.setHours(0,0,0,0);
-
-        const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
-        const matchesType = selectedType === 'All' || cardType === selectedType;
-        const matchesSemester = currentSemester === 'all' || cardSemester === currentSemester;
-
-        let matchesSort = true;
-        if (currentSort === 'upcoming') matchesSort = cardDate >= today;
-        if (currentSort === 'past') matchesSort = cardDate < today;
-
-        return matchesQuery && matchesType && matchesSemester && matchesSort;
-      });
-
-      currentPage = 1;
-      applySort();
-      renderPage();
-      renderPagination();
-
-      let noEventsMessage = document.getElementById('no-events-message');
-      if (!noEventsMessage) {
-        noEventsMessage = document.createElement('div');
-        noEventsMessage.id = 'no-events-message';
-        noEventsMessage.textContent = 'No events found';
-        noEventsMessage.style.textAlign = 'center';
-        noEventsMessage.style.padding = '2rem';
-        noEventsMessage.style.gridColumn = '1 / -1';
-        grid.appendChild(noEventsMessage);
-      }
-      noEventsMessage.style.display = filteredCards.length === 0 ? 'block' : 'none';
-
-      // Update type buttons on desktop only
-      if (window.innerWidth > 768) {
-        const newTypes = getTypesForFilteredCards();
-        renderTypeButtons(newTypes);
-      }
-    }
-
-    // Apply sorting
-    function applySort() {
-      const today = new Date(); today.setHours(0,0,0,0);
-      filteredCards.sort((a, b) => {
-        const dateA = new Date(a.dataset.date); dateA.setHours(0,0,0,0);
-        const dateB = new Date(b.dataset.date); dateB.setHours(0,0,0,0);
-
-        if (currentSort === 'title-asc') return a.dataset.title.localeCompare(b.dataset.title);
-        if (currentSort === 'upcoming') return dateA - dateB;
-        if (currentSort === 'past') return dateB - dateA;
-        return 0;
-      });
-    }
-
-    // Render current page
-    function renderPage() {
-      const start = (currentPage - 1) * EVENTS_PER_PAGE;
-      const end = start + EVENTS_PER_PAGE;
-
-      getCards().forEach(card => card.style.display = 'none');
-      filteredCards.slice(start, end).forEach(card => card.style.display = '');
-    }
-
-    // Render pagination
-    function renderPagination() {
-      const totalPages = Math.ceil(filteredCards.length / EVENTS_PER_PAGE);
-      if (totalPages <= 1) {
-        paginationContainer.innerHTML = '';
-        return;
-      }
-
-      const isMobile = window.innerWidth < 768;
-      let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
-
-      if (isMobile) {
-        // Mobile: show current page and previous page if exists, plus next page if exists
-        const pagesToShow = [];
-        
-        if (currentPage > 1) pagesToShow.push(currentPage - 1);
-        pagesToShow.push(currentPage);
-        if (currentPage < totalPages) pagesToShow.push(currentPage + 1);
-
-        // Ensure only max 2 numbers shown: prefer current and previous if possible
-        if (pagesToShow.length > 2) pagesToShow.shift(); // remove oldest to keep max 2
-
-        pagesToShow.forEach(p => {
-          html += `<button class="pagination-btn${p === currentPage ? ' active' : ''}" data-page="${p}">${p}</button>`;
-        });
-
-      } else {
-        // Desktop: show all pages
-        for (let i = 1; i <= totalPages; i++) {
-          html += `<button class="pagination-btn${i === currentPage ? ' active' : ''}" data-page="${i}">${i}</button>`;
-        }
-      }
-
-      html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
-
-      paginationContainer.innerHTML = html;
-
-      // Re-attach click listeners
-      Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
-        btn.addEventListener('click', () => {
-          let page = parseInt(btn.dataset.page);
-          if (page < 1) page = 1;
-          if (page > totalPages) page = totalPages;
-          currentPage = page;
-          renderPage();
-          renderPagination();
-        });
-      });
-    }
-
-
-
-    // Event listeners
-    searchInput.addEventListener('input', applyFilters);
-
-    // Filters popover
-    filtersToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (filtersPopover.style.display === 'block') closePopover();
-      else openPopover();
+      return matchesSemester && matchesSort && matchesQuery;
     });
 
-    filtersApply.addEventListener('click', () => {
-      currentSemester = semesterSelectPop.value;
+    const typeSet = new Set(cards.map(c => c.dataset.type || 'Other'));
+
+    if (typeSet.size <= 1) {
+      return ['All'];
+    }
+
+    const preferred = ["Social", "Industry", "Projects", "Major"];
+    const preferredExisting = preferred.filter(p => typeSet.has(p));
+    const remaining = [...typeSet]
+      .filter(t => !preferredExisting.includes(t))
+      .sort((a, b) => a.localeCompare(b));
+
+    return ['All', ...preferredExisting, ...remaining];
+  }
+
+
+  function renderTypeButtons(types) {
+    const container = document.getElementById('type-filters');
+    container.innerHTML = '';
+
+    types.forEach(type => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.dataset.type = type;
+      btn.textContent = type;
+      btn.className = `type-btn ${type === currentType ? 'active' : ''}`;
+
+      btn.addEventListener('click', () => {
+        currentType = type;
+        typeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+      });
+
+      container.appendChild(btn);
+    });
+
+    typeButtons = Array.from(container.querySelectorAll('.type-btn'));
+  }
+
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    const selectedType =
+      window.innerWidth <= 768 && typeSelectPop
+        ? typeSelectPop.value
+        : currentType;
+
+    filteredCards = getCards().filter(card => {
+      const title = card.dataset.title;
+      const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+      const type = card.dataset.type;
+      const semester = card.dataset.semester;
+      const date = new Date(card.dataset.date); date.setHours(0,0,0,0);
+
+      const matchesQuery =
+        !query || title.includes(query) || excerpt.includes(query);
+
+      const matchesType =
+        selectedType === 'All' || type === selectedType;
+
+      const matchesSemester =
+        currentSemester === 'all' || semester === currentSemester;
+
+      let matchesSort = true;
+      if (currentSort === 'upcoming') matchesSort = date >= today;
+      if (currentSort === 'past') matchesSort = date < today;
+
+      return (
+        matchesQuery &&
+        matchesType &&
+        matchesSemester &&
+        matchesSort
+      );
+    });
+
+    currentPage = 1;
+    applySort();
+    renderPage();
+    renderPagination();
+
+    if (window.innerWidth > 768) {
+      renderTypeButtons(getTypesForFilteredCards());
+    }
+  }
+
+  function applySort() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    filteredCards.sort((a, b) => {
+      const titleA = a.dataset.title.trim();
+      const titleB = b.dataset.title.trim();
+
+      // ✅ TITLE SORT OVERRIDES EVERYTHING
+      if (currentTitleSort === 'title-asc') {
+        return titleA.localeCompare(titleB, undefined, {
+          sensitivity: 'base',
+          numeric: true
+        });
+      }
+
+      if (currentTitleSort === 'title-desc') {
+        return (
+          titleA.localeCompare(titleB, undefined, {
+            sensitivity: 'base',
+            numeric: true
+          }) * -1
+        );
+      }
+
+      // ⬇️ Only fall back to date sorting if title sort is "none"
+      const dateA = new Date(a.dataset.date);
+      const dateB = new Date(b.dataset.date);
+      dateA.setHours(0, 0, 0, 0);
+      dateB.setHours(0, 0, 0, 0);
+
+      if (currentSort === 'upcoming') return dateA - dateB;
+      if (currentSort === 'past') return dateB - dateA;
+
+      return 0;
+    });
+  }
+
+
+
+  function renderPage() {
+    const start = (currentPage - 1) * EVENTS_PER_PAGE;
+    const end = start + EVENTS_PER_PAGE;
+
+    getCards().forEach(card => card.style.display = 'none');
+    filteredCards.slice(start, end).forEach(card => {
+      card.style.display = '';
+    });
+  }
+
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredCards.length / EVENTS_PER_PAGE);
+    paginationContainer.innerHTML = '';
+
+    if (totalPages <= 1) return;
+
+    const isMobile = window.innerWidth < 768;
+
+    const createBtn = (label, page, disabled = false, active = false) => {
+      const btn = document.createElement('button');
+      btn.textContent = label;
+      btn.className = `pagination-btn${active ? ' active' : ''}`;
+      btn.disabled = disabled;
+      btn.onclick = () => {
+        currentPage = page;
+        renderPage();
+        renderPagination();
+      };
+      return btn;
+    };
+
+    paginationContainer.appendChild(
+      createBtn('Prev', currentPage - 1, currentPage === 1)
+    );
+
+    if (isMobile) {
+      [currentPage - 1, currentPage, currentPage + 1]
+        .filter(p => p >= 1 && p <= totalPages)
+        .forEach(p => {
+          paginationContainer.appendChild(
+            createBtn(p, p, false, p === currentPage)
+          );
+        });
+    } else {
+      for (let i = 1; i <= totalPages; i++) {
+        paginationContainer.appendChild(
+          createBtn(i, i, false, i === currentPage)
+        );
+      }
+    }
+
+    paginationContainer.appendChild(
+      createBtn('Next', currentPage + 1, currentPage === totalPages)
+    );
+  }
+
+  // === Event listeners ===
+
+  searchInput.addEventListener('input', applyFilters);
+
+  semesterSelectPop.addEventListener('change', () => {
+    currentSemester = semesterSelectPop.value;
+
+    if (currentSemester === latestSemesterId || currentSemester === 'all') {
+      sortGroup.style.display = 'block';
       currentSort = sortSelectPop.value;
-      closePopover();
-      applyFilters();
-    });
-
-    filtersCancel.addEventListener('click', closePopover);
-
-    function openPopover() {
-      filtersPopover.style.display = 'block';
-      filtersToggle.setAttribute('aria-expanded', 'true');
-      semesterSelectPop.value = currentSemester;
-      sortSelectPop.value = currentSort;
-      if (typeSelectPop && window.innerWidth <= 768) {
-        typeSelectPop.value = typeButtons.find(b => b.classList.contains('active'))?.dataset.type || 'All';
-      }
-      semesterSelectPop.focus();
-      document.addEventListener('click', onDocClick);
-      document.addEventListener('keydown', onKeyDown);
+    } else {
+      sortGroup.style.display = 'none';
+      currentSort = 'past';
     }
 
-    function closePopover() {
+    applyFilters();
+  });
+
+  sortSelectPop.addEventListener('change', () => {
+    currentSort = sortSelectPop.value;
+    applyFilters();
+  });
+
+  titleSortSelectPop.addEventListener('change', () => {
+    currentTitleSort = titleSortSelectPop.value;
+    applyFilters();
+  });
+
+  if (typeSelectPop) {
+    typeSelectPop.addEventListener('change', applyFilters);
+  }
+
+  filtersToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = filtersPopover.style.display === 'block';
+    filtersPopover.style.display = open ? 'none' : 'block';
+    filtersToggle.setAttribute('aria-expanded', String(!open));
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!filtersPopover.contains(e.target) && e.target !== filtersToggle) {
       filtersPopover.style.display = 'none';
       filtersToggle.setAttribute('aria-expanded', 'false');
-      document.removeEventListener('click', onDocClick);
-      document.removeEventListener('keydown', onKeyDown);
     }
+  });
 
-    function onDocClick(e) {
-      if (!filtersPopover.contains(e.target) && e.target !== filtersToggle) closePopover();
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      filtersPopover.style.display = 'none';
+      filtersToggle.setAttribute('aria-expanded', 'false');
     }
+  });
 
-    function onKeyDown(e) {
-      if (e.key === 'Escape') closePopover();
-    }
-
-    // Initialize
-    applyFilters();
-
-    // Optional: re-apply filters on window resize to switch between mobile/desktop type filter
-    window.addEventListener('resize', applyFilters);
-
+  applyFilters();
+  window.addEventListener('resize', applyFilters);
 </script>
