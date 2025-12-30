@@ -459,7 +459,148 @@
 
 @media (max-width: 768px) {
 
-  .learn-space {
+  /* Reduce top spacing */
+  .learning-space {
     padding-top: 6rem;
   }
+
+    .learning-controls .controls-row {
+    position: relative; /* ensures popover stays in row context */
+    flex-wrap: wrap;
+  }
+
+
+  /* ------------------------- */
+  /* SEARCH + FILTER ROW */
+  /* ------------------------- */
+  .learning-controls .controls-row {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    align-items: center;
+    flex-wrap: nowrap;
+    position: relative; /* relative positioning for popover */
+  }
+
+  /* Search bar expands */
+  .search-wrapper {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+  }
+
+  /* Hide desktop pills */
+  .type-filter-pill,
+  .type-filter-label {
+    display: none;
+  }
+
+  /* Keep filter button visible and aligned */
+  .filters-toggle-btn {
+    margin-left: auto;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Popover drops below controls row */
+  .filters-popover {
+    position: absolute; /* absolute relative to controls-row */
+    top: 100%;          /* right below the row */
+    left: 0;
+    right: 0;
+    width: 100%;        /* full row width */
+    min-width: unset;
+    margin-top: 0.5rem;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  }
+  
+
+  /* Adjust grid layout for mobile */
+  .learning-grid,
+  .featured-learning-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 1.5rem;
+    width: 100%;
+  }
+
+  /* Remove outer margins on content wrapper */
+  .key-content {
+    margin-left: 1.3rem;
+    margin-right: 1.3rem;
+    margin-bottom: 3rem;
+    width: 100%;
+  }
+
+  .featured-learning-panel {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  /* Panel adjustments */
+  .learning-panel,
+  .featured-learning-panel {
+    padding: 0.5rem 1rem;
+  }
+
+  .learning-panel::before,
+  .featured-learning-panel::before {
+    left: 0;
+    right: 0;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    border-radius: 10px;
+  }
+
+  /* Learn cards full width */
+  .learn-card {
+    width: 100%;
+  }
+
+  /* Make controls row relative for popover positioning */
+  .learning-controls .controls-row {
+    position: relative;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* Full-width popover */
+  .filters-popover {
+    position: absolute;
+    top: 100%;          /* below the row */
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: #1f1f1f;  /* ensure background shows */
+    border-radius: 12px;
+    border: 3px solid var(--color--primary);
+    padding: 1rem;
+    z-index: 1000;        /* above everything else */
+    display: none;        /* default hidden */
+  }
+
+  /* Popover content stacks nicely */
+  .filters-popover-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  /* Make select fill the width of container */
+  .filter-group select {
+    width: 100%;
+    min-width: 0;  /* prevents shrinking issues in flex */
+    background: #2a2a2a;
+    color: #fff;
+    border-radius: 10px;
+    border: 1px solid #333;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
 }
