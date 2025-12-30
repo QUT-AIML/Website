@@ -119,11 +119,6 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
                       <option value="date-desc">Date Latest → Earliest</option>
                     </select>
                   </div>
-
-                  <div class="filter-actions">
-                    <button id="filters-apply" type="button" class="btn-secondary">Apply</button>
-                    <button id="filters-cancel" type="button" class="btn-secondary">Cancel</button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -163,190 +158,166 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
 </body>
 </html>
 
+
 <script type="module">
-    const searchInput = document.getElementById('learning-search');
-    const grid = document.getElementById('learning-grid');
-    const sortDropdown = document.getElementById('sort-select-pop');
-    const filtersToggle = document.getElementById('filters-toggle');
-    const filtersPopover = document.getElementById('filters-popover');
-    const filtersApply = document.getElementById('filters-apply');
-    const filtersCancel = document.getElementById('filters-cancel');
-    let paginationContainer = document.getElementById('learning-pagination');
+const searchInput = document.getElementById('learning-search');
+const grid = document.getElementById('learning-grid');
+const sortDropdown = document.getElementById('sort-select-pop');
+const filtersToggle = document.getElementById('filters-toggle');
+const filtersPopover = document.getElementById('filters-popover');
+let paginationContainer = document.getElementById('learning-pagination');
 
-    if (!paginationContainer) {
-      paginationContainer = document.createElement('div');
-      paginationContainer.id = 'learning-pagination';
-      paginationContainer.style.textAlign = 'center';
-      paginationContainer.style.marginTop = '2rem';
-      grid.parentNode.appendChild(paginationContainer);
-    }
+if (!paginationContainer) {
+  paginationContainer = document.createElement('div');
+  paginationContainer.id = 'learning-pagination';
+  paginationContainer.style.textAlign = 'center';
+  paginationContainer.style.marginTop = '2rem';
+  grid.parentNode.appendChild(paginationContainer);
+}
 
-    const LEARNINGS_PER_PAGE = 6;
-    let currentPage = 1;
-    let filteredCards = [];
-    let categoryButtons = [];
+const LEARNINGS_PER_PAGE = 6;
+let currentPage = 1;
+let filteredCards = [];
+let categoryButtons = [];
 
-    // Build card HTML from a card element
-    function buildCardHTML(card) {
-      return `<article class="learn-card" data-category="${card.dataset.category}" data-title="${card.dataset.title}" data-date="${card.dataset.date}">
-        ${card.innerHTML}
-      </article>`;
-    }
+// Store all cards
+const allCards = Array.from(grid.querySelectorAll('.learn-card'));
 
-    // At top, store a master copy of all cards
-    const allCards = Array.from(grid.querySelectorAll('.learn-card'));
+// Determine unique categories
+const allCategoriesSet = new Set(allCards.map(c => c.dataset.category || 'Other'));
+const allCategories = ['All', ...Array.from(allCategoriesSet).sort()];
 
-    // Replace getCards() with returning this master list
-    function getCards() { return allCards; }
+// Build card HTML
+function buildCardHTML(card) {
+  return `<article class="learn-card" data-category="${card.dataset.category}" data-title="${card.dataset.title}" data-date="${card.dataset.date}">
+    ${card.innerHTML}
+  </article>`;
+}
 
-    // Apply filters/sort always from master list
-    function applyFilters() {
-      const query = searchInput.value.trim().toLowerCase();
-      const activeBtn = categoryButtons.find(b => b.classList.contains('active'));
-      const selectedCategory = activeBtn ? activeBtn.dataset.category : 'All';
-
-      filteredCards = allCards.filter(card => {
-        const title = card.dataset.title || '';
-        const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
-        const cardCategory = card.dataset.category || '';
-        const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
-        const matchesCategory = selectedCategory === 'All' || cardCategory === selectedCategory;
-        return matchesQuery && matchesCategory;
-      });
-
-      applySort();
+// Render category buttons
+function renderCategoryButtons(activeCategory = 'All') {
+  const container = document.getElementById('type-filters');
+  container.innerHTML = '';
+  allCategories.forEach(c => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset.category = c;
+    btn.textContent = c;
+    btn.className = `type-btn ${c === activeCategory ? 'active' : ''}`;
+    btn.addEventListener('click', () => {
+      categoryButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
       currentPage = 1;
-      renderPage();
-      renderPagination();
-      renderNoResults();
-      renderCategoryButtons(getCategoriesForFilteredCards());
-    }
-
-    // Sorting
-    function applySort() {
-      const sortOption = sortDropdown.value;
-      filteredCards.sort((a, b) => {
-        switch(sortOption) {
-          case 'title-asc': return a.dataset.title.localeCompare(b.dataset.title);
-          case 'title-desc': return b.dataset.title.localeCompare(a.dataset.title);
-          case 'date-asc': return new Date(a.dataset.date) - new Date(b.dataset.date);
-          case 'date-desc': return new Date(b.dataset.date) - new Date(a.dataset.date);
-          default: return 0;
-        }
-      });
-    }
-
-    // Render current page by replacing innerHTML
-    function renderPage() {
-      const start = (currentPage - 1) * LEARNINGS_PER_PAGE;
-      const end = start + LEARNINGS_PER_PAGE;
-      const cardsToShow = filteredCards.slice(start, end);
-      grid.innerHTML = cardsToShow.map(buildCardHTML).join('');
-    }
-
-    function renderPagination() {
-      const totalPages = Math.ceil(filteredCards.length / LEARNINGS_PER_PAGE);
-      if(totalPages <= 1) { paginationContainer.innerHTML = ''; return; }
-
-      const isMobile = window.innerWidth <= 768;
-
-      // Prev button
-      let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
-
-      if (isMobile) {
-        // Mobile: show current + next (or previous + current if last)
-        let startPage, endPage;
-
-        if (currentPage === totalPages && totalPages > 1) {
-          startPage = currentPage - 1;
-          endPage = currentPage;
-        } else {
-          startPage = currentPage;
-          endPage = Math.min(currentPage + 1, totalPages);
-        }
-
-        for (let i = startPage; i <= endPage; i++) {
-          html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
-        }
-      } else {
-        // Desktop: show all pages
-        for (let i = 1; i <= totalPages; i++) {
-          html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
-        }
-      }
-
-      // Next button
-      html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
-
-      paginationContainer.innerHTML = html;
-
-      // Attach event listeners
-      Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
-        btn.addEventListener('click', () => {
-          let page = parseInt(btn.dataset.page);
-          if (isNaN(page)) return;
-          if (page < 1) page = 1;
-          if (page > totalPages) page = totalPages;
-          currentPage = page;
-          renderPage();
-          renderPagination();
-        });
-      });
-    }
-
-
-    // Categories
-    function getCategoriesForFilteredCards() {
-      const set = new Set(filteredCards.map(c => c.dataset.category || 'Other'));
-      return set.size <= 1 ? ['All'] : ['All', ...Array.from(set).sort()];
-    }
-
-    function renderCategoryButtons(categories) {
-      const container = document.getElementById('type-filters');
-      container.innerHTML = '';
-      categories.forEach(c => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.dataset.category = c;
-        btn.textContent = c;
-        btn.className = `type-btn ${c === 'All' ? 'active' : ''}`;
-        btn.addEventListener('click', () => {
-          categoryButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          applyFilters();
-        });
-        container.appendChild(btn);
-      });
-      categoryButtons = Array.from(container.querySelectorAll('.type-btn'));
-    }
-
-    // No results message
-    function renderNoResults() {
-      let noLearningsMessage = document.getElementById('no-learning-message');
-      if (!noLearningsMessage) {
-        noLearningsMessage = document.createElement('div');
-        noLearningsMessage.id = 'no-learning-message';
-        noLearningsMessage.textContent = 'No learnings found';
-        noLearningsMessage.style.textAlign = 'center';
-        noLearningsMessage.style.padding = '2rem';
-        noLearningsMessage.style.gridColumn = '1 / -1';
-        grid.appendChild(noLearningsMessage);
-      }
-      noLearningsMessage.style.display = filteredCards.length === 0 ? 'block' : 'none';
-    }
-
-    // Event listeners
-    searchInput.addEventListener('input', applyFilters);
-    filtersToggle.addEventListener('click', e => {
-      e.stopPropagation();
-      filtersPopover.style.display = (filtersPopover.style.display==='block') ? 'none' : 'block';
-    });
-    filtersApply.addEventListener('click', () => {
-      filtersPopover.style.display = 'none';
       applyFilters();
     });
-    filtersCancel.addEventListener('click', () => { filtersPopover.style.display='none'; });
+    container.appendChild(btn);
+  });
+  categoryButtons = Array.from(container.querySelectorAll('.type-btn'));
+}
 
-    // Initialize
-    applyFilters();
-    </script>
+// Apply filters and sorting
+function applyFilters() {
+  const query = searchInput.value.trim().toLowerCase();
+  const activeBtn = categoryButtons.find(b => b.classList.contains('active'));
+  const selectedCategory = activeBtn ? activeBtn.dataset.category : 'All';
+
+  filteredCards = allCards.filter(card => {
+    const title = card.dataset.title || '';
+    const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+    const cardCategory = card.dataset.category || '';
+    const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
+    const matchesCategory = selectedCategory === 'All' || cardCategory === selectedCategory;
+    return matchesQuery && matchesCategory;
+  });
+
+  applySort();
+  currentPage = 1;
+  renderPage();
+  renderPagination();
+  renderNoResults();
+}
+
+// Sorting
+function applySort() {
+  const sortOption = sortDropdown.value;
+  filteredCards.sort((a, b) => {
+    switch(sortOption) {
+      case 'title-asc': return a.dataset.title.localeCompare(b.dataset.title);
+      case 'title-desc': return b.dataset.title.localeCompare(a.dataset.title);
+      case 'date-asc': return new Date(a.dataset.date) - new Date(b.dataset.date);
+      case 'date-desc': return new Date(b.dataset.date) - new Date(a.dataset.date);
+      default: return 0;
+    }
+  });
+}
+
+// Render current page
+function renderPage() {
+  const start = (currentPage - 1) * LEARNINGS_PER_PAGE;
+  const end = start + LEARNINGS_PER_PAGE;
+  const cardsToShow = filteredCards.slice(start, end);
+  grid.innerHTML = cardsToShow.map(buildCardHTML).join('');
+}
+
+// Render pagination
+function renderPagination() {
+  const totalPages = Math.ceil(filteredCards.length / LEARNINGS_PER_PAGE);
+  if(totalPages <= 1) { paginationContainer.innerHTML = ''; return; }
+
+  const isMobile = window.innerWidth <= 768;
+  let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
+
+  if (isMobile) {
+    let startPage = currentPage === totalPages && totalPages > 1 ? currentPage - 1 : currentPage;
+    let endPage = Math.min(currentPage + 1, totalPages);
+    for (let i = startPage; i <= endPage; i++) {
+      html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+    }
+  } else {
+    for (let i = 1; i <= totalPages; i++) {
+      html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+    }
+  }
+
+  html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
+  paginationContainer.innerHTML = html;
+
+  Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
+    btn.addEventListener('click', () => {
+      let page = parseInt(btn.dataset.page);
+      if (isNaN(page)) return;
+      page = Math.min(Math.max(page, 1), totalPages);
+      currentPage = page;
+      renderPage();
+      renderPagination();
+    });
+  });
+}
+
+// No results message
+function renderNoResults() {
+  let msg = document.getElementById('no-learning-message');
+  if (!msg) {
+    msg = document.createElement('div');
+    msg.id = 'no-learning-message';
+    msg.textContent = 'No learnings found';
+    msg.style.textAlign = 'center';
+    msg.style.padding = '2rem';
+    msg.style.gridColumn = '1 / -1';
+    grid.appendChild(msg);
+  }
+  msg.style.display = filteredCards.length === 0 ? 'block' : 'none';
+}
+
+// Event listeners
+searchInput.addEventListener('input', applyFilters);
+sortDropdown.addEventListener('change', applyFilters);
+filtersToggle.addEventListener('click', e => {
+  e.stopPropagation();
+  filtersPopover.style.display = (filtersPopover.style.display==='block') ? 'none' : 'block';
+});
+
+// Initialize category buttons and filters
+renderCategoryButtons();
+applyFilters();
+</script>

@@ -632,6 +632,11 @@
 
 
 
+.type-filter-pill .type-btn.active {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff;
+  font-weight: 600;
+}
 
 
 /* === PAGINATION BUTTONS === */

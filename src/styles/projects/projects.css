@@ -555,6 +555,9 @@
   z-index: -1;
 }
 
+.hidden-type {
+ display: none;
+}
 
 
 
@@ -564,7 +567,10 @@
 /* ========================= */
 @media (max-width: 768px) {
 
-  
+    .hidden-type {
+      display: block;
+    }
+
     .top-projects-space {
         padding-top: 5rem;
     }
@@ -740,6 +746,7 @@
   top: calc(100% + 40px);
 }
 }
+
 
 
 

@@ -218,11 +218,6 @@ const types = ["All", ...preferredExisting, ...remaining];
                       <option value="title-desc">Title Descending</option>
                     </select>
                   </div>
-
-                  <div class="filter-actions">
-                    <button id="filters-apply" type="button" class="btn-secondary">Apply</button>
-                    <button id="filters-cancel" type="button" class="btn-secondary">Cancel</button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -283,127 +278,131 @@ const types = ["All", ...preferredExisting, ...remaining];
 
     
 
-  <script type="module">
-      const searchInput = document.getElementById('projects-search');
-      const grid = document.getElementById('projects-grid');
-      let paginationContainer = document.getElementById('projects-pagination');
 
-      if (!paginationContainer) {
-        paginationContainer = document.createElement('div');
-        paginationContainer.id = 'projects-pagination';
-        paginationContainer.style.textAlign = 'center';
-        paginationContainer.style.marginTop = '2rem';
-        grid.parentNode.appendChild(paginationContainer);
-      }
+<script type="module">
+    const searchInput = document.getElementById('projects-search');
+    const grid = document.getElementById('projects-grid');
+    let paginationContainer = document.getElementById('projects-pagination');
 
-      const filtersToggle = document.getElementById('filters-toggle');
-      const filtersPopover = document.getElementById('filters-popover');
-      const semesterSelectPop = document.getElementById('semester-select-pop');
-      const sortSelectPop = document.getElementById('sort-select-pop');
-      const filtersApply = document.getElementById('filters-apply');
-      const filtersCancel = document.getElementById('filters-cancel');
-      const typeSelectPop = document.getElementById('type-select-pop');
+    if (!paginationContainer) {
+      paginationContainer = document.createElement('div');
+      paginationContainer.id = 'projects-pagination';
+      paginationContainer.style.textAlign = 'center';
+      paginationContainer.style.marginTop = '2rem';
+      grid.parentNode.appendChild(paginationContainer);
+    }
 
-      const PROJECTS_PER_PAGE = 6;
-      let currentPage = 1;
-      let currentSemester = 'all';
-      let currentSort = '';
-      let filteredCards = [];
-      let typeButtons = Array.from(document.querySelectorAll('.type-btn'));
+    const filtersToggle = document.getElementById('filters-toggle');
+    const filtersPopover = document.getElementById('filters-popover');
+    const semesterSelectPop = document.getElementById('semester-select-pop');
+    const sortSelectPop = document.getElementById('sort-select-pop');
+    const typeSelectPop = document.getElementById('type-select-pop');
 
-      // Apply filters including mobile type select
-      function applyFilters() {
-        const query = searchInput.value.trim().toLowerCase();
+    const PROJECTS_PER_PAGE = 6;
+    let currentPage = 1;
+    let currentSemester = 'all';
+    let currentSort = '';
+    let filteredCards = [];
+    let typeButtons = Array.from(document.querySelectorAll('.type-btn'));
 
-        // Determine type filter
-        let selectedType = 'All';
-        if (window.innerWidth <= 768 && typeSelectPop) {
-          selectedType = typeSelectPop.value;
-        } else {
-          const activeTypeBtn = typeButtons.find(b => b.classList.contains('active'));
-          selectedType = activeTypeBtn ? activeTypeBtn.dataset.type : 'All';
-        }
+    // ---------- Render desktop type buttons ----------
+    function renderTypeButtons(types) {
+      const container = document.getElementById('type-filters');
+      const activeType = typeButtons.find(b => b.classList.contains('active'))?.dataset.type || 'All';
+      container.innerHTML = '';
 
-        filteredCards = Array.from(grid.querySelectorAll('.project-card')).filter(card => {
-          const title = card.dataset.title || '';
-          const excerpt = card.querySelector('.card-description')?.textContent.toLowerCase() || '';
-          const cardType = card.dataset.type || '';
-          const cardSemester = card.dataset.semester || '';
-
-          const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
-          const matchesType = selectedType === 'All' || cardType === selectedType;
-          const matchesSemester = currentSemester === 'all' || cardSemester === currentSemester;
-
-          return matchesQuery && matchesType && matchesSemester;
+      types.forEach(t => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.type = t;
+        btn.textContent = t;
+        btn.className = `type-btn ${t === activeType ? 'active' : ''}`;
+        btn.addEventListener('click', () => {
+          typeButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentPage = 1;
+          applyFilters();
         });
+        container.appendChild(btn);
+      });
 
-        currentPage = 1;
-        renderPage();
-        renderPagination();
+      typeButtons = Array.from(container.querySelectorAll('.type-btn'));
+    }
 
-        // Update type buttons on desktop
-        if (window.innerWidth > 768) {
-          const availableTypes = new Set();
-          filteredCards.forEach(card => availableTypes.add(card.dataset.type || 'Other'));
-          typeButtons.forEach(btn => {
-            const t = btn.dataset.type;
-            btn.style.display = t === 'All' || availableTypes.has(t) ? '' : 'none';
-            if (!availableTypes.has(currentType)) {
-              currentType = 'All';
-              typeButtons.forEach(b => b.classList.remove('active'));
-              document.querySelector('.type-btn[data-type="All"]').classList.add('active');
-            }
-          });
-        }
+    // ---------- Sorting ----------
+    function applySort() {
+      if (!currentSort || currentSort === '') return;
+
+      filteredCards.sort((a, b) => {
+        const aTitle = a.querySelector('.card-title')?.textContent || '';
+        const bTitle = b.querySelector('.card-title')?.textContent || '';
+        if (currentSort === 'title-asc') return aTitle.localeCompare(bTitle, undefined, { sensitivity: 'base' });
+        if (currentSort === 'title-desc') return bTitle.localeCompare(aTitle, undefined, { sensitivity: 'base' });
+        return 0;
+      });
+    }
+
+
+    // ---------- Filtering ----------
+    function applyFilters() {
+      const query = searchInput.value.trim().toLowerCase();
+
+      // Determine selected type
+      let selectedType = 'All';
+      if (window.innerWidth <= 768 && typeSelectPop) {
+        selectedType = typeSelectPop.value;
+      } else {
+        const activeBtn = typeButtons.find(b => b.classList.contains('active'));
+        selectedType = activeBtn ? activeBtn.dataset.type : 'All';
       }
 
-      // Pagination and rendering
-      function renderPage() {
-        const start = (currentPage - 1) * PROJECTS_PER_PAGE;
-        const end = start + PROJECTS_PER_PAGE;
+      // Filter cards
+      filteredCards = Array.from(grid.querySelectorAll('.project-card')).filter(card => {
+        const title = card.dataset.title || '';
+        const excerpt = card.querySelector('.card-description')?.textContent.toLowerCase() || '';
+        const cardType = card.dataset.type || '';
+        const cardSemester = card.dataset.semester || '';
 
-        Array.from(grid.querySelectorAll('.project-card')).forEach(card => card.style.display = 'none');
-        filteredCards.slice(start, end).forEach(card => card.style.display = '');
+        return (!query || title.includes(query) || excerpt.includes(query)) &&
+              (selectedType === 'All' || cardType === selectedType) &&
+              (currentSemester === 'all' || cardSemester === currentSemester);
+      });
+
+      // ---------- Apply sort ----------
+      if (currentSort === 'title-asc') {
+        filteredCards.sort((a, b) => (a.dataset.title || '').localeCompare(b.dataset.title || '', undefined, { sensitivity: 'base' }));
+      } else if (currentSort === 'title-desc') {
+        filteredCards.sort((a, b) => (b.dataset.title || '').localeCompare(a.dataset.title || '', undefined, { sensitivity: 'base' }));
       }
 
+      // Re-append sorted cards to grid
+      filteredCards.forEach(card => grid.appendChild(card));
+
+      currentPage = 1;
+      renderPage();
+      renderPagination();
+    }
+
+
+    // ---------- Render page ----------
+    function renderPage() {
+      const start = (currentPage - 1) * PROJECTS_PER_PAGE;
+      const end = start + PROJECTS_PER_PAGE;
+      Array.from(grid.querySelectorAll('.project-card')).forEach(card => card.style.display = 'none');
+      filteredCards.slice(start, end).forEach(card => card.style.display = '');
+    }
+
+    // ---------- Render pagination ----------
     function renderPagination() {
       const totalPages = Math.ceil(filteredCards.length / PROJECTS_PER_PAGE);
       paginationContainer.innerHTML = '';
       if (totalPages <= 1) return;
 
-      const isMobile = window.innerWidth <= 768;
-
-      // Prev button
       let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
-
-      if (isMobile) {
-        // Mobile: show current page + next page (or previous if at end)
-        let startPage, endPage;
-
-        if (currentPage === totalPages && totalPages > 1) {
-          // Last page: show previous + current
-          startPage = currentPage - 1;
-          endPage = currentPage;
-        } else {
-          // Otherwise: current + next
-          startPage = currentPage;
-          endPage = Math.min(currentPage + 1, totalPages);
-        }
-
-        for (let i = startPage; i <= endPage; i++) {
-          html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
-        }
-
-      } else {
-        // Desktop: show all pages
-        for (let i = 1; i <= totalPages; i++) {
-          html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
-        }
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
       }
-
-      // Next button
       html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
-
       paginationContainer.innerHTML = html;
 
       Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
@@ -418,57 +417,55 @@ const types = ["All", ...preferredExisting, ...remaining];
       });
     }
 
+    // ---------- Event listeners ----------
 
+    // Search input
+    searchInput.addEventListener('input', () => { currentPage = 1; applyFilters(); });
 
-      // Event listeners
-      searchInput.addEventListener('input', () => { currentPage=1; applyFilters(); });
-      filtersToggle.addEventListener('click', e => {
-        e.stopPropagation();
-        if (filtersPopover.style.display==='block') closePopover();
-        else openPopover();
-      });
-      filtersApply.addEventListener('click', () => {
-        currentSemester = semesterSelectPop.value;
-        currentSort = sortSelectPop.value;
-        closePopover();
+    // Desktop type buttons
+    typeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        typeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentPage = 1;
         applyFilters();
       });
-      filtersCancel.addEventListener('click', closePopover);
+    });
 
-      function openPopover() {
-        filtersPopover.style.display = 'block';
-        filtersToggle.setAttribute('aria-expanded', 'true');
-        semesterSelectPop.value = currentSemester;
-        sortSelectPop.value = currentSort;
-        if (typeSelectPop && window.innerWidth <= 768) {
-          typeSelectPop.value = typeButtons.find(b => b.classList.contains('active'))?.dataset.type || 'All';
-        }
-        semesterSelectPop.focus();
-        document.addEventListener('click', onDocClick);
-        document.addEventListener('keydown', onKeyDown);
-      }
-
-      function closePopover() {
-        filtersPopover.style.display = 'none';
-        filtersToggle.setAttribute('aria-expanded', 'false');
-        document.removeEventListener('click', onDocClick);
-        document.removeEventListener('keydown', onKeyDown);
-      }
-
-      function onDocClick(e) { if (!filtersPopover.contains(e.target) && e.target !== filtersToggle) closePopover(); }
-      function onKeyDown(e) { if (e.key==='Escape') closePopover(); }
-
-      // Initialize
+    // Dropdown filters immediately apply changes
+    semesterSelectPop.addEventListener('change', () => {
+      currentSemester = semesterSelectPop.value;
+      currentPage = 1;
       applyFilters();
-      window.addEventListener('resize', applyFilters);
-
-      // Activate desktop type buttons
-      typeButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          typeButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentPage=1; applyFilters();
-        });
+    });
+    sortSelectPop.addEventListener('change', () => {
+      currentSort = sortSelectPop.value;
+      currentPage = 1;
+      applyFilters();
+    });
+    if (typeSelectPop) {
+      typeSelectPop.addEventListener('change', () => {
+        currentPage = 1;
+        applyFilters();
       });
+    }
 
+    // Popover toggle
+    filtersToggle.addEventListener('click', e => {
+      e.stopPropagation();
+      filtersPopover.style.display = (filtersPopover.style.display==='block') ? 'none' : 'block';
+      filtersToggle.setAttribute('aria-expanded', filtersPopover.style.display==='block');
+    });
+
+    // Close popover when clicking outside or pressing Escape
+    document.addEventListener('click', e => {
+      if (!filtersPopover.contains(e.target) && e.target !== filtersToggle) filtersPopover.style.display='none';
+    });
+    document.addEventListener('keydown', e => { if(e.key==='Escape') filtersPopover.style.display='none'; });
+
+    // Window resize: update type buttons for desktop
+    window.addEventListener('resize', applyFilters);
+
+    // Initialize
+    applyFilters();
 </script>
