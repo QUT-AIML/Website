@@ -269,7 +269,9 @@
 
 
 
-
+.hidden-type {
+  display: none;
+}
 
 
 .key-content {
@@ -458,17 +460,32 @@
 }
 
 
-/* === MOBILE RESPONSIVE LAYOUT === */
+/* === MOBILE RESPONSIVE LAYOUT === *//* MOBILE RESPONSIVE LAYOUT */
 @media (max-width: 768px) {
 
-  /* Controls row: stack search+filter horizontally, pills below */
+
+  .hidden-type {
+    display:grid;
+  }
+
+  /* Hide category pills */
+  .type-filter-pill {
+    display: none;
+  }
+
+  /* Hide "Sort by" label */
+  .type-filter-label {
+    display: none;
+  }
+
+  /* Controls row: keep pills separate, search+filter on same line */
   .controls-row {
-    flex-direction: column;
+    flex-direction: column; /* stack main sections vertically */
     gap: 0.75rem;
     align-items: stretch;
   }
 
-  /* Wrapper for search bar + filter button */
+  /* Wrapper for search + filter button */
   .search-filter-wrapper {
     display: flex;
     gap: 0.5rem;
@@ -476,11 +493,16 @@
     align-items: center;
   }
 
-  /* Search bar height adjustment */
+  /* Search bar */
   .search-wrapper {
-    flex: 1;              /* take available width */
-    height: 44px;         /* taller for mobile */
-    min-width: 0;         /* allow shrinking inside flex */
+    flex: 1;              /* fill remaining width */
+    height: 44px;         /* adjust height */
+    min-width: 0;         /* allow shrinking */
+    padding: 0.5rem 0.8rem;
+  }
+
+  .search-wrapper input {
+    font-size: 0.95rem;
   }
 
   /* Filter button next to search */
@@ -488,29 +510,10 @@
     flex-shrink: 0;
   }
 
-  /* Categories (pills) stack vertically */
-  .type-filter-wrapper {
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
-  }
-
-  /* Type filter pills stretch full width */
-  .type-filter-pill .type-btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  /* Ensure type filter pills wrap properly */
-  .type-filter-wrapper {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  /* Events grid: single column on small screens */
+  /* Events grid: single column on mobile */
   .events-grid,
   .featured-events-grid {
-    grid-template-columns: 1fr; /* full width cards */
+    grid-template-columns: 1fr;
     gap: 1rem;
     padding: 0.5rem;
   }
@@ -532,15 +535,5 @@
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     margin-bottom: 3rem;
-  }
-
-  /* Optional: shrink search bar height slightly on mobile */
-  .search-wrapper {
-    height: 38px;
-    padding: 0 0.8rem;
-  }
-
-  .search-wrapper input {
-    font-size: 0.95rem;
   }
 }
