@@ -167,7 +167,7 @@ const teamsForClient = teamData.filter(t => t.id !== "overview");
 
 
   const teams = JSON.parse(grid.dataset.teams);
-  const AUTO_DELAY = 6000;
+  const AUTO_DELAY = 7000;
 
   let PAGE_SIZE = window.innerWidth <= 768 ? 2 : 4; // 2 on mobile, 4 on desktop
   let globalPages = [];
@@ -201,19 +201,28 @@ const teamsForClient = teamData.filter(t => t.id !== "overview");
     });
   }
 
-  function renderPage(index) {
-    const page = globalPages[index];
+function renderPage(index) {
+  const page = globalPages[index];
 
-    title.textContent =
-      page.pageIndex > 0
-        ? `${page.teamTitle} – Continued`
-        : page.teamTitle;
+  title.textContent =
+    page.pageIndex > 0
+      ? `${page.teamTitle} – Continued`
+      : page.teamTitle;
 
+  const cards = grid.querySelectorAll(".team-card");
+
+  // Fade out inner content
+  cards.forEach(card => card.classList.add("hidden-content"));
+
+  // Wait 1 second while inner content is hidden
+  setTimeout(() => {
     grid.innerHTML = "";
 
+    // Add new cards
     page.items.forEach(member => {
       const card = document.createElement("div");
       card.className = "team-card";
+
       card.innerHTML = `
         <div class="team-photo">
           <img
@@ -227,23 +236,33 @@ const teamsForClient = teamData.filter(t => t.id !== "overview");
           <h3>${member.name}</h3>
         </div>
       `;
+
+      // start hidden
+      card.classList.add("hidden-content");
       grid.appendChild(card);
+
+      // fade in content
+      requestAnimationFrame(() => card.classList.remove("hidden-content"));
     });
 
     // Fill remaining slots with empty cards
     const emptySlots = PAGE_SIZE - page.items.length;
     for (let i = 0; i < emptySlots; i++) {
       const emptyCard = document.createElement("div");
-      emptyCard.className = "team-card empty-card";
+      emptyCard.className = "team-card";
       emptyCard.innerHTML = `<div class="team-photo"></div><div class="team-info"></div>`;
+      emptyCard.classList.add("hidden-content");
       grid.appendChild(emptyCard);
+      requestAnimationFrame(() => emptyCard.classList.remove("hidden-content"));
     }
 
+    // Update arrows and dots
     leftArrow.style.visibility = index === 0 ? "hidden" : "visible";
     rightArrow.style.visibility = index === globalPages.length - 1 ? "hidden" : "visible";
-
     renderDots();
-  }
+  }, 1000); // 1 second content hidden
+}
+
 
   function next() {
     currentGlobalIndex =

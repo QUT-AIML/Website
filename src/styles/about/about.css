@@ -433,6 +433,16 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.5rem;
+  opacity: 1;
+  transition: opacity 1s ease; /* smooth fade */
+}
+
+.team-grid.fade-out {
+  opacity: 0;
+}
+
+.team-grid.fade-in {
+  opacity: 1;
 }
 
 /* Team card */
@@ -460,6 +470,14 @@
 
 .team-grid.fade-out {
   opacity: 0.3;
+}
+
+.team-card > * {
+  transition: opacity 1s ease; /* fade in/out duration */
+}
+
+.team-card.hidden-content > * {
+  opacity: 0; /* hide inner content */
 }
 
 .team-photo {
