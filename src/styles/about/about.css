@@ -561,9 +561,11 @@
 
 
 
-.team-arrows-mobile {
+.team-arrows-mobile-panel {
   display: none;
 }
+
+
 
 /* MOBILE: show arrows side by side above the team grid */
 @media (max-width: 768px) {

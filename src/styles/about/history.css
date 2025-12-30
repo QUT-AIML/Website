@@ -244,3 +244,32 @@ body.modal-open nav {
   text-align: center;
   font-size: 1.2rem;
 }
+
+
+
+
+/* ---------- MOBILE: Full-width team photo ---------- */
+@media (max-width: 768px) {
+  .team-split {
+    flex-direction: column; /* stack the table and image vertically */
+    gap: 2rem; /* optional spacing */
+  }
+
+  .team-photo-large {
+    width: 100%; /* full container width */
+    display: flex;
+    justify-content: center;
+  }
+
+  .team-photo-large .image-wrapper,
+  .team-photo-large img.team-hero {
+    width: 100%; /* make the image fill the container */
+    height: auto; /* maintain aspect ratio */
+    object-fit: cover; /* optional: scale the image nicely */
+  }
+
+  .yearbook {
+    width: 100%; /* table takes full width above image */
+    overflow-x: auto; /* allow horizontal scroll if table is wide */
+  }
+}

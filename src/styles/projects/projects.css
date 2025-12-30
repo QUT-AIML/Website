@@ -322,7 +322,6 @@
 .pink-panel,
 .projects-controls {
   display: block; /* ensures they stack vertically */
-  width: 100%;
   margin-bottom: 0.5rem;
 }
 
