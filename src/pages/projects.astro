@@ -71,7 +71,7 @@ const types = ["All", ...preferredExisting, ...remaining];
   <body class="background-dots">
     <Navigation />
 
-    <div class="content-wrapper projects-space">
+    <div class="content-wrapper top-projects-space">
       <!-- ABOUT -->
       <section class="pink-panel">
         <p class="pink-title">Club Projects</p>
@@ -91,16 +91,13 @@ const types = ["All", ...preferredExisting, ...remaining];
 
 
 
-
-
         <!-- CURRENT PROJECTS -->
-        <section class="pink-panel">
+        <section class="pink-panel current-projects-space">
           <p class="pink-title">Current Projects ({latestSemester.label})</p>
         </section>
 
         {currentProjects.length === 0 ? (
           <div class="info-panel-wrapper full-width-panel">
-            <div class="thick-line-behind"></div>			
             <section class="info-panel">
               Latest project is still to be confirmed at this stage
             </section>
@@ -144,7 +141,7 @@ const types = ["All", ...preferredExisting, ...remaining];
 
 
 
-      <section class="pink-panel">
+      <section class="pink-panel past-projects-space">
         <p class="pink-title">Previous Projects</p>
       </section>
 
