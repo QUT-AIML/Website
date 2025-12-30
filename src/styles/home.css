@@ -398,6 +398,25 @@
 }
 
 
+.no-events-state {
+  position: relative;
+  z-index: 1;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: #fff;
+}
+
+.no-events-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.no-events-text {
+  font-size: 0.95rem;
+  color: #d1d1d1;
+  line-height: 1.5;
+}
 
 
 
