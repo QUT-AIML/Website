@@ -1,0 +1,19 @@
+{
+  "id": "welcome-night",
+  "overview": {
+    "title": "Welcome Night",
+    "date": "2026-02-24",
+    "dateLabel": "24th Feb 2026",
+    "category": "Social",
+    "excerpt": "Join us for Welcome Night to meet the community, learn about our plans for the semester, and enjoy some fun activities.",
+    "url": "/events/welcome-night"
+  },
+  "details": {
+    "title": "Welcome Night",
+    "fullDate": "Tuesday, 24 February 2026",
+    "time": "5:30 PM – 7:30 PM",
+    "location": "QUT GP-D108 (YourSpace)",
+    "longDescription": "Welcome Night is our chance to introduce our community, share who we are, and outline the exciting events we plan to run throughout the semester. Join us for some fun activities and get to know fellow members!",
+     "isCollab": "false"
+  }
+}
