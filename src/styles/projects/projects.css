@@ -199,23 +199,60 @@
 }
 
 
+/* Desktop: search group can grow */
+.mobile-search-filter {
+  flex: 1;
+  min-width: 0;
+}
 
+/* Search input grows, NOT the button */
+.search-wrapper {
+  flex: 1;
+  min-width: 0;
+}
 
+/* Button must NEVER shrink */
+.filters-toggle-btn {
+  flex-shrink: 0;
+}
 
+/* === FILTER TOGGLE BUTTON (FIXED) === */
+.filters-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  background: var(--color-primary);
+  border: 3px solid var(--color-primary);
+  border-radius: 999px;
+
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.filters-toggle-icon {
+  width: 18px;
+  height: 18px;
+  fill: #1f0f1b;
+}
 
 
 
 
 /* === FILTER BUTTON === */
-.filters-toggle-btn {
+.type-filter-wrapper {
+  margin-left: auto;   /* pushes pills + everything after to the right */
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: var(--color-primary); /* pink button */
-  border-radius: 999px; /* circular */
-  padding: 0.6rem;
-  border: none;
-  cursor: pointer;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.filters-toggle-btn {
+  flex-shrink: 0;      /* stays compact */
 }
 
 /* Funnel Icon */
@@ -262,16 +299,6 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
 .key-content {
     margin-left: 3rem;
     margin-right: 3rem;
@@ -284,7 +311,7 @@
 /* Panel wrapper that creates the dark grey division */
 .projects-panel {
   position: relative;
-  padding: 1.5rem;               /* space around the grid */
+  padding: 1rem;               /* space around the grid */
   display: block;
   width: 100%;
 }
@@ -292,7 +319,6 @@
 .current-projects-panel {
   margin: 0rem 3rem;
 }
-
 
 /* The dark grey background block behind the grid */
 .projects-panel::before {
@@ -310,13 +336,13 @@
 
 /* Ensure the grid and cards sit above the panel */
 .projects-grid {
-    position: relative;
-    justify-content: start; /* aligns cards to the left instead of stretching */
-    z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 360px); 
-    gap: 1.5rem;
-    padding: 1rem;                 /* inner spacing so cards don't touch panel edges */
+  position: relative;
+  justify-content: start; /* aligns cards to the left instead of stretching */
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 360px); 
+  gap: 1.5rem;
+  padding: 1rem;                 /* inner spacing so cards don't touch panel edges */
 }
 
 .pink-panel,
@@ -434,4 +460,235 @@
 
 .full-width-panel {
   width: 100%;
+}
+
+
+/* Ensure all filter groups stack correctly */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+}
+
+/* Force selects to full width */
+.filter-group select {
+  width: 100%;
+}
+
+/* ========================= */
+/* ===== DESKTOP CONTROLS === */
+/* ========================= */
+
+.projects-controls {
+  width: 100%;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: nowrap; /* single row ALWAYS */
+}
+
+/* Search section */
+.mobile-search-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;              /* THIS is what lets search expand */
+  min-width: 0;         /* critical to prevent flex overflow */
+}
+
+.search-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Pills stay tight */
+.type-filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Push filter button to the far right */
+.filters-toggle-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+
+
+
+/* ========================= */
+/* ===== MOBILE LAYOUT ===== */
+/* ========================= */
+@media (max-width: 768px) {
+
+  
+  /* Reduce top spacing */
+  .projects-space {
+    padding-top: 6rem;
+  }
+
+  /* ------------------------- */
+  /* SEARCH + FILTER ROW */
+  /* ------------------------- */
+
+  /* Force search + filter button on same row */
+  .mobile-search-filter {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    align-items: center;
+  }
+
+  .mobile-search-filter .search-wrapper {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+  }
+
+  /* ------------------------- */
+  /* FILTER CONTROLS */
+  /* ------------------------- */
+
+  /* Hide desktop pills */
+  .type-filter-pill,
+  .type-filter-label {
+    display: none;
+  }
+
+  /* Show mobile dropdown inside filter button */
+  .hidden-type {
+    display: block;
+  }
+
+  /* ------------------------- */
+  /* REMOVE DESKTOP MARGINS */
+  /* ------------------------- */
+
+  /* Kill outer page margins */
+  .key-content {
+    margin-left: 1.3rem;
+    margin-right: 1.3rem;
+    margin-bottom: 3rem;
+    width: 100%;
+  }
+
+  .current-projects-panel {
+    margin: 0;
+  }
+
+  /* ------------------------- */
+  /* PROJECTS PANEL */
+  /* ------------------------- */
+
+  .projects-panel {
+    padding: 0.5rem;
+  }
+
+  .projects-panel::before {
+    left: 0;
+    right: 0;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    border-radius: 10px;
+  }
+
+  /* ------------------------- */
+  /* PROJECTS GRID */
+  /* ------------------------- */
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  /* Prevent overflow bugs */
+  .projects-grid,
+  .projects-panel,
+  .project-card {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ------------------------- */
+  /* PROJECT CARDS */
+  /* ------------------------- */
+
+  .project-card {
+    width: 100%;
+  }
+
+  .card-body {
+    padding: 0.9rem;
+  }
+
+  /* ------------------------- */
+  /* CONTROLS STACKING */
+  /* ------------------------- */
+
+  .controls-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: nowrap;
+  }
+
+    .projects-controls {
+    width: 100%;
+  }
+
+  .controls-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: nowrap; /* IMPORTANT */
+    width: 100%;
+  }
+
+  /* Search bar expands */
+  .mobile-search-filter {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  /* Type pills stay compact */
+  .type-filter-label,
+  .type-filter-pill {
+    display: none;
+  }
+
+  /* Filter button stays hard-right */
+  .type-filter-wrapper {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* Keep filter button visible and aligned */
+  .filters-toggle-btn {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+  }
+
+  .filters-popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 40px);
+}
 }

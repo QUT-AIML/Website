@@ -716,5 +716,8 @@
   .pink-panel-flex .history-button {
     width: auto;                 /* allow button to size naturally */
   }
-}
 
+  .about-space {
+    padding-top: 6rem;
+  }
+}

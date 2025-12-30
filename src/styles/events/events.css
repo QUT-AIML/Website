@@ -489,10 +489,17 @@
   display: none; /* only show on mobile */
 }
 
-/* === MOBILE RESPONSIVE LAYOUT === *//* MOBILE RESPONSIVE LAYOUT */
+
+
+
+
 
 /* === MOBILE RESPONSIVE LAYOUT === */
 @media (max-width: 768px) {
+
+  .events-space {
+    padding-top: 6rem;
+  }
 
   /* Hide desktop type pills and label completely */
   .type-filter-pill,
@@ -620,4 +627,5 @@
   .hidden-type {
     display: grid;
   }
+  
 }

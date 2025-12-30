@@ -456,3 +456,10 @@
   color: #FF8BF4; /* match pink accent */
   margin-bottom: 1rem;
 }
+
+@media (max-width: 768px) {
+
+  .learn-space {
+    padding-top: 6rem;
+  }
+}
