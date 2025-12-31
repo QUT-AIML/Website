@@ -4,12 +4,12 @@
 
   /* Reduce top spacing */
 .current-projects-space {
-    margin-top: 5rem;
+    margin-top: 5rem !important;
   }
 
     /* Reduce top spacing */
   .past-projects-space {
-    margin-top: 5rem;
+    margin-top: 5rem !important;
   }
 
 
@@ -573,12 +573,12 @@
 
       /* Reduce top spacing */
     .current-projects-space {
-        margin-top: 4rem;
+        margin-top: 4rem !important;
       }
 
         /* Reduce top spacing */
       .past-projects-space {
-        margin-top: 4rem;
+        margin-top: 4rem !important;
       }
 
 
