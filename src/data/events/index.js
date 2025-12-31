@@ -4,9 +4,17 @@ const modules = import.meta.glob('./**/*.json', { eager: true });
 function normalizeOverview(ev, filePath) {
   const raw = ev && ev.default ? ev.default : ev;
   const o = raw.overview ?? raw;
-  const id = raw.id ?? o.id ?? (o.title ? o.title.toLowerCase().replace(/\s+/g, '-') : '');
+
+  // Derive ID from the filename
+  const fileNameMatch = filePath.match(/\/([^/]+)\.json$/);
+  const id = fileNameMatch ? fileNameMatch[1] : undefined;
+
+  // Get semester folder from path
+  const semesterMatch = filePath.match(/^\.\/([^/]+)\//);
+  const semesterFolder = semesterMatch ? semesterMatch[1] : 'unknown';
+
   return {
-    id,
+    id,                     
     title: o.title ?? '',
     date: o.date ?? '',
     dateLabel: o.dateLabel ?? o.date ?? '',
@@ -14,11 +22,12 @@ function normalizeOverview(ev, filePath) {
     excerpt: o.excerpt ?? '',
     image: o.image ?? '',
     featured: o.featured ?? false,  
-    url: o.url ?? `/events/${id}`,
+    url: `/events/${semesterFolder}/${id}`,   // ✅ include semester folder
     _raw: raw,
     _filePath: filePath
   };
 }
+
 
 /**
  * Parse a folder name to extract a year and semester number.
@@ -30,30 +39,29 @@ function normalizeOverview(ev, filePath) {
  * Returns { year: number|null, sem: number|null, label: string }
  */
 function parseSemesterFolder(folderName) {
-  // Try to find a 4-digit year
+  // Find a 4-digit year
   const yearMatch = folderName.match(/(20\d{2})/);
   const year = yearMatch ? Number(yearMatch[1]) : null;
 
-  // Try to find semester number (1 or 2)
-  // matches "sem1", "sem 1", "semester1", "semester 2", "Sem 2"
-  const semMatch = folderName.match(/(?:sem(?:ester)?[\s-_]?|s[\s-_]?)([12])\b/i);
+  // Find semester number (1 or 2) after "Sem-" or "Sem" or "S-"
+  // Matches: "Sem-1-2026", "Sem-2-2025", "S-1-2024", etc.
+  const semMatch = folderName.match(/(?:sem[\-_]?|s[\-_]?)([12])\b/i);
   const sem = semMatch ? Number(semMatch[1]) : null;
 
-  // If folder looks like "Fall2023" or "Spring2024" we won't infer sem number
   // Build a friendly label
   let label;
   if (year && sem) {
     label = `Sem ${sem}, ${year}`;
   } else if (year && !sem) {
-    // no semester number but year present
-    label = `${folderName.replace(/[-_]/g, ' ')}`;
+    label = folderName.replace(/[-_]/g, ' ');
   } else {
-    // fallback to raw folder name
     label = folderName.replace(/[-_]/g, ' ');
   }
 
   return { year, sem, label };
 }
+
+
 
 // Group by semester folder (assumes files are in ./<semester-folder>/<event>.json)
 const groups = {};
