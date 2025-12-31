@@ -4,15 +4,22 @@
     "date": "2025-09-02",
     "dateLabel": "2nd September 2025",
     "category": "Projects",
-    "excerpt": "Join us for Projects Night to work on exciting challenges, showcase your ideas, and collaborate with fellow members.",
-    "url": "/events/projects-night-4"
+    "excerpt": "🛠️🤖 Join QUT AI & ML Society for Projects Night! Collaborate, showcase ideas, and build AI/ML projects with fellow members. 🚀💡",
+    "image": "/events/Projects/Projects Night - 3.jpg",
+    "featured": false
   },
   "details": {
     "title": "Projects Night",
-    "fullDate": "Tuesday, 2nd September 2025",
+    "fullDate": "Tuesday, 2 September 2025",
     "time": "5:30 PM – 7:30 PM",
     "location": "QUT GP-B223",
-    "longDescription": "Projects Night is an opportunity to collaborate with fellow members on interesting challenges, share your ideas, and showcase any projects you’re working on. Whether you want to brainstorm, get feedback, or just see what others are building, this event is for you!",
-    "isCollab": "false"
+    "longDescription": "Project Night is where ideas evolve into real-world projects. The evening starts with a lightning talk covering the latest in AI, including: 🔥 Gemini Diffusion: AI-generated visuals and smart tools, 🧬 AlphaEvolve: AI-driven digital evolution, 🍌 Nano Banana: compact high-performance AI hardware. Afterwards, dive into hands-on building: work on projects at any level, team up, share knowledge, grow your AI/ML skills, and build exciting projects from simple models like Pokémon Identification to advanced AI tools like Action Recognition. Bring your laptop, curiosity, and energy – let’s make something awesome together! 🚀💡",
+    "isCollab": "false",
+    "gallery": [
+      "/events/Projects/Projects Night - 1.jpg",
+      "/events/Projects/Projects Night - 2.jpg",
+      "/events/Projects/Projects Night - 3.jpg",
+      "/events/Projects/Projects Night - 4.jpg"
+    ]
   }
 }

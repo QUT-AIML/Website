@@ -37,23 +37,24 @@ const pastProjects = semesters
   .filter(s => s.id !== latestSemester?.id && (s.projects?.length ?? 0) > 0)
   .flatMap(s => (s.projects ?? []).map(p => ({ ...p, semesterId: s.id })));
 
-// Flatten all projects for filtering
-const allProjects = [...currentProjects, ...pastProjects];
-
-// Determine dynamic types safely
+// Determine dynamic types from PAST projects only
 const preferred = ["CNN", "Linear Regression"];
 const allTypesSet = new Set();
 
-allProjects.forEach(ev => {
+pastProjects.forEach(ev => {
   const t = (ev.type ?? ev.category ?? "Other")?.toString() ?? "Other";
   allTypesSet.add(t);
 });
 
-const preferredExisting = preferred.filter(p => allTypesSet.has(p));
-const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
-remaining.sort((a, b) => a.localeCompare(b));
+let types = ["All"];
 
-const types = ["All", ...preferredExisting, ...remaining];
+if (allTypesSet.size > 1) {
+  const preferredExisting = preferred.filter(p => allTypesSet.has(p));
+  const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
+  remaining.sort((a, b) => a.localeCompare(b));
+
+  types = ["All", ...preferredExisting, ...remaining];
+}
 ---
 
 <html lang="en">
@@ -227,7 +228,7 @@ const types = ["All", ...preferredExisting, ...remaining];
 
         <section class="projects-panel">
           <section id="projects-grid" class="projects-grid">
-            {projectsBySemester.map((ev) => {
+            {pastProjects.map((ev) => {
               const type = ev.type ?? ev.category ?? "Other";
               return (
                 <article

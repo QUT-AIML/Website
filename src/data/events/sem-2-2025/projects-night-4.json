@@ -4,15 +4,22 @@
     "date": "2025-08-26",
     "dateLabel": "26th August 2025",
     "category": "Projects",
-    "excerpt": "Join us for Projects Night to work on exciting challenges, showcase your ideas, and collaborate with fellow members.",
-    "url": "/events/projects-night-4"
+    "excerpt": "🛠️🤖 Join QUT AI & ML Society for Projects Night! Collaborate, showcase ideas, and build AI/ML projects with fellow members. 🚀💡",
+    "image": "/events/Projects/Projects Night - 2.jpg",
+    "featured": false
   },
   "details": {
     "title": "Projects Night",
-    "fullDate": "Tuesday, 26th July 2025",
+    "fullDate": "Tuesday, 26 August 2025",
     "time": "5:30 PM – 7:30 PM",
     "location": "QUT GP-B223",
-    "longDescription": "Projects Night is an opportunity to collaborate with fellow members on interesting challenges, share your ideas, and showcase any projects you’re working on. Whether you want to brainstorm, get feedback, or just see what others are building, this event is for you!",
-    "isCollab": "true"
+    "longDescription": "Project Night is where ideas turn into progress. We start with a quick lightning talk covering the latest AI news and tips, including how to use Google Colab for your projects, then dive straight into hands-on building. Work on beginner, intermediate, or advanced projects, team up, share skills, and support each other. Learn by doing and grow your confidence. Build cool things from simple models to advanced AI tools. No long workshops, no lectures—just a short kick-off and then pure project time. Bring your laptop, your curiosity, and your energy and let’s make something awesome together! 🚀💡",
+    "isCollab": "false",
+    "gallery": [
+      "/events/Projects/Projects Night - 1.jpg",
+      "/events/Projects/Projects Night - 2.jpg",
+      "/events/Projects/Projects Night - 3.jpg",
+      "/events/Projects/Projects Night - 4.jpg"
+    ]
   }
 }

@@ -3,8 +3,7 @@
     "title": "<Project Title>",
     "category": "<Category, e.g., CNN, Random Forests>",
     "excerpt": "<Short description of the project>",
-    "image": "<Path to project image, e.g., /images/project.jpg>",
-    "url": "<URL path to project page, e.g., /projects/project-id>"
+    "image": "<Path to project image, e.g., /images/project.jpg>"
   },
   "details": {
     "title": "<Project Title>",

@@ -1,21 +1,34 @@
 {
   "overview": {
-    "title": "Projects Night - How to Maintain a ML Portfolio",
+    "title": "BANDS x AIML Collab Projects Night – Part 2",
     "date": "2025-08-12",
     "dateLabel": "12th August 2025",
     "category": "Projects",
-    "excerpt": "Learn how to maintain a strong machine learning portfolio, collaborate on projects, and get feedback from fellow members.",
-    "url": "/events/projects-night-3"
+    "excerpt": "🛠️🤖 Join BANDS x QUT AI & ML Society for Collab Projects Night Part 2! Learn to build and showcase your ML portfolio with expert guidance. 🚀💡",
+    "image": "/events/Projects/Projects Night - 1.jpg",
+    "featured": false
   },
   "details": {
-    "title": "Projects Night - How to Maintain a ML Portfolio",
+    "title": "BANDS x AIML Collab Projects Night – Part 2",
     "fullDate": "Tuesday, 12 August 2025",
     "time": "5:30 PM – 7:30 PM",
-    "location": "QUT GP-B223",
-    "longDescription": "Join us for Projects Night focused on maintaining a machine learning portfolio. We'll guide you through best practices, showcase project ideas, and provide opportunities to collaborate with fellow members. Bring your ideas, get feedback, and leave with concrete steps to strengthen your portfolio!",
+    "location": "QUT GP-B233",
+    "longDescription": "You’ve started building your ML portfolio, now let’s make it shine! Join us for Part 2 of the collaboration between BANDS and the QUT AI & ML Society as we dive deeper into maintaining and showcasing your Machine Learning journey. Highlights include a keynote by Albert Dai, tips on ML newsletters & staying updated, portfolio building & maintenance, and an interactive Q&A with hands-on challenges. Whether you’re starting fresh or already building your reputation, this event will give you the tools and confidence to maintain a professional ML presence. 🔗 RSVP now via the updated link in our bio to secure your spot. 🚀💡",
     "isCollab": "true",
+    "schedule": [],
     "speakers": [
-      { "name": "Albert Dai", "role": "Sessional Academic & Data Scientist" }
+      { "name": "Albert Dai", "role": "Keynote Speaker / Industry Expert" }
+    ],
+    "registration": {
+      "required": "true",
+      "link": "https://campus.hellorubric.com/?eid=38574",
+      "capacity": ""
+    },
+    "gallery": [
+      "/events/Projects/Projects Night - 1.jpg",
+      "/events/Projects/Projects Night - 2.jpg",
+      "/events/Projects/Projects Night - 3.jpg",
+      "/events/Projects/Projects Night - 4.jpg"
     ]
   }
 }

@@ -4,15 +4,16 @@
     "date": "2025-10-07",
     "dateLabel": "7th October 2025",
     "category": "Study",
-    "excerpt": "Join us for Study Night to focus, collaborate, and prepare for upcoming assessments with fellow members.",
-    "url": "/events/study-1"
+    "excerpt": "📚✨ Join QUT AI & ML Society for Study Night! Focus, collaborate, and prepare for assessments in a relaxed, supportive environment. 🚀",
+    "image": "/events/Projects/Projects Night - 4.jpg",
+    "featured": false
   },
   "details": {
     "title": "Study Night",
     "fullDate": "Tuesday, 7 October 2025",
     "time": "5:30 PM – 7:30 PM",
     "location": "QUT GP-B223",
-    "longDescription": "Study Night is a dedicated session to focus on coursework, collaborate with fellow members, and prepare for upcoming assessments. Bring your notes, questions, and projects, and make the most of a productive evening with a supportive study environment.",
+    "longDescription": "Need a space to focus, catch up on assignments, or just take a break with friends? Study Night is a relaxed, no-pressure evening designed for getting things done in good company. Enjoy a chilled environment with lo-fi beats, bring your own work – assessments, revision, side projects – and connect with peers while you work. Bring your laptop, your focus (or your procrastination energy), and settle in for a productive yet social night. ☕📖",
     "isCollab": "false"
   }
 }
