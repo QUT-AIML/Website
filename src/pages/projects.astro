@@ -5,40 +5,79 @@ import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 import projectsIndex from "@/data/projects/index.js";
 
+/* -----------------------------
+   Helpers
+----------------------------- */
+function isTBCProject(p) {
+  return p?.id?.toLowerCase() === "tbc";
+}
+
+/* -----------------------------
+   Load semesters
+----------------------------- */
 const semesters = projectsIndex?.semesters ?? [];
 
-// Flatten projects and attach semester id
-const projectsBySemester = semesters
-  .map(s => (s.projects ?? []).map(ev => ({ ...ev, semesterId: s.id })))
-  .flat();
-
-// Current projects: always the latest semester
-const latestSemester = semesters[0] ?? null;
-const currentProjects = (latestSemester?.projects ?? []).map(p => ({
-  ...p,
-  semesterId: latestSemester.id
-}));
-
-// Sort semesters: newest year first, then highest semester
-semesters.sort((a, b) => {
+/* -----------------------------
+   Sort semesters (newest first)
+----------------------------- */
+const sortedSemesters = [...semesters].sort((a, b) => {
   if (a.year && b.year) {
     if (a.year !== b.year) return b.year - a.year;
-    const aSem = a.sem ?? -1;
-    const bSem = b.sem ?? -1;
-    return bSem - aSem;
+    return (b.sem ?? -1) - (a.sem ?? -1);
   }
   if (a.year && !b.year) return -1;
   if (!a.year && b.year) return 1;
   return (b.folder ?? "").localeCompare(a.folder ?? "");
 });
 
+/* -----------------------------
+   Latest semester logic
+----------------------------- */
+const latestSemester = sortedSemesters[0] ?? null;
+const latestProjectsRaw = latestSemester?.projects ?? [];
 
-// Past projects: exclude latest semester and empty semesters
-const pastProjects = semesters
-  .filter(s => s.id !== latestSemester?.id && (s.projects?.length ?? 0) > 0)
-  .flatMap(s => (s.projects ?? []).map(p => ({ ...p, semesterId: s.id })));
+// Latest semester is considered TBC if:
+//  - empty
+//  - OR only contains TBC.json
+const latestIsTBC =
+  latestProjectsRaw.length === 0 ||
+  latestProjectsRaw.every(isTBCProject);
 
-// Determine dynamic types from PAST projects only
+// Current projects (ONLY if latest is not TBC)
+const currentProjects = latestIsTBC
+  ? []
+  : latestProjectsRaw.map(p => ({
+      ...p,
+      semesterId: latestSemester.id
+    }));
+
+/* -----------------------------
+   Past projects
+   - If latest semester is TBC, include it as past
+   - Exclude TBC.json from display
+----------------------------- */
+const pastProjects = sortedSemesters
+  .filter(s => {
+    if (!s.projects || s.projects.length === 0) return false;
+
+    if (s.id === latestSemester?.id) {
+      return latestIsTBC;
+    }
+
+    return true;
+  })
+  .flatMap(s =>
+    (s.projects ?? [])
+      .filter(p => !isTBCProject(p))
+      .map(p => ({
+        ...p,
+        semesterId: s.id
+      }))
+  );
+
+/* -----------------------------
+   Build filter types from PAST projects only
+----------------------------- */
 const preferred = ["CNN", "Linear Regression"];
 const allTypesSet = new Set();
 
@@ -57,6 +96,7 @@ if (allTypesSet.size > 1) {
   types = ["All", ...preferredExisting, ...remaining];
 }
 ---
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
