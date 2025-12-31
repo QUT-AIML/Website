@@ -8,15 +8,12 @@ import Footer from "@/components/Footer.astro";
 export async function getStaticPaths() {
   const modules = import.meta.glob('../../data/events/**/*.json', { eager: true });
 
-  const paths = Object.keys(modules)
+  return Object.keys(modules)
     .map((filePath) => {
       const match = filePath.match(/\/([^/]+)\.json$/);
-      const id = match ? match[1] : null;
-      return id ? { params: { id } } : null;
+      return match ? { params: { id: match[1] } } : null;
     })
     .filter(Boolean);
-
-  return paths;
 }
 
 const { params } = Astro;
@@ -37,14 +34,22 @@ if (!matchKey) {
 
 const overview = event ? (event.overview ?? event) : null;
 const details = event ? (event.details ?? {}) : {};
-const pageTitle = event ? `${details.title ?? overview.title} — QUT AIML` : "Event not found";
+const pageTitle = event
+  ? `${details.title ?? overview.title} — QUT AIML`
+  : "Event not found";
 ---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={overview ? (overview.excerpt ?? details.longDescription ?? `Event details for ${overview.title}`) : "Event not found"} />
+    <meta
+      name="description"
+      content={
+        overview
+          ? overview.excerpt ?? details.longDescription
+          : "Event not found"
+      }
+    />
     <title>{pageTitle}</title>
   </head>
 
@@ -55,126 +60,146 @@ const pageTitle = event ? `${details.title ?? overview.title} — QUT AIML` : "E
       {notFound ? (
         <section class="unique-event-card unique-event-notfound">
           <h1>Event not found</h1>
-          <p>We couldn't find an event with the id <strong>{id}</strong>.</p>
-          <p><a href="/events" class="unique-link">Back to events</a></p>
+          <p>No event exists with ID <strong>{id}</strong>.</p>
+          <a href="/events" class="unique-link">← Back to events</a>
         </section>
       ) : (
         <article class="unique-event-card">
-          <nav class="unique-nav">
+
+          <!-- ROW 1: BACK -->
+          <nav class="event-back">
             <a href="/events" class="unique-link">← Back to events</a>
           </nav>
 
-          {/* TOP IMAGE */}
-          {overview.image ? (
-            <div class="unique-top-image-wrapper">
-              <img src={overview.image} alt={overview.title} class="unique-top-image" />
-            </div>
-          ) : null}
+          <!-- ROW 2: TITLE -->
+          <h1 class="event-title">
+            {details.title ?? overview.title}
+          </h1>
 
-          <header class="unique-header">
-            <h1 class="unique-title">{details.title ?? overview.title}</h1>
-            <div class="unique-meta">
-              <time>{details.fullDate ?? overview.dateLabel ?? overview.date}</time>
-              {details.time ? <span> · {details.time}</span> : null}
-              {details.location ? <span> · {details.location}</span> : null}
-            </div>
-            <div class="unique-meta-divider"></div>
+          <!-- ROW 3: META PILLS -->
+          <div class="event-meta-pills">
+            {(details.fullDate ?? overview.dateLabel ?? overview.date) && (
+              <span class="meta-pill">
+                {details.fullDate ?? overview.dateLabel ?? overview.date}
+              </span>
+            )}
+            {details.time && <span class="meta-pill">{details.time}</span>}
+            {details.location && (
+              <span class="meta-pill">{details.location}</span>
+            )}
+          </div>
 
-            {(overview.category || (details.tags && details.tags.length)) ? (
-              <div class="unique-tags">
-                {overview.category ? <span class="unique-tag">{overview.category}</span> : null}
-                {(details.tags ?? []).map(tag => <span class="unique-tag">{tag}</span>)}
-              </div>
-            ) : null}
-          </header>
+          <!-- ROW 4: DIVIDER -->
+          <div class="event-divider"></div>
 
-          <section class="unique-body">
+          <!-- ROW 5: DESCRIPTION -->
+          <section class="event-description">
             <p>{details.longDescription ?? overview.excerpt}</p>
-
-            {details.schedule ? (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Schedule</h3>
-                <ul>
-                  {details.schedule.map(item => <li>{item.time ? `${item.time} — ` : ''}{item.activity}</li>)}
-                </ul>
-              </div>
-            ) : null}
-
-            {details.agenda ? (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Agenda</h3>
-                <ul>
-                  {details.agenda.map(a => <li>{a.item}</li>)}
-                </ul>
-              </div>
-            ) : null}
-
-            {details.speakers ? (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Speakers</h3>
-                <ul>
-                  {details.speakers.map(s => <li>{s.name}{s.role ? ` — ${s.role}` : ''}</li>)}
-                </ul>
-              </div>
-            ) : null}
-
-            {details.format ? (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Format</h3>
-                <p>{details.format}</p>
-              </div>
-            ) : null}
-
-            {details.prizes ? (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Prizes</h3>
-                <ul>
-                  {details.prizes.map(p => <li>{p}</li>)}
-                </ul>
-              </div>
-            ) : null}
-
-            {details.registration ? (
-              <div class="unique-registration">
-                <h3 class="unique-section-title">Registration</h3>
-                <p>{details.registration.required ? 'Registration required' : 'No registration required'}</p>
-                {details.registration.link ? <p><a href={details.registration.link} class="unique-link">Register / More info</a></p> : null}
-                {details.registration.price ? <p class="unique-price">Price: {details.registration.price}</p> : null}
-              </div>
-            ) : null}
-
-            {details.documents ? (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Documents</h3>
-                <ul>
-                  {details.documents.map(d => <li><a href={d.url} class="unique-link">{d.label}</a></li>)}
-                </ul>
-              </div>
-            ) : null}
-
-            {details.gallery ? (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Gallery</h3>
-                <div class="unique-gallery">
-                  {details.gallery.map(src => (
-                    <div class="unique-gallery-item">
-                      <img src={src} alt={overview.title} class="unique-gallery-image" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
           </section>
 
-          {details.contact ? (
+          <!-- ROW 6: IMAGE -->
+          {overview.image && (
+            <section class="event-image">
+              <img src={overview.image} alt={overview.title} />
+            </section>
+          )}
+
+          <!-- ROW 7: REGISTRATION -->
+          {details.registration && (
+            <section class="event-registration">
+              <h3>Registration</h3>
+              <p>
+                {details.registration.required
+                  ? "Registration required"
+                  : "No registration required"}
+              </p>
+
+              {details.registration.link && (
+                <a
+                  href={details.registration.link}
+                  class="register-button"
+                >
+                  Register now
+                </a>
+              )}
+
+              {details.registration.price && (
+                <p class="event-price">
+                  {details.registration.price}
+                </p>
+              )}
+            </section>
+          )}
+
+          <!-- SCHEDULE -->
+          {details.schedule && (
+            <section class="unique-section">
+              <h3 class="unique-section-title">Schedule</h3>
+              <ul>
+                {details.schedule.map(item => (
+                  <li>
+                    {item.time && <strong>{item.time} — </strong>}
+                    {item.activity}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <!-- SPEAKERS -->
+          {details.speakers && (
+            <section class="unique-section">
+              <h3 class="unique-section-title">Speakers</h3>
+              <ul>
+                {details.speakers.map(s => (
+                  <li>
+                    {s.name}
+                    {s.role && ` — ${s.role}`}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <!-- GALLERY -->
+          {details.gallery && (
+            <section class="unique-section">
+              <h3 class="unique-section-title">Gallery</h3>
+              <div class="unique-gallery">
+                {details.gallery.map(src => (
+                  <div class="unique-gallery-item">
+                    <img
+                      src={src}
+                      alt={overview.title}
+                      class="unique-gallery-image"
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- CONTACT -->
+          {details.contact && (
             <footer class="unique-footer">
               <strong>Contact</strong>
-              <div>
-                {details.contact.email ? <div>Email: <a href={`mailto:${details.contact.email}`} class="unique-link">{details.contact.email}</a></div> : null}
-                {details.contact.phone ? <div>Phone: {details.contact.phone}</div> : null}
-              </div>
+              {details.contact.email && (
+                <div>
+                  Email:
+                  <a
+                    href={`mailto:${details.contact.email}`}
+                    class="unique-link"
+                  >
+                    {details.contact.email}
+                  </a>
+                </div>
+              )}
+              {details.contact.phone && (
+                <div>Phone: {details.contact.phone}</div>
+              )}
             </footer>
-          ) : null}
+          )}
+
         </article>
       )}
     </main>

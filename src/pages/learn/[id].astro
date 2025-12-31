@@ -4,197 +4,170 @@ import "@/styles/learn/learn-details.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// ============================
-// Static paths
-// ============================
+// Dynamic routes
 export async function getStaticPaths() {
-  const modules = import.meta.glob('../../data/learn/data/**/*.json', { eager: true });
+  const modules = import.meta.glob('../../data/learn/**/*.json', { eager: true });
 
   return Object.keys(modules)
-    .map((filePath) => {
-      const match = filePath.match(/\/([^/]+)\.json$/);
+    .map(path => {
+      const match = path.match(/\/([^/]+)\.json$/);
       return match ? { params: { id: match[1] } } : null;
     })
     .filter(Boolean);
 }
 
-// ============================
-// Params + data loading
-// ============================
-const { params } = Astro;
-const id = params.id;
+// Get route param
+const { id } = Astro.params;
 
-const modules = import.meta.glob('../../data/learn/data/**/*.json');
+// Load JSON data
+const modules = import.meta.glob('../../data/learn/**/*.json');
 const matchKey = Object.keys(modules).find(k => k.endsWith(`/${id}.json`));
 
 let notFound = false;
-let topic = null;
+let learning = null;
 
 if (!matchKey) {
   notFound = true;
 } else {
   const mod = await modules[matchKey]();
-  topic = mod.default ?? mod;
+  learning = mod.default ?? mod;
 }
-
-const pageTitle = topic
-  ? `${topic.title} — QUT AIML`
-  : "Learning not found";
 ---
-
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta
-      name="description"
-      content={topic?.description ?? "Learning resource"}
-    />
-    <title>{pageTitle}</title>
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="description" content={learning?.description ?? "Learning resource"} />
+  <title>{learning?.title ?? "Learning"} — QUT AIML</title>
+</head>
 
-  <body class="background-dots">
-    <Navigation />
+<body class="background-dots">
+  <Navigation />
 
-    <main class="unique-learning-space">
-      {notFound ? (
-        <section class="unique-learning-card unique-learning-notfound">
-          <h1>Learning not found</h1>
-          <p>We couldn't find a learning with the id <strong>{id}</strong>.</p>
-          <p><a href="/learn" class="unique-link">Back to learning</a></p>
-        </section>
-      ) : (
-        <article class="unique-learning-card">
-          <nav class="unique-nav">
-            <a href="/learn" class="unique-link">← Back to learning</a>
-          </nav>
+  <main class="learn-detail-space">
+    {notFound ? (
+      <section class="learn-detail-card">
+        <h1>Learning not found</h1>
+        <a href="/learn" class="learn-link">← Back to Learn</a>
+      </section>
+    ) : (
+      <article class="learn-detail-card">
 
-          <header class="unique-header">
-            <h1 class="unique-title">{topic.title}</h1>
+        <!-- BACK -->
+        <nav class="learn-back">
+          <a href="/learn" class="learn-link">← Back to Learn</a>
+        </nav>
 
-            {topic.category && (
-              <div class="unique-tags">
-                <span class="unique-tag">{topic.category}</span>
-              </div>
-            )}
-          </header>
+        <!-- TITLE -->
+        <h1 class="learn-title">{learning.title}</h1>
 
-          <section class="unique-body">
-            <p>{topic.description}</p>
+        <!-- META -->
+        <div class="learn-meta">
+          {learning.category && <span class="meta-pill">{learning.category}</span>}
+        </div>
 
-            {/* ============================
-                Overview
-            ============================ */}
-            {topic.overview && (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Overview</h3>
-                <p>{topic.overview.definition}</p>
+        <!-- DIVIDER -->
+        <div class="learn-divider"></div>
 
-                {topic.overview.types?.length && (
-                  <>
-                    <h4>Types</h4>
-                    <ul>
-                      {topic.overview.types.map(t => <li>{t}</li>)}
-                    </ul>
-                  </>
-                )}
-
-                {topic.overview.key_concepts?.length && (
-                  <>
-                    <h4>Key Concepts</h4>
-                    <ul>
-                      {topic.overview.key_concepts.map(k => <li>{k}</li>)}
-                    </ul>
-                  </>
-                )}
-              </div>
-            )}
-
-            {/* ============================
-                Tutorials
-            ============================ */}
-            {topic.tutorials?.length && (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Tutorials</h3>
-                <ul>
-                  {topic.tutorials.map(t => (
-                    <li>
-                      <a href={t.url} class="unique-link">{t.title}</a>
-                      <p>{t.description}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* ============================
-                Videos
-            ============================ */}
-            {topic.videos?.length && (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Videos</h3>
-                <div class="unique-video-grid">
-                  {topic.videos.map(v => (
-                    <div>
-                      <iframe
-                        src={v.url}
-                        title={v.title}
-                        loading="lazy"
-                        allowfullscreen
-                      ></iframe>
-                      <p><strong>{v.title}</strong></p>
-                      <p>{v.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* ============================
-                Applications
-            ============================ */}
-            {topic.applications?.length && (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Applications</h3>
-                <ul>
-                  {topic.applications.map(a => <li>{a}</li>)}
-                </ul>
-              </div>
-            )}
-
-            {/* ============================
-                Resources
-            ============================ */}
-            {topic.resources?.length && (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Resources</h3>
-                <ul>
-                  {topic.resources.map(r => (
-                    <li>
-                      <a href={r.url} class="unique-link">{r.title}</a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* ============================
-                Tips
-            ============================ */}
-            {topic.tips?.length && (
-              <div class="unique-section">
-                <h3 class="unique-section-title">Tips</h3>
-                <ul>
-                  {topic.tips.map(t => <li>{t}</li>)}
-                </ul>
-              </div>
-            )}
+        <!-- DESCRIPTION -->
+        {learning.description && (
+          <section class="learn-description">
+            <p>{learning.description}</p>
           </section>
-        </article>
-      )}
-    </main>
+        )}
 
-    <Footer />
-  </body>
+        <!-- HERO IMAGE -->
+        {learning.image && (
+          <section class="learn-hero">
+            <img src={learning.image} alt={learning.title} />
+          </section>
+        )}
+
+        <!-- OVERVIEW -->
+        {learning.overview?.definition && (
+          <section class="learn-section">
+            <h3>What is it?</h3>
+            <p>{learning.overview.definition}</p>
+          </section>
+        )}
+
+        <!-- KEY CONCEPTS -->
+        {learning.overview?.key_concepts && (
+          <section class="learn-section">
+            <h3>Key Concepts</h3>
+            <ul>
+              {learning.overview.key_concepts.map(k => <li>{k}</li>)}
+            </ul>
+          </section>
+        )}
+
+        <!-- TUTORIALS -->
+        {learning.tutorials && (
+          <section class="learn-section">
+            <h3>Tutorials</h3>
+            <ul class="learn-links">
+              {learning.tutorials.map(t => (
+                <li>
+                  <a href={t.url} target="_blank" class="learn-link">{t.title}</a>
+                  <p>{t.description}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <!-- VIDEOS -->
+        {learning.videos && (
+          <section class="learn-section">
+            <h3>Videos</h3>
+            <div class="learn-video-grid">
+              {learning.videos.map(v => (
+                <iframe
+                  src={v.url}
+                  title={v.title}
+                  allowfullscreen
+                ></iframe>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- APPLICATIONS -->
+        {learning.applications && (
+          <section class="learn-section">
+            <h3>Applications</h3>
+            <ul>
+              {learning.applications.map(a => <li>{a}</li>)}
+            </ul>
+          </section>
+        )}
+
+        <!-- RESOURCES -->
+        {learning.resources && (
+          <section class="learn-section">
+            <h3>Resources</h3>
+            <ul class="learn-links">
+              {learning.resources.map(r => (
+                <li><a href={r.url} target="_blank" class="learn-link">{r.title}</a></li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <!-- TIPS -->
+        {learning.tips && (
+          <section class="learn-section learn-tips">
+            <h3>Tips</h3>
+            <ul>
+              {learning.tips.map(t => <li>{t}</li>)}
+            </ul>
+          </section>
+        )}
+
+      </article>
+    )}
+  </main>
+
+  <Footer />
+</body>
 </html>

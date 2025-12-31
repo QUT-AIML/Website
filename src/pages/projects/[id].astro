@@ -8,15 +8,12 @@ import Footer from "@/components/Footer.astro";
 export async function getStaticPaths() {
   const modules = import.meta.glob('../../data/projects/**/*.json', { eager: true });
 
-  const paths = Object.keys(modules)
+  return Object.keys(modules)
     .map((filePath) => {
       const match = filePath.match(/\/([^/]+)\.json$/);
-      const id = match ? match[1] : null;
-      return id ? { params: { id } } : null;
+      return match ? { params: { id: match[1] } } : null;
     })
     .filter(Boolean);
-
-  return paths;
 }
 
 const { params } = Astro;
@@ -37,74 +34,133 @@ if (!matchKey) {
 
 const overview = project ? (project.overview ?? project) : null;
 const details = project ? (project.details ?? {}) : {};
-const pageTitle = project ? `QUT AIML` : "Project not found";
 ---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={overview ? (overview.excerpt ?? details.longDescription ?? `Project details for ${overview.title}`) : "Project not found"} />
-    <title>{pageTitle}</title>
+    <meta
+      name="description"
+      content={
+        overview
+          ? overview.excerpt ?? details.longDescription
+          : "Project not found"
+      }
+    />
+    <title>{overview?.title ?? "Project"} — QUT AIML</title>
   </head>
 
   <body class="background-dots">
     <Navigation />
 
-        <main class="unique-project-space">
-            {notFound ? (
-                <section class="unique-project-card unique-project-notfound">
-                <h1>Project not found</h1>
-                <p>We couldn't find a project with the id <strong>{id}</strong>.</p>
-                <p><a href="/projects" class="unique-link">Back to projects</a></p>
-                </section>
-            ) : (
-                <article class="unique-project-card">
-                <nav class="unique-nav">
-                    <a href="/projects" class="unique-link">← Back to projects</a>
-                </nav>
+    <main class="unique-project-space">
+      {notFound ? (
+        <section class="unique-project-card unique-project-notfound">
+          <h1>Project not found</h1>
+          <p>No project exists with ID <strong>{id}</strong>.</p>
+          <a href="/projects" class="unique-link">← Back to projects</a>
+        </section>
+      ) : (
+        <article class="unique-project-card">
 
-                {/* TOP IMAGE */}
-                {overview.image && (
-                    <div class="unique-top-image-wrapper">
-                    <img src={overview.image} alt={overview.title} class="unique-top-image" />
-                    </div>
-                )}
+          <!-- ROW 1: BACK -->
+          <nav class="project-back">
+            <a href="/projects" class="unique-link">← Back to projects</a>
+          </nav>
 
-                <header class="unique-header">
-                    <h1 class="unique-title">{details.title ?? overview.title}</h1>
-                    <div class="unique-tags">
-                    {overview.category && <span class="unique-tag">{overview.category}</span>}
-                    </div>
-                </header>
+          <!-- ROW 2: TITLE -->
+          <h1 class="project-title">
+            {details.title ?? overview.title}
+          </h1>
 
-                <section class="unique-body">
-                    <p>{details.longDescription ?? overview.excerpt}</p>
+          <!-- ROW 3: META PILL -->
+          {overview.category && (
+            <div class="project-meta-pills">
+              <span class="meta-pill">{overview.category}</span>
+            </div>
+          )}
 
-                    {details.github && (
-                    <div class="unique-section">
-                        <h3 class="unique-section-title">GitHub</h3>
-                        <p><a href={details.github} class="unique-link" target="_blank">View Repository</a></p>
-                    </div>
-                    )}
+          <!-- ROW 4: DIVIDER -->
+          <div class="project-divider"></div>
 
-                    {details.gallery && details.gallery.length > 0 && (
-                    <div class="unique-section">
-                        <h3 class="unique-section-title">Gallery</h3>
-                        <div class="unique-gallery">
-                        {details.gallery.map(src => (
-                            <div class="unique-gallery-item">
-                            <img src={src} alt={overview.title} class="unique-gallery-image" />
-                            </div>
-                        ))}
-                        </div>
-                    </div>
-                    )}
-                </section>
-                </article>
-            )}
-            </main>
+          <!-- ROW 5: DESCRIPTION -->
+          <section class="project-description">
+            <p>{details.longDescription ?? overview.excerpt}</p>
+          </section>
 
+          <!-- ROW 6: GITHUB CTA -->
+          {details.github && (
+            <section class="project-github">
+              <a
+                href={details.github}
+                class="github-button"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on GitHub
+              </a>
+            </section>
+          )}
+
+          <!-- ROW 7: HERO IMAGE -->
+          {details.gallery?.[0] && (
+            <section class="project-image">
+              <img
+                src={details.gallery[0]}
+                alt={overview.title}
+              />
+            </section>
+          )}
+
+          <!-- OPTIONAL: GOAL -->
+          {details.goal && (
+            <section class="project-section">
+              <h3 class="project-section-title">Project Goal</h3>
+              <p>{details.goal}</p>
+            </section>
+          )}
+
+          <!-- OPTIONAL: FEATURES -->
+          {details.features && (
+            <section class="project-section">
+              <h3 class="project-section-title">Features</h3>
+              <ul>
+                {details.features.map(f => (
+                  <li>{f}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <!-- OPTIONAL: TECHNOLOGIES -->
+          {details.technologies && (
+            <section class="project-section">
+              <h3 class="project-section-title">Technologies Used</h3>
+              <ul>
+                {details.technologies.map(t => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <!-- GALLERY -->
+          {details.gallery?.length > 1 && (
+            <section class="project-section">
+              <h3 class="project-section-title">Gallery</h3>
+              <div class="project-gallery">
+                {details.gallery.slice(1).map(src => (
+                  <div class="project-gallery-item">
+                    <img src={src} alt={overview.title} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+        </article>
+      )}
+    </main>
 
     <Footer />
   </body>

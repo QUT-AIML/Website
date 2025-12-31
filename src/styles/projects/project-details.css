@@ -1,3 +1,6 @@
+/* ===============================
+   LAYOUT
+================================ */
 .unique-project-space {
   padding-top: 10rem;
   padding-left: 3rem;
@@ -10,115 +13,133 @@
 .unique-project-card {
   background-color: #1f1f1f;
   color: #eaeaea;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-  width: 800px;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+  width: 820px;
   max-width: 100%;
-  padding: 2rem;
+  padding: 2.5rem;
 }
 
-.unique-project-notfound {
-  text-align: center;
+/* ===============================
+   HEADER
+================================ */
+.project-back {
+  margin-bottom: 0.75rem;
 }
 
-.unique-top-image-wrapper {
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
-
-.unique-top-image {
-  width: 100%;
-  height: auto;
-  border-radius: 12px 12px 0 0;
-  object-fit: cover;
-}
-
-.unique-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.8rem;
+.project-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 2rem;
+  font-weight: 700;
   color: #fff;
 }
 
-.unique-meta {
-  color: #bdbdbd;
-  font-size: 0.95rem;
-  margin-bottom: 0.5rem;
+/* ===============================
+   META PILLS
+================================ */
+.project-meta-pills {
+  display: flex;
+  gap: 0.5rem;
 }
 
-.unique-meta-divider {
+.meta-pill {
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #000;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ===============================
+   DIVIDER
+================================ */
+.project-divider {
   height: 2px;
   width: 100%;
-  background-color: #FF8BF4;
-  margin-bottom: 1rem;
-  border-radius: 1px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  margin: 1.5rem 0;
 }
 
-.unique-tags {
+/* ===============================
+   DESCRIPTION
+================================ */
+.project-description {
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+/* ===============================
+   GITHUB CTA
+================================ */
+.project-github {
+  margin-bottom: 2rem;
+}
+
+.github-button {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #000;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.github-button:hover {
+  opacity: 0.9;
+}
+
+/* ===============================
+   HERO IMAGE
+================================ */
+.project-image img {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 2rem;
+  object-fit: cover;
+}
+
+/* ===============================
+   SECTIONS
+================================ */
+.project-section {
+  margin-bottom: 2rem;
+}
+
+.project-section-title {
+  margin-bottom: 0.75rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ===============================
+   GALLERY
+================================ */
+.project-gallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
 }
 
-.unique-tag {
-  font-size: 0.85rem;
-  color: #888;
-}
-
-.unique-body {
-  color: #eaeaea;
-  line-height: 1.6;
-}
-
-.unique-section {
-  margin-bottom: 1rem;
-}
-
-.unique-section-title {
-  margin: 0 0 0.5rem 0;
-  color: #FF8BF4;
-}
-
-.unique-registration {
-  margin-top: 1rem;
-  padding: 0.75rem;
+.project-gallery-item {
+  width: 130px;
+  height: 90px;
   border-radius: 8px;
-  background: #1e1e1e;
-  border: 1px solid #333;
-}
-
-.unique-price {
-  margin-top: 0.25rem;
-  color: #888;
-}
-
-.unique-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.unique-gallery-item {
-  width: 120px;
-  height: 80px;
-  border-radius: 6px;
   overflow: hidden;
   background: #111;
 }
 
-.unique-gallery-image {
+.project-gallery-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.unique-footer {
-  margin-top: 1.25rem;
-  border-top: 1px solid #333;
-  padding-top: 1rem;
-  color: #bdbdbd;
-}
-
+/* ===============================
+   LINKS
+================================ */
 .unique-link {
   color: var(--color-secondary);
   text-decoration: none;
@@ -126,4 +147,22 @@
 
 .unique-link:hover {
   text-decoration: underline;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .unique-project-space {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .unique-project-card {
+    padding: 1.75rem;
+  }
+
+  .project-title {
+    font-size: 1.6rem;
+  }
 }
