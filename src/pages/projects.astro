@@ -22,15 +22,16 @@ const currentProjects = (latestSemester?.projects ?? []).map(p => ({
 // Sort semesters: newest year first, then highest semester
 semesters.sort((a, b) => {
   if (a.year && b.year) {
-    if (a.year !== b.year) return b.year - a.year; // newest year first
+    if (a.year !== b.year) return b.year - a.year;
     const aSem = a.sem ?? -1;
     const bSem = b.sem ?? -1;
-    return bSem - aSem; // highest semester first
+    return bSem - aSem;
   }
   if (a.year && !b.year) return -1;
   if (!a.year && b.year) return 1;
-  return b.folder.localeCompare(a.folder);
+  return (b.folder ?? "").localeCompare(a.folder ?? "");
 });
+
 
 // Past projects: exclude latest semester and empty semesters
 const pastProjects = semesters
