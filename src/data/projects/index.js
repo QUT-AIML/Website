@@ -18,7 +18,6 @@ const groups = {};
 
 allPaths.forEach(filePath => {
   if (filePath.endsWith('template.json')) return;
-  if (filePath.endsWith('TBC.json')) return;
 
   const parts = filePath.split('/');
   const folder = parts[1];
