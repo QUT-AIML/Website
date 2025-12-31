@@ -1,0 +1,24 @@
+{
+  "overview": {
+    "title": "Clubs Exchange: Neon Party",
+    "date": "2025-08-23",
+    "dateLabel": "23rd August 2025",
+    "category": "Social",
+    "excerpt": "Join us for the Neon Party to meet members from other clubs, dance, and enjoy a vibrant night out! 🎉💃🕺",
+    "image": "/events/Social/Social Night - 1.jpg",
+    "featured": false
+  },
+  "details": {
+    "title": "Clubs Exchange: Neon Party",
+    "fullDate": "Saturday, 23 August 2025",
+    "time": "From 7 PM",
+    "location": "Eclipse Nightclub, Fortitude Valley",
+    "longDescription": "Come to the Clubs Exchange: Neon Party for a night of music, dancing, and socializing! Meet members from other clubs, enjoy a lively neon-themed atmosphere, and have fun with your friends. Secure your spot and register now! 🎉💡",
+    "isCollab": "true",
+    "registration": {
+      "required": "true",
+      "link": "https://campus.hellorubric.com/?eid=38324",
+      "capacity": ""
+    }
+  }
+}

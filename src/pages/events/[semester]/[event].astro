@@ -1,0 +1,158 @@
+---
+import "@/styles/global.css";
+import "@/styles/events/event-details.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+
+// === Generate static paths ===
+export async function getStaticPaths() {
+  const modules = import.meta.glob('../../../data/events/**/*.json', { eager: true });
+
+  // Create { semester, event } pairs
+  const paths = Object.keys(modules).map((filePath) => {
+    // Match folder (semester) and filename (event)
+    const match = filePath.replaceAll("\\", "/").match(/\/data\/events\/([^/]+)\/([^/]+)\.json$/);
+    if (!match) return null;
+    const [, semester, eventFile] = match;
+    return { params: { semester, event: eventFile } };
+  }).filter(Boolean);
+
+  return paths;
+}
+
+// === Get params from route ===
+const { params } = Astro;
+const semester = params.semester;  // folder name like "sem-1-2026"
+const event = params.event;        // filename without .json
+
+// === Dynamically import the JSON file for this semester/event ===
+const modules = import.meta.glob('../../../data/events/**/*.json');
+const matchKey = Object.keys(modules).find(k =>
+  k.replaceAll("\\", "/").endsWith(`/${semester}/${event}.json`)
+);
+
+let notFound = false;
+let eventData = null;
+
+if (!matchKey) {
+  notFound = true;
+} else {
+  const mod = await modules[matchKey]();
+  eventData = mod.default ?? mod;
+}
+
+const overview = eventData ? (eventData.overview ?? eventData) : null;
+const details = eventData ? (eventData.details ?? {}) : {};
+const pageTitle = eventData
+  ? `${details.title ?? overview.title} — QUT AIML`
+  : "Event not found";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={overview ? overview.excerpt ?? details.longDescription : "Event not found"} />
+    <title>{pageTitle}</title>
+  </head>
+
+  <body class="background-dots">
+    <Navigation />
+
+    <main class="unique-event-space">
+      {notFound ? (
+        <section class="unique-event-card unique-event-notfound">
+          <h1>Event not found</h1>
+          <p>No event exists with ID <strong>{event}</strong> in semester <strong>{semester}</strong>.</p>
+          <a href="/events" class="unique-link">← Back to events</a>
+        </section>
+      ) : (
+        <article class="unique-event-card">
+          <nav class="event-back">
+            <a href="/events" class="unique-link">← Back to events</a>
+          </nav>
+
+          <h1 class="event-title">{details.title ?? overview.title}</h1>
+
+          <div class="event-meta-pills">
+            {(details.fullDate ?? overview.dateLabel ?? overview.date) && (
+              <span class="meta-pill">{details.fullDate ?? overview.dateLabel ?? overview.date}</span>
+            )}
+            {details.time && <span class="meta-pill">{details.time}</span>}
+            {details.location && <span class="meta-pill">{details.location}</span>}
+          </div>
+
+          <div class="event-divider"></div>
+
+          <section class="event-description">
+            <p>{details.longDescription ?? overview.excerpt}</p>
+          </section>
+
+          {overview.image && (
+            <section class="event-image">
+              <img src={overview.image} alt={overview.title} />
+            </section>
+          )}
+
+          {details.registration && (
+            <section class="event-registration">
+              <h3>Registration</h3>
+              <p>{details.registration.required ? "Registration required" : "No registration required"}</p>
+              {details.registration.link && (
+                <a href={details.registration.link} class="register-button">Register now</a>
+              )}
+              {details.registration.price && <p class="event-price">{details.registration.price}</p>}
+            </section>
+          )}
+
+          {details.schedule && (
+            <section class="unique-section">
+              <h3 class="unique-section-title">Schedule</h3>
+              <ul>
+                {details.schedule.map(item => (
+                  <li>{item.time && <strong>{item.time} — </strong>}{item.activity}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {details.speakers && (
+            <section class="unique-section">
+              <h3 class="unique-section-title">Speakers</h3>
+              <ul>
+                {details.speakers.map(s => (
+                  <li>{s.name}{s.role && ` — ${s.role}`}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {details.gallery && (
+            <section class="unique-section">
+              <h3 class="unique-section-title">Gallery</h3>
+              <div class="unique-gallery">
+                {details.gallery.map(src => (
+                  <div class="unique-gallery-item">
+                    <img src={src} alt={overview.title} class="unique-gallery-image" />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {details.contact && (
+            <footer class="unique-footer">
+              <strong>Contact</strong>
+              {details.contact.email && (
+                <div>Email: <a href={`mailto:${details.contact.email}`} class="unique-link">{details.contact.email}</a></div>
+              )}
+              {details.contact.phone && <div>Phone: {details.contact.phone}</div>}
+            </footer>
+          )}
+        </article>
+      )}
+    </main>
+
+    <Footer />
+  </body>
+</html>

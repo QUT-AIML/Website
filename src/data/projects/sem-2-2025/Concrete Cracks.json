@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Concrete Cracks",
+    "category": "CNN",
+    "excerpt": "Detect cracks in concrete structures using CNN-based image classification.",
+    "image": "/projects/concrete cracks.jpg"
+  },
+  "details": {
+    "title": "Concrete Cracks",
+    "github": "https://github.com/QUT-AIML/Convolutional-Neural-Networks",
+    "longDescription": "This project uses CNNs to detect cracks in concrete structures from images. Users can explore feature extraction with convolutional layers, pooling, regularization, and data augmentation techniques. The model is ready for training and can be used to improve structural inspection processes."
+  }
+}

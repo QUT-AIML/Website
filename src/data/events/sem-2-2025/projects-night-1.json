@@ -1,0 +1,25 @@
+{
+  "overview": {
+    "title": "Projects Night",
+    "date": "2025-07-29",
+    "dateLabel": "29th July 2025",
+    "category": "Projects",
+    "excerpt": "🛠️🤖 Discover what you can build at QUT AI & ML Society Project Night! Explore projects, learn hands-on, and collaborate with peers. 🚀💡",
+    "image": "/events/Projects/Projects Night - 1.jpg",
+    "featured": false
+  },
+  "details": {
+    "title": "Projects Night",
+    "fullDate": "Tuesday, 29 July 2025",
+    "time": "5:30 PM – 7:30 PM",
+    "location": "QUT GP-B233",
+    "longDescription": "Curious about how AI and machine learning actually work in practice? Our Project Nights are the perfect place to start. Whether you're just beginning or already confident with AI tools, you'll get the chance to build real projects, explore powerful ML techniques, and learn by doing alongside other students who are just as excited as you are. Choose from beginner, intermediate, or advanced projects, pair up, share skills, and support each other. Gain hands-on experience and boost your confidence. Build cool things from linear regression to transformers. No STEM or coding background required – just bring your curiosity and energy and start building your AI journey with us! 🚀💡",
+    "isCollab": "false",
+    "gallery": [
+      "/events/Projects/Projects Night - 1.jpg",
+      "/events/Projects/Projects Night - 2.jpg",
+      "/events/Projects/Projects Night - 3.jpg",
+      "/events/Projects/Projects Night - 4.jpg"
+    ]
+  }
+}

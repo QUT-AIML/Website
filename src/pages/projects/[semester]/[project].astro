@@ -1,0 +1,155 @@
+---
+import "@/styles/global.css";
+import "@/styles/projects/project-details.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+
+// === Generate static paths based on semester/project JSON files ===
+export async function getStaticPaths() {
+  const modules = import.meta.glob('../../../data/projects/**/*.json', { eager: true });
+
+  // Create { semester, event } pairs
+  const paths = Object.keys(modules).map((filePath) => {
+    // Match folder (semester) and filename (event)
+    const match = filePath.replaceAll("\\", "/").match(/\/data\/projects\/([^/]+)\/([^/]+)\.json$/);
+    if (!match) return null;
+    const [, semester, projectFile] = match;
+    return { params: { semester, project: projectFile } };
+  }).filter(Boolean);
+
+  return paths;
+}
+
+// === Get params from route ===
+const { params } = Astro;
+const semester = params.semester;  // folder name like "sem-1-2026"
+const project = params.project;        // filename without .json
+
+// === Dynamically import the JSON file for this semester/event ===
+const modules = import.meta.glob('../../../data/projects/**/*.json');
+const matchKey = Object.keys(modules).find(k =>
+  k.replaceAll("\\", "/").endsWith(`/${semester}/${project}.json`)
+);
+
+let notFound = false;
+let projectData = null;
+
+if (!matchKey) {
+  notFound = true;
+} else {
+  const mod = await modules[matchKey]();
+  projectData = mod.default ?? mod;
+}
+
+const overview = projectData ? (projectData.overview ?? projectData) : null;
+const details = projectData ? (projectData.details ?? {}) : {};
+const pageTitle = projectData
+  ? `${details.title ?? overview.title} — QUT AIML`
+  : "Event not found";
+
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content={
+        overview
+          ? overview.excerpt ?? details.longDescription
+          : "Project not found"
+      }
+    />
+    <title>{overview?.title ?? "Project"} — QUT AIML</title>
+  </head>
+
+  <body class="background-dots">
+    <Navigation />
+
+    <main class="unique-project-space">
+      {notFound ? (
+        <section class="unique-project-card unique-project-notfound">
+          <h1>Project not found</h1>
+          <p>No project exists with name <strong>{projectName}</strong> in semester <strong>{semester}</strong>.</p>
+          <a href="/projects" class="unique-link">← Back to projects</a>
+        </section>
+      ) : (
+        <article class="unique-project-card">
+
+          <nav class="project-back">
+            <a href="/projects" class="unique-link">← Back to projects</a>
+          </nav>
+
+          <h1 class="project-title">{details.title ?? overview.title}</h1>
+
+          {overview.category && (
+            <div class="project-meta-pills">
+              <span class="meta-pill">{overview.category}</span>
+            </div>
+          )}
+
+          <div class="project-divider"></div>
+
+          <section class="project-description">
+            <p>{details.longDescription ?? overview.excerpt}</p>
+          </section>
+
+          {details.github && (
+            <section class="project-github">
+              <a href={details.github} class="github-button" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+              </a>
+            </section>
+          )}
+
+          {details.gallery?.[0] && (
+            <section class="project-image">
+              <img src={details.gallery[0]} alt={overview.title} />
+            </section>
+          )}
+
+          {details.goal && (
+            <section class="project-section">
+              <h3 class="project-section-title">Project Goal</h3>
+              <p>{details.goal}</p>
+            </section>
+          )}
+
+          {details.features && (
+            <section class="project-section">
+              <h3 class="project-section-title">Features</h3>
+              <ul>
+                {details.features.map(f => <li>{f}</li>)}
+              </ul>
+            </section>
+          )}
+
+          {details.technologies && (
+            <section class="project-section">
+              <h3 class="project-section-title">Technologies Used</h3>
+              <ul>
+                {details.technologies.map(t => <li>{t}</li>)}
+              </ul>
+            </section>
+          )}
+
+          {details.gallery?.length > 1 && (
+            <section class="project-section">
+              <h3 class="project-section-title">Gallery</h3>
+              <div class="project-gallery">
+                {details.gallery.slice(1).map(src => (
+                  <div class="project-gallery-item">
+                    <img src={src} alt={overview.title} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+        </article>
+      )}
+    </main>
+
+    <Footer />
+  </body>
+</html>

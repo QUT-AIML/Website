@@ -3,8 +3,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #FF00E6;
-  --color-secondary: #FF8BF4;
+  --color-primary: #FF8BF4;
+  --color-secondary: #A30093;
   --color-background: #090909;
   --font-body: "Inter", sans-serif;
   --font-heading: "Share Tech", sans-serif;
@@ -14,9 +14,47 @@
     background: radial-gradient(125% 125% at 50% 5%, #090909 20%, #090909 55%, #FF00E6 75%);
 }
 
+.background-gradient {
+  /* Top layer: semi-transparent radial gradient */
+  background-image: 
+    radial-gradient(125% 125% at 50% 5%, rgba(9, 9, 9, 0.8) 20%, rgba(9, 9, 9, 0.8) 55%, rgba(255, 0, 230, 0.6) 75%),
+    /* Bottom layer: subtle dark grey dots */
+    radial-gradient(circle, #bababa 1px, transparent 1px);
+  
+  background-size: 
+    auto,         /* gradient scales normally */
+    30px 30px;    /* dots spacing */
+  
+  background-repeat: 
+    no-repeat, 
+    repeat;       /* dots repeat */
+  
+  background-position: 
+    center top, 
+    0 0;          /* gradient at top center, dots start at top-left */
+  
+  background-color: #000; /* fallback black base */
+}
+
+
+.background-dots {
+  background-color: #000; /* black base */
+  
+  /* repeating dot pattern */
+  background-image: 
+    radial-gradient(circle, #393939 1px, transparent 1px); /* dark grey dot */
+  
+  background-size: 30px 30px; /* spacing of the dots in a grid */
+}
+
+
 * {
   font-family: var(--font-heading);
   color: var(--color-primary);
+}
+
+body {
+  display: block; /* or flex with justify-start */
 }
 
 .background-network {
@@ -84,6 +122,12 @@ h2 {
 }
 
 
+/* Footer full width */
+footer {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 
 /* ---------------------------------- */
 /*   Layout & Spacing for <main>      */
@@ -116,7 +160,7 @@ h2 {
 .content-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1rem;
   max-width: 100%;
   overflow: visible;
 }
@@ -125,9 +169,19 @@ h2 {
   background-color: #272727;
   border-radius: 10px;
   padding: 30px;
+  margin-left: 3rem;
+  margin-right: 3rem;
   box-shadow: 8px 8px 0 #1B1B1B;
   color: white;
-  width: 100%;
+  z-index: 5;
+}
+
+.minimal-padding-panel {
+  background-color: #272727;
+  border-radius: 10px;
+  padding: 15px 40px;
+  box-shadow: 8px 8px 0 #1B1B1B;
+  color: white;
 }
 
 .section-title {
@@ -136,13 +190,29 @@ h2 {
 }
 
 .section-content {
-  line-height: 1.6;
+  line-height: 1.2;
+}
+
+.section-space {
+  margin-top: 1rem;
 }
 
 .section-list {
   list-style: disc;
   padding-left: 1.25rem;
-  line-height: 1.6;
+  line-height: 1.2;
+}
+
+.pink-panel {
+  background-color: var(--color-secondary);
+  border-radius: 10px;
+  padding: 0.5rem 2rem;
+  margin: 0rem 3rem;
+}
+
+.pink-title {
+  font-size: 2rem;
+  font-weight:900;
 }
 
 
@@ -332,7 +402,7 @@ h2 {
 }
 
 .selection-content {
-  line-height: 1.6;
+  line-height: 1.2;
   color: white;
 }
 
@@ -358,11 +428,23 @@ h2 {
   margin-bottom: 0;
 }
 
+
 /* ----------------------------- */
 /*  SELECTION AREA - RESPONSIVE  */
 /* ----------------------------- */
 
 @media (max-width: 40rem) {
+
+  .info-panel{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .pink-panel{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
 
   /* Remove right padding on panels */
   .selection-panel {

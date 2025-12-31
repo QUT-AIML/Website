@@ -1,7 +1,7 @@
 ---
 import MainLogo from "@/logos/Head-Transparent.png"
 import "@/styles/global.css"
-import "@/styles/navbar.css"
+import "@/styles/components/navbar.css"
 ---
 
 <nav class="navbar">
@@ -16,36 +16,14 @@ import "@/styles/navbar.css"
   </div>
 
   <ul class="nav-links main-links" id="main-links">
-
-    <li><a href="/">Home</a></li>
-
-    <li class="dropdown">
-      <a href="#" class="dropbtn">
-        About Us <span class="arrow">&#9662;</span>
-      </a>
-      <ul class="dropdown-content">
-        <li><a href="/about/aims">Our Aims & Objectives</a></li>
-        <li><a href="/about/history">Our History</a></li>
-      </ul>
-    </li>
-
-    <li class="dropdown">
-      <a href="#" class="dropbtn">
-        Learn <span class="arrow">&#9662;</span>
-      </a>
-      <ul class="dropdown-content">
-        <li><a href="/learn/ai_tools">AI Tools & Resources</a></li>
-        <li><a href="/learn/ml_topics">ML Topics</a></li>
-        <li><a href="/learn/ml_playground">ML Playground</a></li>
-      </ul>
-    </li>
-
-    <li><a href="/challenges">Challenges</a></li>
+    <li><a href="/about">About</a></li>
     <li><a href="/events">Events</a></li>
+    <li><a href="/projects">Projects</a></li>
+    <li><a href="/learn">Learn</a></li>
+    <li><a href="/contact">Connect</a></li>
 
     <!-- For mobile only -->
     <div class="mobile-only">
-      <li class="contact-button"><a href="/contact">Contact Us</a></li>
       <li class="pink-button"><a href="https://campus.hellorubric.com/?tab=memberships&s=11397">Join Us</a></li>
     </div>
 
@@ -53,8 +31,12 @@ import "@/styles/navbar.css"
   </ul>
 
   <div class="secondary-links">
-    <a href="https://campus.hellorubric.com/?tab=memberships&s=11397" class="btn signup">Join Us</a>
-    <a href="/contact" class="contact-link contact">Contact Us</a>
+    <a href="https://campus.hellorubric.com/?tab=memberships&s=11397" class="btn btn-outline">
+      <svg class="btn-border" viewBox="0 0 100 40" preserveAspectRatio="none">
+        <rect x="1" y="1" width="98" height="38" rx="18" ry="18" />
+      </svg>
+      <span>Join Us</span>
+    </a>
   </div>
 </nav>
 
@@ -130,21 +112,27 @@ toggleButton.addEventListener("click", e => {
 });
 </script>
 
-
 <script type="module" client:load>
   const navContainer = document.querySelector('.nav-links');
-  // Include only top-level links and dropdown toggles
-  const links        = Array.from(navContainer.querySelectorAll('a:not(.dropdown-content a)'));
-  const indicator    = navContainer.querySelector('.indicator');
+  const links = Array.from(
+    navContainer.querySelectorAll('a:not(.dropdown-content a)')
+  );
+  const indicator = navContainer.querySelector('.indicator');
 
-  let activeLink;
-  let indicatorTimeout;
+  let activeLink = null;
+  let indicatorTimeout = null;
   const currentPath = window.location.pathname;
 
-  // 1) Try exact match on top-level link
-  activeLink = links.find(link => link.getAttribute('href') === currentPath);
+  /* -----------------------------
+     ACTIVE LINK DETECTION
+  ----------------------------- */
 
-  // 2) Try prefix match for top-level link
+  // 1) Exact match
+  activeLink = links.find(
+    link => link.getAttribute('href') === currentPath
+  );
+
+  // 2) Prefix match (ignore home "/")
   if (!activeLink) {
     activeLink = links.find(link => {
       const href = link.getAttribute('href');
@@ -152,36 +140,57 @@ toggleButton.addEventListener("click", e => {
     });
   }
 
-  // 3) If still no match, look inside each dropdown’s children
+  // 3) Dropdown children → parent toggle
   if (!activeLink) {
     document.querySelectorAll('.dropdown').forEach(drop => {
       const toggle = drop.querySelector('.dropbtn');
-      const childs = drop.querySelectorAll('.dropdown-content a');
-      childs.forEach(child => {
+      const children = drop.querySelectorAll('.dropdown-content a');
+
+      children.forEach(child => {
         const href = child.getAttribute('href');
-        if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
+        if (
+          href === currentPath ||
+          (href !== '/' && currentPath.startsWith(href))
+        ) {
           activeLink = toggle;
         }
       });
     });
   }
 
-  // Mark active and position indicator
+  /* -----------------------------
+     INDICATOR HELPERS
+  ----------------------------- */
+
+  function updateIndicator(linkEl) {
+    const linkBox = linkEl.getBoundingClientRect();
+    const containerBox = navContainer.getBoundingClientRect();
+    const offsetX = linkBox.left - containerBox.left;
+
+    indicator.style.width = `${linkBox.width}px`;
+    indicator.style.left = `${offsetX}px`;
+    indicator.classList.add('visible');
+  }
+
+  function hideIndicator() {
+    indicator.classList.remove('visible');
+  }
+
+  /* -----------------------------
+     INITIAL STATE
+  ----------------------------- */
+
   if (activeLink) {
     activeLink.classList.add('active');
     updateIndicator(activeLink);
+  } else {
+    hideIndicator(); // HOME PAGE → no indicator
   }
 
-  function updateIndicator(linkEl) {
-    const linkBox      = linkEl.getBoundingClientRect();
-    const containerBox = navContainer.getBoundingClientRect();
-    const offsetX      = linkBox.left - containerBox.left;
+  /* -----------------------------
+     HOVER BEHAVIOR
+  ----------------------------- */
 
-    indicator.style.width = `${linkBox.width}px`;
-    indicator.style.left  = `${offsetX}px`;
-  }
-
-  // On hover, move the indicator
   links.forEach(link => {
     link.addEventListener('mouseenter', () => {
       clearTimeout(indicatorTimeout);
@@ -189,25 +198,34 @@ toggleButton.addEventListener("click", e => {
     });
   });
 
-  // On mouse leave, return to active
+  /* -----------------------------
+     LEAVE NAVBAR
+  ----------------------------- */
+
   navContainer.addEventListener('mouseleave', () => {
     clearTimeout(indicatorTimeout);
     indicatorTimeout = setTimeout(() => {
-      if (activeLink) updateIndicator(activeLink);
+      if (activeLink) {
+        updateIndicator(activeLink);
+      } else {
+        hideIndicator(); // HOME → disappear entirely
+      }
     }, 100);
   });
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const link = document.querySelector('.secondary-links a.contact');
-    if (!link) return;
+  /* -----------------------------
+     SECONDARY CONTACT LINK
+  ----------------------------- */
 
-    // Normalize: remove trailing slash & file extensions
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactLink = document.querySelector('.secondary-links a.contact');
+    if (!contactLink) return;
+
     let path = window.location.pathname.replace(/\/$/, '');
     path = path.replace(/(\/index\.html)$/, '');
 
     if (path === '/contact') {
-      link.classList.add('active');
+      contactLink.classList.add('active');
     }
   });
-
 </script>

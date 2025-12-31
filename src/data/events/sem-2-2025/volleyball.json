@@ -1,0 +1,25 @@
+{
+  "overview": {
+    "title": "Volleyball Tournament",
+    "date": "2025-09-25",
+    "dateLabel": "25th September 2025",
+    "category": "Social",
+    "excerpt": "🏐 Bump, Set, Spike! Join QUT AMS x Women in Tech for a fun Volleyball Tournament. Play, connect, and enjoy friendly competition! 💥",
+    "image": "/events/Social/Social Night - 1.jpg",
+    "featured": false
+  },
+  "details": {
+    "title": "Volleyball Tournament",
+    "fullDate": "Thursday, 25 September 2025",
+    "time": "10:30 AM – 12:30 PM",
+    "location": "QUT Kelvin Grove Indoor Sports Courts, 44 Musk Ave, Kelvin Grove",
+    "longDescription": "QUT AMS x Women in Tech are teaming up to bring you an exciting Volleyball Tournament! Get ready to play, connect, and collaborate with fellow members. Enjoy friendly competition, make new friends, and have a smashing time on the court! Tickets are available here: https://campus.hellorubric.com/?eid=41299. Don’t miss out! 🎉🏐",
+    "isCollab": "true",
+    "registration": {
+      "required": "true",
+      "link": "https://campus.hellorubric.com/?eid=41299",
+      "capacity": "",
+      "price": "$5"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Physical Activity",
+    "category": "K-Nearest Neighbours",
+    "excerpt": "Classify different types of physical activity from sensor data using KNN.",
+    "image": "/projects/physical activity.jpeg"
+  },
+  "details": {
+    "title": "Physical Activity",
+    "github": "https://github.com/QUT-AIML/K-Nearest-Neighbours",
+    "longDescription": "This project uses K-Nearest Neighbours (KNN) to classify physical activities from sensor data, including cycling, jogging, football, and jump rope. The dataset includes multiple CSV files, and users can explore distance metrics, feature scaling, and optimal K selection to enhance classification results."
+  }
+}

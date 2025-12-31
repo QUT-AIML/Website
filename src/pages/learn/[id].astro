@@ -1,0 +1,173 @@
+---
+import "@/styles/global.css";
+import "@/styles/learn/learn-details.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+
+// Dynamic routes
+export async function getStaticPaths() {
+  const modules = import.meta.glob('../../data/learn/**/*.json', { eager: true });
+
+  return Object.keys(modules)
+    .map(path => {
+      const match = path.match(/\/([^/]+)\.json$/);
+      return match ? { params: { id: match[1] } } : null;
+    })
+    .filter(Boolean);
+}
+
+// Get route param
+const { id } = Astro.params;
+
+// Load JSON data
+const modules = import.meta.glob('../../data/learn/**/*.json');
+const matchKey = Object.keys(modules).find(k => k.endsWith(`/${id}.json`));
+
+let notFound = false;
+let learning = null;
+
+if (!matchKey) {
+  notFound = true;
+} else {
+  const mod = await modules[matchKey]();
+  learning = mod.default ?? mod;
+}
+---
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="description" content={learning?.description ?? "Learning resource"} />
+  <title>{learning?.title ?? "Learning"} — QUT AIML</title>
+</head>
+
+<body class="background-dots">
+  <Navigation />
+
+  <main class="learn-detail-space">
+    {notFound ? (
+      <section class="learn-detail-card">
+        <h1>Learning not found</h1>
+        <a href="/learn" class="learn-link">← Back to Learn</a>
+      </section>
+    ) : (
+      <article class="learn-detail-card">
+
+        <!-- BACK -->
+        <nav class="learn-back">
+          <a href="/learn" class="learn-link">← Back to Learn</a>
+        </nav>
+
+        <!-- TITLE -->
+        <h1 class="learn-title">{learning.title}</h1>
+
+        <!-- META -->
+        <div class="learn-meta">
+          {learning.category && <span class="meta-pill">{learning.category}</span>}
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="learn-divider"></div>
+
+        <!-- DESCRIPTION -->
+        {learning.description && (
+          <section class="learn-description">
+            <p>{learning.description}</p>
+          </section>
+        )}
+
+        <!-- HERO IMAGE -->
+        {learning.image && (
+          <section class="learn-hero">
+            <img src={learning.image} alt={learning.title} />
+          </section>
+        )}
+
+        <!-- OVERVIEW -->
+        {learning.overview?.definition && (
+          <section class="learn-section">
+            <h3>What is it?</h3>
+            <p>{learning.overview.definition}</p>
+          </section>
+        )}
+
+        <!-- KEY CONCEPTS -->
+        {learning.overview?.key_concepts && (
+          <section class="learn-section">
+            <h3>Key Concepts</h3>
+            <ul>
+              {learning.overview.key_concepts.map(k => <li>{k}</li>)}
+            </ul>
+          </section>
+        )}
+
+        <!-- TUTORIALS -->
+        {learning.tutorials && (
+          <section class="learn-section">
+            <h3>Tutorials</h3>
+            <ul class="learn-links">
+              {learning.tutorials.map(t => (
+                <li>
+                  <a href={t.url} target="_blank" class="learn-link">{t.title}</a>
+                  <p>{t.description}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <!-- VIDEOS -->
+        {learning.videos && (
+          <section class="learn-section">
+            <h3>Videos</h3>
+            <div class="learn-video-grid">
+              {learning.videos.map(v => (
+                <iframe
+                  src={v.url}
+                  title={v.title}
+                  allowfullscreen
+                ></iframe>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- APPLICATIONS -->
+        {learning.applications && (
+          <section class="learn-section">
+            <h3>Applications</h3>
+            <ul>
+              {learning.applications.map(a => <li>{a}</li>)}
+            </ul>
+          </section>
+        )}
+
+        <!-- RESOURCES -->
+        {learning.resources && (
+          <section class="learn-section">
+            <h3>Resources</h3>
+            <ul class="learn-links">
+              {learning.resources.map(r => (
+                <li><a href={r.url} target="_blank" class="learn-link">{r.title}</a></li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <!-- TIPS -->
+        {learning.tips && (
+          <section class="learn-section learn-tips">
+            <h3>Tips</h3>
+            <ul>
+              {learning.tips.map(t => <li>{t}</li>)}
+            </ul>
+          </section>
+        )}
+
+      </article>
+    )}
+  </main>
+
+  <Footer />
+</body>
+</html>

@@ -1,0 +1,227 @@
+/* ===============================
+   FOOTER BASE
+================================ */
+
+.site-footer {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  margin-top: auto;
+
+  /* Frosted glass effect */
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+/* ===============================
+   INNER LAYOUT
+================================ */
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr; /* left + right */
+}
+
+.footer-left-inner {
+  padding-left: 5rem; /* add padding only inside the left half */
+  display: flex;       /* optional: align columns horizontally */
+  gap: 4rem;           /* spacing between columns */
+}
+
+
+/* Right-align the social icons and copyright */
+.footer-right .footer-social,
+.footer-right .copyright {
+  margin-left: auto;
+  display: flex; /* ensures flex behavior for the icons */
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 4rem;
+}
+
+/* Optional: add spacing between social icons and copyright */
+.footer-right .copyright {
+  margin-top: 0.2rem; 
+  padding-bottom: 1.5rem;
+}
+
+/* ===============================
+   COLUMNS
+================================ */
+
+.footer-column {
+  padding-top: 3rem;
+  padding-bottom: 2rem;
+}
+
+.footer-column h4 {
+  color: var(--color-primary);
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 0.10rem;
+}
+
+.footer-column a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* 🔒 prevent dark hover */
+.footer-column a:hover {
+  color: var(--color-primary);
+  opacity: 0.7;
+}
+
+.footer-column p {
+  margin: 0.15rem 0;
+  color: #e5e5e5;
+}
+
+.footer-column .mt {
+  margin-top: 1.2rem;
+}
+
+
+/* ===============================
+   RIGHT SECTION WITH IMAGE BACKGROUND
+================================ */
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  overflow: hidden; /* clip anything outside */
+}
+
+/* Background image overlay */
+.footer-right::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150%; /* extend beyond the footer */
+  background-image: url('../../public/background-rubric.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.7;
+  z-index: 1;
+  transform: translateY(-25%); /* optional: adjust visible portion */
+}
+
+/* Ensure content stays above background */
+.footer-right > * {
+  position: relative;
+  z-index: 2;
+}
+
+
+
+/* ===============================
+   SOCIAL ICONS
+================================ */
+
+.footer-social {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.footer-social a {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.footer-social a:hover {
+  border-color: #fff;
+}
+
+.footer-social svg {
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+}
+
+/* ===============================
+   COPYRIGHT
+================================ */
+
+.copyright {
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+/* ===============================
+   SHAPE (RIGHT ONLY)
+================================ */
+
+
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+
+  /* Stack left columns vertically without gap */
+  .footer-left-inner {
+    flex-direction: column;
+    padding-left: 1.5rem;   /* keep some horizontal padding */
+    gap: 1rem;                 /* remove vertical gap */
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Remove padding inside columns */
+  .footer-left-inner .footer-column {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .footer-inner {
+    grid-template-columns: 1fr; /* stack left + right */
+  }
+
+  .footer-right {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-social {
+    flex-wrap: wrap;       /* allow icons to wrap */
+    gap: 0.75rem;          /* spacing between icons */
+    justify-content: center; /* center horizontally */
+    padding-top: 1rem;
+    padding-left: 5rem;
+  }
+
+  .footer-right .footer-social,
+  .footer-right .copyright {
+    justify-content: center;
+  }
+
+  .footer-social a {
+    flex: 0 1 calc(33.33% - 0.5rem); /* 3 icons per row */
+  }
+}

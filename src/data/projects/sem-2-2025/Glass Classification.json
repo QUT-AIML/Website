@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Glass Classification",
+    "category": "K-Nearest Neighbours",
+    "excerpt": "Classify types of glass based on chemical composition using KNN.",
+    "image": "/projects/glass type.jpeg"
+  },
+  "details": {
+    "title": "Glass Classification",
+    "github": "https://github.com/QUT-AIML/K-Nearest-Neighbours",
+    "longDescription": "This project uses K-Nearest Neighbours (KNN) to classify glass types based on their chemical properties. The dataset contains various chemical compositions, and users can experiment with distance metrics, feature scaling, and K selection to improve classification accuracy."
+    }
+}

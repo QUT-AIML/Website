@@ -1,0 +1,19 @@
+{
+  "overview": {
+    "title": "Welcome Night",
+    "date": "2025-07-22",
+    "dateLabel": "22nd Jul 2025",
+    "category": "Social",
+    "excerpt": "✨ Join us for the QUT AI & ML Society Welcome Night! Meet our members, discover workshops, projects, and enjoy games, activities, and free pizza! 🍕",
+    "image": "/events/Social/Social Night - 1.jpg",
+    "featured": true
+  },
+  "details": {
+    "title": "Welcome Night",
+    "fullDate": "Tuesday, 22 July 2025",
+    "time": "5:30 PM – 7:30 PM",
+    "location": "QUT GP-D108",
+    "longDescription": "Come and get to know what the QUT AI & ML Society is all about. Meet our members, find out what we have planned for the year, and see how you can get involved in our workshops, projects, and fun socials. Meet like-minded students and future collaborators, have fun with games and activities, connect, relax, and belong in our growing community. And yes… free pizza! 🍕🎉",
+    "isCollab": "false"
+  }
+}

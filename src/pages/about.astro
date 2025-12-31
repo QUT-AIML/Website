@@ -1,0 +1,301 @@
+---
+import "@/styles/global.css";
+import "@/styles/about/about.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+
+// Import all JSON files eagerly
+const teamFiles = import.meta.glob('/src/data/teams/*.json', { eager: true, query: '?json' });
+
+// Get the latest team JSON based on the year in the filename
+const latestTeamFile = Object.keys(teamFiles)
+  .map(path => ({
+    path,
+    year: parseInt(path.match(/(\d{4})/)[0]) // extract year
+  }))
+  .sort((a, b) => b.year - a.year)[0].path;
+
+// Get the JSON array from the file
+const teamData = teamFiles[latestTeamFile].default;
+
+// Filter out overview
+const teamsForClient = teamData.filter(t => t.id !== "overview");
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning."
+    />
+    <title>QUT AIML</title>
+  </head>
+
+  <body class="background-dots">
+    <Navigation />
+
+    <div class="content-wrapper about-space">
+      <!-- ABOUT -->
+      <section class="pink-panel">
+        <p class="pink-title">About QUT AIML</p>
+      </section>
+
+		<div class="info-panel-wrapper">
+			<div class="thick-line-behind"></div>			
+			<section class="info-panel">
+				The QUT AI & ML Society is a student‑led community dedicated to empowering the next generation of innovators in artificial intelligence and machine learning. 
+        We bring together students of all experience levels to learn, experiment, and build through hands‑on workshops, technical projects, and AI‑focused hackathons. 
+        We also create opportunities for industry engagement and social connection, giving members the space to collaborate, share ideas, and most importantly, 
+        develop something extraordinary.
+				</p>
+			</section>
+    </div>
+
+    <div class="content-wrapper>">
+
+      <!-- OBJECTIVES -->
+      <div class="objectives-wrapper">
+        <div class="thick-line-behind"></div>
+
+        <section class="objectives-section">
+          <div class="objectives-inner">
+            <div class="objectives-header">
+              <span class="banner left"></span>
+              <h2>OUR<br /><span>OBJECTIVES</span></h2>
+              <span class="banner right"></span>
+            </div>
+
+            <div class="objectives-cards">
+              <div class="objective-item">
+                <div class="objective-number">1</div>
+                <div class="objective-card">
+                  <p>Gain insights and guidance from alumni, professionals, and leaders in the AI and ML industry.</p>
+                </div>
+              </div>
+
+              <div class="objective-item">
+                <div class="objective-number">2</div>
+                <div class="objective-card">
+                  <p>Collaborate, experiment, and build impactful projects focused on artificial intelligence and machine learning.</p>
+                </div>
+              </div>
+
+              <div class="objective-item">
+                <div class="objective-number">3</div>
+                <div class="objective-card">
+                  <p>Connect and network with students, researchers, and professionals in the AI, ML, and broader tech community.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+      <!-- TEAM -->
+      <section class="team-section">
+        <!-- Pink panel header + button on same row -->
+        <div class="pink-panel-flex">
+          <p class="pink-title">Meet the Team</p>
+          <button
+            class="history-button"
+            onclick="window.location.href='/about/history';"
+          >
+            Our History
+          </button>
+        </div>
+
+        <!-- Team name below -->
+        <div class="content-wrapper centered-box">
+          <section class="minimal-padding-panel spacing-top">
+            <p class="section-content">
+              <div id="team-title" class="team-name"></div>
+            </p>
+          </section>
+        </div>
+
+        <!-- Team carousel grid -->
+        <div class="team-grid-wrapper">
+          <div class="team-row">
+            <div class="side-bar left">
+              <button class="carousel-arrow left">‹</button>
+            </div>
+
+            <div
+              class="team-grid"
+              id="team-grid"
+              data-teams={JSON.stringify(teamsForClient)}
+            ></div>
+
+            <div class="side-bar right">
+              <button class="carousel-arrow right">›</button>
+            </div>
+          </div>
+
+          <div class="team-dots" id="team-dots"></div>
+        </div>
+
+        <!-- Mobile arrow wrapper above the grid -->    
+        <div class="team-arrows-mobile-panel">
+          <button class="carousel-arrow left">‹</button>
+          <button class="carousel-arrow right">›</button>
+        </div>
+
+      </section>
+
+
+    </div>
+
+    <Footer />
+
+<script>
+  const grid = document.getElementById("team-grid");
+  const title = document.getElementById("team-title");
+  const dotsContainer = document.getElementById("team-dots");
+  const leftArrow = document.querySelector(".carousel-arrow.left");
+  const rightArrow = document.querySelector(".carousel-arrow.right");
+    
+  const mobileLeftArrow = document.querySelector(".team-arrows-mobile-panel .left");
+  const mobileRightArrow = document.querySelector(".team-arrows-mobile-panel .right");
+
+  // Attach click handlers
+  mobileLeftArrow?.addEventListener("click", () => { prev(); resetAuto(); });
+  mobileRightArrow?.addEventListener("click", () => { next(); resetAuto(); });
+
+
+  const teams = JSON.parse(grid.dataset.teams);
+  const AUTO_DELAY = 7000;
+
+  let PAGE_SIZE = window.innerWidth <= 768 ? 2 : 4; // 2 on mobile, 4 on desktop
+  let globalPages = [];
+  let currentGlobalIndex = 0;
+  let autoTimer;
+
+  function buildPages() {
+    globalPages = [];
+    teams.forEach(team => {
+      for (let i = 0; i < team.items.length; i += PAGE_SIZE) {
+        globalPages.push({
+          teamTitle: team.title,
+          items: team.items.slice(i, i + PAGE_SIZE),
+          pageIndex: i / PAGE_SIZE,
+        });
+      }
+    });
+  }
+
+  function renderDots() {
+    dotsContainer.innerHTML = "";
+    globalPages.forEach((_, i) => {
+      const dot = document.createElement("span");
+      dot.className = "team-dot" + (i === currentGlobalIndex ? " active" : "");
+      dot.onclick = () => {
+        currentGlobalIndex = i;
+        resetAuto();
+        renderPage(currentGlobalIndex);
+      };
+      dotsContainer.appendChild(dot);
+    });
+  }
+
+function renderPage(index) {
+  const page = globalPages[index];
+
+  title.textContent =
+    page.pageIndex > 0
+      ? `${page.teamTitle} – Continued`
+      : page.teamTitle;
+
+  const cards = grid.querySelectorAll(".team-card");
+
+  // Fade out inner content
+  cards.forEach(card => card.classList.add("hidden-content"));
+
+  // Wait 1 second while inner content is hidden
+  setTimeout(() => {
+    grid.innerHTML = "";
+
+    // Add new cards
+    page.items.forEach(member => {
+      const card = document.createElement("div");
+      card.className = "team-card";
+
+      card.innerHTML = `
+        <div class="team-photo">
+          <img
+            src="/people/${member.name.split(" ")[0]}.png"
+            alt="${member.name}"
+            onerror="this.src='/people/Anonymous.png';"
+          />
+        </div>
+        <div class="team-info">
+          <span class="role">${member.role}</span>
+          <h3>${member.name}</h3>
+        </div>
+      `;
+
+      // start hidden
+      card.classList.add("hidden-content");
+      grid.appendChild(card);
+
+      // fade in content
+      requestAnimationFrame(() => card.classList.remove("hidden-content"));
+    });
+
+    // Fill remaining slots with empty cards
+    const emptySlots = PAGE_SIZE - page.items.length;
+    for (let i = 0; i < emptySlots; i++) {
+      const emptyCard = document.createElement("div");
+      emptyCard.className = "team-card";
+      emptyCard.innerHTML = `<div class="team-photo"></div><div class="team-info"></div>`;
+      emptyCard.classList.add("hidden-content");
+      grid.appendChild(emptyCard);
+      requestAnimationFrame(() => emptyCard.classList.remove("hidden-content"));
+    }
+
+    // Update arrows and dots
+    leftArrow.style.visibility = index === 0 ? "hidden" : "visible";
+    rightArrow.style.visibility = index === globalPages.length - 1 ? "hidden" : "visible";
+    renderDots();
+  }, 1000); // 1 second content hidden
+}
+
+
+  function next() {
+    currentGlobalIndex =
+      currentGlobalIndex < globalPages.length - 1 ? currentGlobalIndex + 1 : 0;
+    renderPage(currentGlobalIndex);
+  }
+
+  function prev() {
+    currentGlobalIndex =
+      currentGlobalIndex > 0 ? currentGlobalIndex - 1 : globalPages.length - 1;
+    renderPage(currentGlobalIndex);
+  }
+
+  function resetAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(next, AUTO_DELAY);
+  }
+
+  rightArrow.onclick = () => { next(); resetAuto(); };
+  leftArrow.onclick = () => { prev(); resetAuto(); };
+
+  // Rebuild pages if window is resized (mobile ↔ desktop)
+  window.addEventListener("resize", () => {
+    const newPageSize = window.innerWidth <= 768 ? 2 : 4;
+    if (newPageSize !== PAGE_SIZE) {
+      PAGE_SIZE = newPageSize;
+      currentGlobalIndex = 0;
+      buildPages();
+      renderPage(0);
+    }
+  });
+
+  buildPages();
+  resetAuto();
+  renderPage(0);
+</script>

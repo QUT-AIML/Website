@@ -1,0 +1,323 @@
+---
+import "@/styles/global.css";
+import "@/styles/learn/learn.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+import articlesIndex from "@/data/learn/index.js";
+
+const learnings = articlesIndex?.topics ?? [];
+
+// Determine dynamic categories
+const allCategoriesSet = new Set();
+learnings.forEach(ev => {
+  const c = ev.category ?? "Other";
+  if (c) allCategoriesSet.add(c);
+});
+const categories = ["All", ...Array.from(allCategoriesSet).sort()];
+
+// Featured learnings (strictly featured)
+const featuredLearnings = learnings.filter(ev => ev.featured === true);
+---
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="description" content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning." />
+  <title>QUT AIML</title>
+</head>
+
+<body class="background-dots">
+  <Navigation />
+
+  <div class="content-wrapper learning-space">
+    <!-- Featured Learnings -->
+    {featuredLearnings.length > 0 && (
+      <>
+        <section class="pink-panel">
+          <p class="pink-title">Featured Learning</p>
+        </section>
+        <section class="featured-learning-panel">
+          <div class="featured-learning-grid">
+            {featuredLearnings.map(ev => (
+              <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
+                <a href={`/learn/${ev.id}`}>
+                  <div class="card-media">
+                    {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title">{ev.title}</h3>
+                    <div class="card-divider"></div>
+                    <time class="card-date">{ev.dateLabel || ev.date}</time>
+                    <p class="card-description">{ev.excerpt}</p>
+                    <div class="card-footer">
+                      <span class="card-view-more">View more →</span>
+                    </div>
+                  </div>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+      </>
+    )}
+
+    <!-- All Learnings -->
+    <section class="pink-panel">
+      <p class="pink-title">Learn about AI & ML</p>
+    </section>
+
+    <div class="key-content">
+      <section class="learning-controls">
+        <div class="controls-row">
+          <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="16.65" y1="16.65" x2="21" y2="21" />
+            </svg>
+            <input id="learning-search" type="search" placeholder="Search" aria-label="Search learning" />
+          </div>
+
+          <div class="type-filter-wrapper">
+            <span class="type-filter-label">Category:</span>
+            <div id="type-filters" class="type-filter-pill">
+              {categories.map(c => (
+                <button class={`type-btn ${c === "All" ? "active" : ""}`} data-category={c} type="button">{c}</button>
+              ))}
+            </div>
+          </div>
+
+          <!-- FILTER POPOVER -->
+            <div class="filters-wrapper">
+              <button
+                id="filters-toggle"
+                aria-haspopup="true"
+                aria-expanded="false"
+                type="button"
+                class="filters-toggle-btn"
+              >
+                <svg class="filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24">
+                  <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
+                </svg>
+              </button>
+
+              <div
+                id="filters-popover"
+                role="dialog"
+                aria-modal="false"
+                class="filters-popover"
+              >
+                <div class="filters-popover-content">
+                  <div class="filter-group">
+                    <label for="sort-select-pop">Sort</label>
+                    <select id="sort-select-pop">
+                      <option value="none">None</option>
+                      <option value="title-asc">Title A–Z</option>
+                      <option value="title-desc">Title Z–A</option>
+                      <option value="date-asc">Date Earliest → Latest</option>
+                      <option value="date-desc">Date Latest → Earliest</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="learning-panel">
+        <section id="learning-grid" class="learning-grid">
+          {learnings.map(ev => (
+            <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
+              <a href={`./learn/${ev.id}`}>
+                <div class="card-media">
+                  {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
+                </div>
+                <div class="card-body">
+                  <h3 class="card-title">{ev.title}</h3>
+                  <div class="card-divider"></div>
+                  <time class="card-date">{ev.dateLabel || ev.date}</time>
+                  <p class="card-description">{ev.excerpt}</p>
+                  <div class="card-footer">
+                    <span class="card-view-more">View more →</span>
+                  </div>
+                </div>
+              </a>
+            </article>
+          ))}
+        </section>
+      </section>
+      
+      <div id="learning-pagination"></div>
+
+    </div>
+  </div>
+
+  <Footer />
+</body>
+</html>
+
+
+<script type="module">
+const searchInput = document.getElementById('learning-search');
+const grid = document.getElementById('learning-grid');
+const sortDropdown = document.getElementById('sort-select-pop');
+const filtersToggle = document.getElementById('filters-toggle');
+const filtersPopover = document.getElementById('filters-popover');
+let paginationContainer = document.getElementById('learning-pagination');
+
+if (!paginationContainer) {
+  paginationContainer = document.createElement('div');
+  paginationContainer.id = 'learning-pagination';
+  paginationContainer.style.textAlign = 'center';
+  paginationContainer.style.marginTop = '2rem';
+  grid.parentNode.appendChild(paginationContainer);
+}
+
+const LEARNINGS_PER_PAGE = 6;
+let currentPage = 1;
+let filteredCards = [];
+let categoryButtons = [];
+
+// Store all cards
+const allCards = Array.from(grid.querySelectorAll('.learn-card'));
+
+// Determine unique categories
+const allCategoriesSet = new Set(allCards.map(c => c.dataset.category || 'Other'));
+const allCategories = ['All', ...Array.from(allCategoriesSet).sort()];
+
+// Build card HTML
+function buildCardHTML(card) {
+  return `<article class="learn-card" data-category="${card.dataset.category}" data-title="${card.dataset.title}" data-date="${card.dataset.date}">
+    ${card.innerHTML}
+  </article>`;
+}
+
+// Render category buttons
+function renderCategoryButtons(activeCategory = 'All') {
+  const container = document.getElementById('type-filters');
+  container.innerHTML = '';
+  allCategories.forEach(c => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset.category = c;
+    btn.textContent = c;
+    btn.className = `type-btn ${c === activeCategory ? 'active' : ''}`;
+    btn.addEventListener('click', () => {
+      categoryButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentPage = 1;
+      applyFilters();
+    });
+    container.appendChild(btn);
+  });
+  categoryButtons = Array.from(container.querySelectorAll('.type-btn'));
+}
+
+// Apply filters and sorting
+function applyFilters() {
+  const query = searchInput.value.trim().toLowerCase();
+  const activeBtn = categoryButtons.find(b => b.classList.contains('active'));
+  const selectedCategory = activeBtn ? activeBtn.dataset.category : 'All';
+
+  filteredCards = allCards.filter(card => {
+    const title = card.dataset.title || '';
+    const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+    const cardCategory = card.dataset.category || '';
+    const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
+    const matchesCategory = selectedCategory === 'All' || cardCategory === selectedCategory;
+    return matchesQuery && matchesCategory;
+  });
+
+  applySort();
+  currentPage = 1;
+  renderPage();
+  renderPagination();
+  renderNoResults();
+}
+
+// Sorting
+function applySort() {
+  const sortOption = sortDropdown.value;
+  filteredCards.sort((a, b) => {
+    switch(sortOption) {
+      case 'title-asc': return a.dataset.title.localeCompare(b.dataset.title);
+      case 'title-desc': return b.dataset.title.localeCompare(a.dataset.title);
+      case 'date-asc': return new Date(a.dataset.date) - new Date(b.dataset.date);
+      case 'date-desc': return new Date(b.dataset.date) - new Date(a.dataset.date);
+      default: return 0;
+    }
+  });
+}
+
+// Render current page
+function renderPage() {
+  const start = (currentPage - 1) * LEARNINGS_PER_PAGE;
+  const end = start + LEARNINGS_PER_PAGE;
+  const cardsToShow = filteredCards.slice(start, end);
+  grid.innerHTML = cardsToShow.map(buildCardHTML).join('');
+}
+
+// Render pagination
+function renderPagination() {
+  const totalPages = Math.ceil(filteredCards.length / LEARNINGS_PER_PAGE);
+  if(totalPages <= 1) { paginationContainer.innerHTML = ''; return; }
+
+  const isMobile = window.innerWidth <= 768;
+  let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
+
+  if (isMobile) {
+    let startPage = currentPage === totalPages && totalPages > 1 ? currentPage - 1 : currentPage;
+    let endPage = Math.min(currentPage + 1, totalPages);
+    for (let i = startPage; i <= endPage; i++) {
+      html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+    }
+  } else {
+    for (let i = 1; i <= totalPages; i++) {
+      html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+    }
+  }
+
+  html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
+  paginationContainer.innerHTML = html;
+
+  Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
+    btn.addEventListener('click', () => {
+      let page = parseInt(btn.dataset.page);
+      if (isNaN(page)) return;
+      page = Math.min(Math.max(page, 1), totalPages);
+      currentPage = page;
+      renderPage();
+      renderPagination();
+    });
+  });
+}
+
+// No results message
+function renderNoResults() {
+  let msg = document.getElementById('no-learning-message');
+  if (!msg) {
+    msg = document.createElement('div');
+    msg.id = 'no-learning-message';
+    msg.textContent = 'No learnings found';
+    msg.style.textAlign = 'center';
+    msg.style.padding = '2rem';
+    msg.style.gridColumn = '1 / -1';
+    grid.appendChild(msg);
+  }
+  msg.style.display = filteredCards.length === 0 ? 'block' : 'none';
+}
+
+// Event listeners
+searchInput.addEventListener('input', applyFilters);
+sortDropdown.addEventListener('change', applyFilters);
+filtersToggle.addEventListener('click', e => {
+  e.stopPropagation();
+  filtersPopover.style.display = (filtersPopover.style.display==='block') ? 'none' : 'block';
+});
+
+// Initialize category buttons and filters
+renderCategoryButtons();
+applyFilters();
+</script>

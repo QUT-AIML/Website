@@ -1,0 +1,396 @@
+---
+import "@/styles/global.css";
+import "@/styles/projects/projects.css";
+import Navigation from "@/components/Navigation.astro";
+import Footer from "@/components/Footer.astro";
+import projectsIndex from "@/data/projects/index.js";
+
+const semesters = projectsIndex?.semesters ?? [];
+
+// Flatten projects and attach semester id
+const projectsBySemester = semesters
+  .map(s => (s.projects ?? []).map(ev => ({ ...ev, semesterId: s.id })))
+  .flat();
+
+// Current projects: always the latest semester
+const latestSemester = semesters[0] ?? null;
+const currentProjects = (latestSemester?.projects ?? []).map(p => ({
+  ...p,
+  semesterId: latestSemester.id
+}));
+
+// Sort semesters: newest year first, then highest semester
+semesters.sort((a, b) => {
+  if (a.year && b.year) {
+    if (a.year !== b.year) return b.year - a.year; // newest year first
+    const aSem = a.sem ?? -1;
+    const bSem = b.sem ?? -1;
+    return bSem - aSem; // highest semester first
+  }
+  if (a.year && !b.year) return -1;
+  if (!a.year && b.year) return 1;
+  return b.folder.localeCompare(a.folder);
+});
+
+// Past projects: exclude latest semester and empty semesters
+const pastProjects = semesters
+  .filter(s => s.id !== latestSemester?.id && (s.projects?.length ?? 0) > 0)
+  .flatMap(s => (s.projects ?? []).map(p => ({ ...p, semesterId: s.id })));
+
+// Determine dynamic types from PAST projects only
+const preferred = ["CNN", "Linear Regression"];
+const allTypesSet = new Set();
+
+pastProjects.forEach(ev => {
+  const t = (ev.type ?? ev.category ?? "Other")?.toString() ?? "Other";
+  allTypesSet.add(t);
+});
+
+let types = ["All"];
+
+if (allTypesSet.size > 1) {
+  const preferredExisting = preferred.filter(p => allTypesSet.has(p));
+  const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
+  remaining.sort((a, b) => a.localeCompare(b));
+
+  types = ["All", ...preferredExisting, ...remaining];
+}
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning."
+    />
+    <title>QUT AIML</title>
+    <link rel="stylesheet" href="/styles/global.css" />
+    <link rel="stylesheet" href="/styles/projects/projects.css" />
+  </head>
+
+  <body class="background-dots">
+    <Navigation />
+
+    <div class="content-wrapper top-projects-space">
+      <!-- ABOUT -->
+      <section class="pink-panel">
+        <p class="pink-title">Club Projects</p>
+      </section>
+
+      <div class="info-panel-wrapper">
+        <div class="thick-line-behind"></div>
+        <section class="info-panel">
+          The QUT AI & ML Society runs collaborative projects that bring students, researchers, and industry partners together to build practical AI and machine‑learning solutions. 
+          Projects range from developer tools and data‑driven apps to research prototypes and everyday innovations, with clear roles for contributors at every skill level. 
+          We pair hands‑on work with mentorship, workshops, and hackathons to help members learn, share code, and grow their portfolios while applying AI responsibly. 
+          Join to contribute, learn from peers, and help shape projects that make a real impact.
+        </section>
+      </div>
+
+      <!-- CURRENT PROJECTS -->
+      <section class="pink-panel current-projects-space">
+        <p class="pink-title">Current Projects ({latestSemester.label})</p>
+      </section>
+
+      {currentProjects.length === 0 ? (
+        <div class="info-panel-wrapper full-width-panel">
+          <section class="info-panel">
+            Latest project is still to be confirmed at this stage
+          </section>
+        </div>
+      ) : (
+        <section class="projects-panel current-projects-panel">
+          <section id="current-projects-grid" class="projects-grid">
+            {currentProjects.map(ev => {
+              const type = ev.type ?? ev.category ?? "Other";
+              return (
+                <article
+                  class="project-card"
+                  data-semester={ev.semesterId}
+                  data-category={ev.category}
+                  data-type={type}
+                  data-title={ev.title.toLowerCase()}
+                >
+                  <a href={`/projects/${ev.semesterId}/${ev.id}`}>
+                    <div class="card-media">
+                      {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
+                    </div>
+
+                    <div class="card-body">
+                      <h3 class="card-title">{ev.title}</h3>
+                      <div class="card-divider"></div>
+                      <time class="card-date">{ev.dateLabel}</time>
+                      <p class="card-description">{ev.excerpt}</p>
+                      <div class="card-footer">
+                        <span class="card-view-more">View more →</span>
+                      </div>
+                    </div>
+                  </a>
+                </article>
+              );
+            })}
+          </section>
+        </section>
+      )}
+
+      <section class="pink-panel past-projects-space">
+        <p class="pink-title">Previous Projects</p>
+      </section>
+
+      <div class="key-content">
+        <div class="projects-controls">
+          <div class="controls-row">
+
+            <!-- MOBILE SEARCH + FILTER WRAPPER -->
+            <div class="mobile-search-filter">
+              <div class="search-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="16.65" y1="16.65" x2="21" y2="21" />
+                </svg>
+                <input
+                  id="projects-search"
+                  type="search"
+                  placeholder="Search projects"
+                  aria-label="Search projects"
+                />
+              </div>
+            </div>
+
+            <button id="filters-toggle" aria-haspopup="true" aria-expanded="false" type="button" class="filters-toggle-btn">
+              <svg class="filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
+              </svg>
+            </button>
+
+            <!-- FILTER POPOVER -->
+            <div class="type-filter-wrapper" style="margin-left:auto; position:relative;">
+              <div id="filters-popover" role="dialog" aria-modal="false" class="filters-popover">
+                <div class="filters-popover-content">
+
+                  <div class="filter-group">
+                    <label for="semester-select-pop">Semester</label>
+                    <select id="semester-select-pop">
+                      <option value="all" selected>All past semesters</option>
+                      {semesters.filter(s => s.id !== latestSemester?.id).map(s => (
+                        <option value={s.id}>{s.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="type-select-pop">Type</label>
+                    <select id="type-select-pop">
+                      {types.map(t => (
+                        <option value={t}>{t}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="sort-select-pop">Sort data</label>
+                    <select id="sort-select-pop">
+                      <option value="" selected>None</option>
+                      <option value="title-asc">Title Ascending</option>
+                      <option value="title-desc">Title Descending</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="projects-panel">
+
+          <div id="type-filters" class="desktop-type-filters">
+
+          <section id="projects-grid" class="projects-grid">
+            {pastProjects.map((ev) => {
+              const type = ev.type ?? ev.category ?? "Other";
+              return (
+                <article
+                  class="project-card"
+                  data-semester={ev.semesterId}
+                  data-category={ev.category}
+                  data-type={type}
+                  data-title={ev.title.toLowerCase()}
+                >
+                  <a href={`/projects/${ev.semesterId}/${ev.id}`}>
+                    <div class="card-media">
+                      {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
+                    </div>
+
+                    <div class="card-body">
+                      <h3 class="card-title">{ev.title}</h3>
+                      <div class="card-divider"></div>
+                      <time class="card-date">{ev.dateLabel}</time>
+                      <p class="card-description">{ev.excerpt}</p>
+                      <div class="card-footer">
+                        <span class="card-view-more">View more →</span>
+                      </div>
+                    </div>
+                  </a>
+                </article>
+              );
+            })}
+          </section>
+          </div>
+        </section>
+
+        <!-- Pagination container -->
+        <div id="projects-pagination"></div>
+
+      </div>
+    </div>
+
+    <Footer />
+    </body>
+    </htmll>
+    
+
+    <script type="module">
+      const searchInput = document.getElementById('projects-search');
+      const grid = document.getElementById('projects-grid');
+      const paginationContainer = document.getElementById('projects-pagination');
+      const filtersToggle = document.getElementById('filters-toggle');
+      const filtersPopover = document.getElementById('filters-popover');
+      const semesterSelectPop = document.getElementById('semester-select-pop');
+      const sortSelectPop = document.getElementById('sort-select-pop');
+      const typeSelectPop = document.getElementById('type-select-pop');
+      const typeFiltersContainer = document.getElementById('type-filters');
+
+      const PROJECTS_PER_PAGE = 6;
+      let currentPage = 1;
+      let currentSemester = 'all';
+      let currentSort = '';
+      let filteredCards = [];
+      let typeButtons = [];
+
+      // Render desktop type buttons
+      function renderTypeButtons(types) {
+        if (!typeFiltersContainer) return; // safety check
+
+        typeFiltersContainer.innerHTML = '';
+
+        types.forEach((t, index) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.dataset.type = t;
+          btn.textContent = t;
+          btn.className = `type-btn ${index === 0 ? 'active' : ''}`;
+
+          btn.addEventListener('click', () => {
+            typeButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentPage = 1;
+            applyFilters();
+          });
+
+          typeFiltersContainer.appendChild(btn);
+        });
+
+        typeButtons = Array.from(typeFiltersContainer.querySelectorAll('.type-btn'));
+      }
+
+
+      // ---------- Sorting ----------
+      function applySort() {
+        if (!currentSort) return;
+        filteredCards.sort((a, b) => {
+          const aTitle = a.querySelector('.card-title')?.textContent || '';
+          const bTitle = b.querySelector('.card-title')?.textContent || '';
+          if (currentSort === 'title-asc') return aTitle.localeCompare(bTitle, undefined, { sensitivity: 'base' });
+          if (currentSort === 'title-desc') return bTitle.localeCompare(aTitle, undefined, { sensitivity: 'base' });
+          return 0;
+        });
+      }
+
+      // ---------- Get selected type ----------
+      function getSelectedType() {
+        if (typeSelectPop) {
+          return typeSelectPop.value;
+        } 
+      }
+
+      // ---------- Filtering ----------
+      function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const selectedType = getSelectedType();
+
+        filteredCards = Array.from(grid.querySelectorAll('.project-card')).filter(card => {
+          const title = card.dataset.title || '';
+          const excerpt = card.querySelector('.card-description')?.textContent.toLowerCase() || '';
+          const cardType = card.dataset.type || '';
+          const cardSemester = card.dataset.semester || '';
+
+          return (!query || title.includes(query) || excerpt.includes(query)) &&
+                 (selectedType === 'All' || cardType === selectedType) &&
+                 (currentSemester === 'all' || cardSemester === currentSemester);
+        });
+
+        applySort();
+        filteredCards.forEach(card => grid.appendChild(card));
+        currentPage = 1;
+        renderPage();
+        renderPagination();
+      }
+
+      // ---------- Render page ----------
+      function renderPage() {
+        const start = (currentPage - 1) * PROJECTS_PER_PAGE;
+        const end = start + PROJECTS_PER_PAGE;
+        Array.from(grid.querySelectorAll('.project-card')).forEach(card => card.style.display = 'none');
+        filteredCards.slice(start, end).forEach(card => card.style.display = '');
+      }
+
+      // ---------- Render pagination ----------
+      function renderPagination() {
+        const totalPages = Math.ceil(filteredCards.length / PROJECTS_PER_PAGE);
+        paginationContainer.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+          html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+        }
+        html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
+        paginationContainer.innerHTML = html;
+
+        Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
+          btn.addEventListener('click', () => {
+            const page = parseInt(btn.dataset.page);
+            if (!isNaN(page)) {
+              currentPage = page;
+              renderPage();
+              renderPagination();
+            }
+          });
+        });
+      }
+
+      // ---------- Event listeners ----------
+      searchInput.addEventListener('input', () => { currentPage = 1; applyFilters(); });
+      semesterSelectPop.addEventListener('change', () => { currentSemester = semesterSelectPop.value; currentPage = 1; applyFilters(); });
+      sortSelectPop.addEventListener('change', () => { currentSort = sortSelectPop.value; currentPage = 1; applyFilters(); });
+      if (typeSelectPop) typeSelectPop.addEventListener('change', () => { currentPage = 1; applyFilters(); });
+
+      filtersToggle.addEventListener('click', e => {
+        e.stopPropagation();
+        filtersPopover.style.display = (filtersPopover.style.display==='block') ? 'none' : 'block';
+        filtersToggle.setAttribute('aria-expanded', filtersPopover.style.display==='block');
+      });
+      document.addEventListener('click', e => { if(!filtersPopover.contains(e.target) && e.target!==filtersToggle) filtersPopover.style.display='none'; });
+      document.addEventListener('keydown', e => { if(e.key==='Escape') filtersPopover.style.display='none'; });
+
+      window.addEventListener('resize', applyFilters);
+
+      // ---------- Initialize ----------
+      renderTypeButtons(["All", ...types.filter(t => t !== "All")]);
+      applyFilters();
+    </script>
+  </body>
+</html>
+ 

@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Pokémon",
+    "category": "Linear Regression",
+    "excerpt": "Predict Pokémon stats based on other characteristics using linear regression.",
+    "image": "/projects/pokemon.png"
+  },
+  "details": {
+    "title": "Pokémon",
+    "github": "https://github.com/QUT-AIML/Linear-Regression",
+    "longDescription": "This project analyzes Pokémon characteristics to predict specific stats like HP, attack, and defense using linear regression. Users can explore relationships between different Pokémon features, experiment with multiple regression models, and interpret coefficients to understand the impact of each attribute."  
+  }
+}

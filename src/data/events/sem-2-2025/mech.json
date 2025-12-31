@@ -1,0 +1,25 @@
+{
+  "id": "mech-mayhem-2025",
+  "overview": {
+    "title": "Mech Mayhem",
+    "date": "2025-10-11",
+    "dateLabel": "11th October 2025",
+    "category": "Industry",
+    "excerpt": "🚀 Join Mech Mayhem 2025! Test your robotics and mechanical creations, explore STEM showcases, and connect with fellow innovators. 🤖🌌",
+    "image": "/events/Projects/Projects Night - 1.jpg"
+  },
+  "details": {
+    "title": "Mech Mayhem",
+    "fullDate": "Saturday, 11 October 2025",
+    "time": "10:00 AM – 2:00 PM",
+    "location": "QUT GP-O134",
+    "longDescription": "Mech Mayhem is a hands-on robotics and engineering challenge where high-school and university teams compete head-to-head in mini robotics battles. Explore space and tech showcases, AI demos, and innovative engineering projects. Hear lightning talks from researchers, industry mentors, and innovators. Connect with clubs, careers, and cutting-edge STEM opportunities. Whether you’re competing, exploring, or getting inspired, this is your launchpad for STEM innovation! 🚀🤖🌌",
+    "isCollab": "true",
+    "registration": {
+      "required": "true",
+      "link": "https://campus.hellorubric.com/?eid=42304",
+      "capacity": "",
+      "price": "Free"
+    }
+  }
+}

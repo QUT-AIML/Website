@@ -1,0 +1,583 @@
+
+
+/* ----------------------------- */
+/*         NAVBAR BASE           */
+/* ----------------------------- */
+
+/* ── Navbar Desktop Layout ── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0.8rem 4rem;
+
+  /* Frosted glass effect */
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.brand .logo { 
+  width:46px; 
+}
+
+.brand {
+  font-size:1.5rem; 
+  margin-left: 2rem;
+}
+
+/* Centered main links */
+.main-links {
+  grid-column: 2;          /* force into center column */
+  justify-self: center;
+
+  display: flex;
+  align-items: center;
+  list-style: none;
+  position: relative;
+}
+
+.main-links li { 
+  position: relative; 
+}
+
+.main-links a { 
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+  padding: 0px 12px;
+}
+
+/* Single source of truth for top-level nav spacing */
+.main-links > li > a {
+  padding: 0.3rem 12px;   /* ↑ vertical padding restored */
+  display: inline-flex;
+  align-items: center;
+}
+
+.main-links a:hover { 
+  color:var(--color-primary); 
+}
+
+.main-links a.active { 
+  color:var(--color-primary); 
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top:100%; 
+  left:0;
+  background: #4d4d4d;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  min-width: 250px;
+  border-radius: 4px;
+  background-color: black;
+  z-index: 20;
+}
+
+.dropdown-content a {
+  display: block; 
+  width: 100%;
+  font-size: 0.9rem;
+  color: white;
+  text-align: left !important;
+  transition: background 0.2s;
+  line-height: 1.2rem !important;     
+  padding: 12px 20px !important;   
+}
+
+.dropdown-content a:hover {
+  background-color: rgba(255, 139, 244, 0.2);
+  color: var(--color-secondary);
+  border-radius: 10px;
+}
+
+.nav-links .dropbtn .arrow {
+  display: none;
+}
+
+.main-links .dropbtn.active {
+  color: var(--color-secondary) !important;
+}
+
+.main-links .dropbtn.open .arrow {
+  transform: rotate(180deg);
+}
+
+body.no-scroll {
+  overflow: hidden;
+  height: 100%;
+}
+
+.btn {
+    border: 1px solid #FF00E6;
+}
+
+.btn:hover{
+  background:transparent; 
+  border: none;
+}
+
+.btn-outline {
+  position: relative;
+  padding: 0.45rem 1.4rem;
+  background: #FF00E6;
+  color: #fff;
+  border-radius: 1.2rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.btn-border {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.btn-border rect {
+  fill: none;
+  stroke: #FF00E6;
+  stroke-width: 2;
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  transition: stroke-dashoffset 1.8s ease;
+}
+
+.btn-outline .btn-border rect {
+  fill: none;
+  stroke: #FF00E6;
+  stroke-width: 2;
+  stroke-dasharray: 300;       /* total perimeter */
+  stroke-dashoffset: 300;      /* start hidden */
+  transition: stroke-dashoffset 0.6s ease; /* animation duration */
+}
+
+.btn-outline span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hover start */
+.btn-outline:hover .btn-border rect {
+  stroke-dashoffset: 300;      /* reset instantly */
+  animation: draw-border 1.8s forwards ease;
+}
+
+/* Keyframes to animate perimeter fill */
+@keyframes draw-border {
+  from {
+    stroke-dashoffset: 300;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.dropdown-content li a {
+  padding:.8rem 1.2rem;
+  text-align:center;
+  color:#fff;
+}
+
+/* Hamburger (hidden on desktop) */
+.hamburger {
+  display: none;
+  background:none; 
+  border:none;
+  color:var(--color-primary); 
+  cursor:pointer;
+}
+
+/* Always hide arrows by default */
+.dropbtn .arrow {
+  display: none;
+}
+
+
+
+
+
+
+
+
+/* Desktop hover */
+@media (min-width:1221px) {
+
+  .mobile-header {
+    display: contents;
+  }
+
+    .brand {
+    margin-right: auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .main-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+
+   /* Hide any “.show” classes desktop might’ve left behind */
+  .dropdown-content.show {
+    display: none !important;
+  }
+
+  /* On hover, reveal the submenu */
+  .dropdown:hover .dropdown-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Prevent the arrow‐flip/open styles if you have them */
+  .dropbtn.open .arrow {
+    transform: none !important;
+  }
+  
+  .main-links .dropdown:hover > .dropbtn {
+    color: var(--color-secondary);
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: flex;
+  }
+
+   .dropdown-content.show {
+    display: none !important; 
+  }
+
+  /* Hide mobile buttons by default */
+  .mobile-only {
+    display: none;
+  }
+
+  /* Indicator styling remains unchanged */
+  .indicator {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background: var(--color-secondary);
+    border-radius: 1px;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0;
+    transition:
+      left 0.4s ease,
+      width 0.4s ease,
+      opacity 0.2s ease;
+  }
+
+  .indicator.visible {
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width:1220px) {
+
+  .navbar {
+    padding: 0 !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    z-index: 1000;
+  }
+
+  .dropbtn.active .arrow {
+    transform: translateY(-50%) rotate(0deg) !important;
+  }
+
+  .main-links.show > li > a {
+    font-size: 1.1rem; /* adjust as needed */
+  }
+
+  .main-links .dropdown-content.show a {
+    font-size: 1.1rem; /* adjust as needed */
+  }
+
+  .main-links .dropbtn {
+    font-size: 1.1rem; /* adjust as needed */
+  }
+
+    /* Mobile-only secondary links/buttons */
+  .mobile-only a {
+    font-size: 1.1rem;       /* much larger text */
+  }
+
+  /* Optional: make pink button stand out */
+  .mobile-only .pink-button a {
+    font-size: 1.1rem;
+  }
+
+  .mobile-only a {
+    font-size: 1.1rem;
+  }
+
+  
+  .nav-links .dropdown > .dropbtn {
+    position: relative;
+    display: inline-block;
+    padding-right: 1.8rem;   
+  }
+
+  .nav-links .dropbtn .arrow {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: .5rem;                
+    transform: translateY(-50%);
+    transition: transform .3s ease;
+  }
+
+  .nav-links .dropbtn.active .arrow {
+    transform: translateY(-50%) rotate(180deg);
+    color: var(--color-primary);
+  }
+
+  .dropbtn {
+    position: relative; 
+  }
+
+  .dropbtn .arrow {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    transform-origin: center;
+    transition: transform 0.3s ease;
+  }
+
+  .dropbtn.open .arrow {
+    transform: translateY(-50%) rotate(180deg) !important;
+  }
+
+  .brand {
+    display: flex;
+
+  }
+
+  .mobile-header .brand,
+  .mobile-header .hamburger {
+    margin: 0;
+  }
+
+  .hamburger {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 2002;
+    margin-bottom: 0.3rem !important;
+  }
+
+  .mobile-header {
+    position: relative;
+    z-index: 3001;
+  }
+
+  .hero-section,
+  .hero-background,
+  .hero-overlay,
+  .hero-heading {
+    z-index: 0 !important;
+  }
+
+  /* Inside the existing media query or global */
+  .main-links {
+    z-index: 1002 !important; 
+  }
+
+  .dropdown-content {
+    z-index: 1003 !important; 
+  }
+
+  .hamburger:not(.open) {
+    font-size: 1.8rem;
+  }
+
+  .hamburger.open {
+    font-size: 2.6rem;
+  }
+
+  .main-links {
+    position: fixed;
+    top: 0;           /* start at top of viewport */
+    left: 0;
+    width: 100vw;     /* full viewport width */
+    height: 100vh;    /* full viewport height if you want a full-screen menu */
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 5rem;  /* keep space for mobile header */
+    padding-left: 0;    /* remove any side padding */
+    padding-right: 0;
+    overflow-y: auto;
+    transform: translateY(-100%);
+    transition: transform 0.4s ease;
+    z-index: 100;
+    gap: 0.4rem !important; /* <-- Equal vertical spacing between links */
+  }
+  
+  .main-links .dropdown {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 0.8rem;
+  }
+
+  .main-links .dropdown-content {
+    width: 100%;
+    align-items: center;  
+    text-align: center;   
+  }
+
+  .main-links .dropdown-content.show a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .main-links:not(.show) {
+    pointer-events: none;
+  }
+
+  .main-links.show {
+    transform: translateY(0);
+  }
+
+   .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 1rem 2rem;
+    width: 100vw;
+    box-sizing: border-box;
+    background-color: #000;
+  }
+
+
+  .dropbtn {
+    color: white !important;
+  }
+
+  .dropbtn.active {
+    color: var(--color-primary);
+  }
+
+
+
+  .dropdown-content {
+    display: flex !important;
+    position: static !important;
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    transition:
+      max-height 0.35s ease,
+      opacity    0.25s ease 0.05s,
+      margin     0.35s ease,
+      padding    0.35s ease;
+  }  
+
+  .dropdown-content.show {
+    margin: 10px 30px 0 15px;
+    background: #262626;
+    max-height: 500px;  
+    opacity: 1;
+  }
+
+  .mobile-only .btn,
+  .mobile-only {
+    display: block;
+  }
+
+  .pink-button {
+    background: #FF00E6;
+    margin-top: 1.6rem;
+    padding:0.7rem 1.2rem;
+    border: 1px solid #FF00E6;
+    border-radius:25px; 
+    text-align: center;
+  }
+
+  .secondary-links {
+    display: none;
+  }
+
+  .hero-section {
+    margin-top: 4rem;
+  }
+
+  .background-non-curved {
+    background: linear-gradient(
+        to bottom,
+        #090909 0%,
+        #090909 93%,
+        #FF00E6 97%
+    );
+  }
+
+      /* Ensure ALL nav items (main + dropdown) have equal spacing */
+    .main-links > li,
+    .main-links .dropdown-content li {
+      margin: 0.2rem 0;   /* adjust spacing as needed */
+    }
+
+}
+
+
+

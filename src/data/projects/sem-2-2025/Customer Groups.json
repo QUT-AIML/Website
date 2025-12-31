@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Customer Groups",
+    "category": "Clustering",
+    "excerpt": "Group customers based on purchasing behavior and demographics using clustering techniques.",
+    "image": "/projects/customer groups.png"
+  },
+  "details": {
+    "title": "Customer Groups",
+    "github": "https://github.com/QUT-AIML/Clustering",
+    "longDescription": "This project applies clustering algorithms to customer segmentation data. Users can explore K-Means, DBSCAN, and Hierarchical Clustering to group customers based on behavior and demographics, uncovering patterns that support targeted marketing strategies."
+   }
+}

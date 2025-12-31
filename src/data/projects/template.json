@@ -1,0 +1,14 @@
+{
+  "overview": {
+    "title": "<Project Title>",
+    "category": "<Category, e.g., CNN, Random Forests>",
+    "excerpt": "<Short description of the project>",
+    "image": "<Path to project image, e.g., /images/project.jpg>"
+  },
+  "details": {
+    "title": "<Project Title>",
+    "github": "<link>",
+    "longDescription": "<Detailed description of the project>",
+    "gallery": ["<Image path 1>", "<Image path 2>"]
+  }
+}

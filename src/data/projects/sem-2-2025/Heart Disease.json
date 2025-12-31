@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Heart Disease Predictions",
+    "category": "Logistic Regression",
+    "excerpt": "Predict the presence of heart disease based on patient medical data using logistic regression.",
+    "image": "/projects/heart disease.jpeg"
+  },
+  "details": {
+    "title": "Heart Disease Predictions",
+    "github": "https://github.com/QUT-AIML/Logistic-Regression",
+    "longDescription": "This project uses logistic regression to predict the likelihood of heart disease in patients based on medical features such as cholesterol levels, blood pressure, and age. The dataset is ready-to-use and allows users to explore model evaluation, feature importance, and binary classification techniques."
+    }
+}
