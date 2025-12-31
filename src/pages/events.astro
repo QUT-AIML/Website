@@ -159,15 +159,6 @@ const featuredEvents = eventsBySemester
                       </select>
                     </div>
 
-                    <div class="filter-group" id="title-sort-filter-group">
-                      <label for="title-sort-select-pop">Sort by Title</label>
-                      <select id="title-sort-select-pop">
-                        <option value="none" selected>None</option>
-                        <option value="title-asc">A–Z</option>
-                        <option value="title-desc">Z–A</option>
-                      </select>
-                    </div>
-
                   </div>
                 </div>
               </div>
@@ -246,9 +237,6 @@ const featuredEvents = eventsBySemester
   const typeSelectPop = document.getElementById('type-select-pop'); // Mobile type
   const sortGroup = document.getElementById('sort-filter-group');
 
-  const titleSortSelectPop = document.getElementById('title-sort-select-pop');
-  const titleSortFilterGroup = document.getElementById('title-sort-filter-group');
-
   const EVENTS_PER_PAGE = 6;
 
   let currentPage = 1;
@@ -262,9 +250,6 @@ const featuredEvents = eventsBySemester
 
   const latestSemesterId =
     semesterSelectPop.options[1]?.value ?? null;
-
-  // Always show title sort
-  titleSortFilterGroup.style.display = 'block';
 
   function getCards() {
     return Array.from(grid.querySelectorAll('.event-card'));
@@ -388,24 +373,7 @@ const featuredEvents = eventsBySemester
       const titleA = a.dataset.title.trim();
       const titleB = b.dataset.title.trim();
 
-      // ✅ TITLE SORT OVERRIDES EVERYTHING
-      if (currentTitleSort === 'title-asc') {
-        return titleA.localeCompare(titleB, undefined, {
-          sensitivity: 'base',
-          numeric: true
-        });
-      }
-
-      if (currentTitleSort === 'title-desc') {
-        return (
-          titleA.localeCompare(titleB, undefined, {
-            sensitivity: 'base',
-            numeric: true
-          }) * -1
-        );
-      }
-
-      // ⬇️ Only fall back to date sorting if title sort is "none"
+      // Only fall back to date sorting if title sort is "none"
       const dateA = new Date(a.dataset.date);
       const dateB = new Date(b.dataset.date);
       dateA.setHours(0, 0, 0, 0);
@@ -496,11 +464,6 @@ const featuredEvents = eventsBySemester
 
   sortSelectPop.addEventListener('change', () => {
     currentSort = sortSelectPop.value;
-    applyFilters();
-  });
-
-  titleSortSelectPop.addEventListener('change', () => {
-    currentTitleSort = titleSortSelectPop.value;
     applyFilters();
   });
 

@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Customer Churn",
+    "category": "Random Forest",
+    "excerpt": "Predict customer churn using ensemble learning and Random Forest models.",
+    "image": "/projects/random_forest.png"
+  },
+  "details": {
+    "title": "Customer Churn",
+    "github": "https://github.com/QUT-AIML/Random-Forests",
+    "longDescription": "This project applies Random Forests to predict customer churn based on behavioral and demographic data. Users can experiment with feature engineering, hyperparameter tuning, cross-validation, and feature importance to improve prediction accuracy and gain insights into customer behavior."
+    }
+}

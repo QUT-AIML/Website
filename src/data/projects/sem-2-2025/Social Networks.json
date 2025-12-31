@@ -1,0 +1,14 @@
+{
+  "overview": {
+    "title": "Social Networks",
+    "category": "Clustering",
+    "excerpt": "Identify communities and patterns in social network data using clustering techniques.",
+    "image": "/projects/clustering.jpg"
+  },
+  "details": {
+    "title": "Social Networks",
+    "github": "https://github.com/QUT-AIML/Clustering",
+    "longDescription": "This project applies clustering algorithms to social network and marketing data to detect communities and underlying patterns. Users can use K-Means, DBSCAN, and Hierarchical Clustering and evaluate clusters with metrics like silhouette score and elbow method.",
+    "gallery": ["/images/social-networks-1.jpg", "/images/social-networks-2.jpg"]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Reddit Breakup Stories",
+    "category": "Transformers",
+    "excerpt": "Analyze and classify the emotional content of Reddit breakup stories using Transformers.",
+    "image": "/projects/transformers.png"
+  },
+  "details": {
+    "title": "Reddit Breakup Stories",
+    "github": "https://github.com/QUT-AIML/Transformers",
+    "longDescription": "This project applies Transformer models to text analysis and sentiment classification of Reddit breakup stories. Users can fine-tune pre-trained models like BERT or RoBERTa, explore tokenization, attention visualization, and evaluate performance on NLP classification tasks."
+   }
+}

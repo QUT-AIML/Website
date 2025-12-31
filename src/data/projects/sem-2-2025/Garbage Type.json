@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Garbage Type",
+    "category": "CNN",
+    "excerpt": "Classify different types of waste for recycling using CNNs.",
+    "image": "/projects/CNN.png"
+  },
+  "details": {
+    "title": "Garbage Type",
+    "github": "https://github.com/QUT-AIML/Convolutional-Neural-Networks",
+    "longDescription": "This project classifies images of different types of garbage to assist in recycling using CNNs. Users can apply convolutional and pooling layers, data augmentation, dropout, and experiment with CNN architectures to improve classification accuracy."
+ }
+}

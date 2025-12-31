@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Fake News Detection",
+    "category": "Logistic Regression",
+    "excerpt": "Classify news articles as real or fake using logistic regression.",
+    "image": "/projects/logistic-regression.jpg"
+  },
+  "details": {
+    "title": "Fake News Detection",
+    "github": "https://github.com/QUT-AIML/Logistic-Regression",
+    "longDescription": "This project focuses on detecting fake news articles using logistic regression. The dataset contains labeled news articles and is split into chunks that require reassembly. Users can explore text preprocessing, feature extraction, and binary classification techniques to improve model performance."
+  }
+}

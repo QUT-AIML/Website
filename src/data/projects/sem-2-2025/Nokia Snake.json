@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Nokia Snake",
+    "category": "Reinforcement Learning",
+    "excerpt": "Train an agent to play the classic Nokia Snake game using reinforcement learning.",
+    "image": "/projects/reinforcement_learning.jpg"
+  },
+  "details": {
+    "title": "Nokia Snake",
+    "github": "https://github.com/QUT-AIML/Reinforcement-Learning",
+    "longDescription": "This project introduces reinforcement learning by training an agent to play the classic Nokia Snake game. Users can experiment with Q-learning, policy-based methods, reward functions, and environment design to teach the agent optimal strategies through trial and error."
+   }
+}

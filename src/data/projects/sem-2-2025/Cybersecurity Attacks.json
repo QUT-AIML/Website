@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Cybersecurity Attacks",
+    "category": "Random Forest",
+    "excerpt": "Detect and classify cybersecurity threats using Random Forest algorithms.",
+    "image": "/projects/random_forest.png"
+  },
+  "details": {
+    "title": "Cybersecurity Attacks",
+    "github": "https://github.com/QUT-AIML/Random-Forests",
+    "longDescription": "This project uses Random Forests to analyze cybersecurity incident data and classify different types of attacks. Users can explore feature importance, ensemble methods, hyperparameter tuning, and model evaluation techniques to detect network security threats effectively."
+    }
+}

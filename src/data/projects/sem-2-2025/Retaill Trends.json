@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Retail Sales Trends",
+    "category": "Linear Regression",
+    "excerpt": "Predict future retail sales based on historical data using linear regression.",
+    "image": "/projects/linear_regression.png"
+  },
+  "details": {
+    "title": "Retail Sales Trends",
+    "github": "https://github.com/QUT-AIML/Linear-Regression",
+    "longDescription": "This project focuses on retail sales data to forecast future sales trends using linear regression. Users can explore sales patterns, apply multiple regression techniques, and use regularization to handle overfitting. Evaluation metrics include R², MSE, and RMSE for accurate performance assessment." 
+  }
+}

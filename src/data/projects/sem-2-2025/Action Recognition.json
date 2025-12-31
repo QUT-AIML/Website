@@ -1,0 +1,13 @@
+{
+  "overview": {
+    "title": "Action Recognition",
+    "category": "Transformers",
+    "excerpt": "Classify different types of human actions from video or text using Transformer models.",
+    "image": "/projects/transformers.png"
+  },
+  "details": {
+    "title": "Action Recognition",
+    "github": "https://github.com/QUT-AIML/Transformers",
+    "longDescription": "This project uses Transformer models to recognize human actions from video or textual descriptions. Users can experiment with self-attention mechanisms, multi-head attention, positional encoding, and fine-tuning pre-trained models to classify actions accurately."
+ }
+}
