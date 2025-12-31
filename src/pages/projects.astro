@@ -115,7 +115,7 @@ const types = ["All", ...preferredExisting, ...remaining];
                     data-type={type}
                     data-title={ev.title.toLowerCase()}
                   >
-                    <a href={ev.url}>
+                    <a href={`/projects/${ev.semesterId}/${ev.id}`}>
                       <div class="card-media">
                         {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                       </div>
@@ -237,7 +237,7 @@ const types = ["All", ...preferredExisting, ...remaining];
                   data-type={type}
                   data-title={ev.title.toLowerCase()}
                 >
-                  <a href={ev.url}>
+                  <a href={`/projects/${ev.semesterId}/${ev.id}`}>
                     <div class="card-media">
                       {ev.image ? (
                         <img src={ev.image} alt={ev.title} />

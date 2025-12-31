@@ -25,16 +25,16 @@ remaining.sort((a, b) => a.localeCompare(b));
 const types = ["All", ...preferredExisting, ...remaining];
 
 const today = new Date();
-today.setHours(0, 0, 0, 0); // normalize to start of the day
+today.setHours(0, 0, 0, 0);
 
+// Featured events (future only)
 const featuredEvents = eventsBySemester
   .filter(ev => ev.featured)
   .filter(ev => {
     const eventDate = new Date(ev.date);
-    eventDate.setHours(0, 0, 0, 0); // normalize to start of the day
+    eventDate.setHours(0, 0, 0, 0);
     return eventDate >= today;
   });
-  
 ---
 <html lang="en">
   <head>
@@ -63,7 +63,7 @@ const featuredEvents = eventsBySemester
             <div class="featured-events-grid">
               {featuredEvents.map(ev => (
                 <article class="event-card" data-semester={ev.semesterId} data-category={ev.category} data-type={ev.type ?? ev.category ?? "Other"} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-                  <a href={ev.url}>
+                  <a href={`/events/${ev.semesterId}/${ev.id}`}>
                     <div class="card-media">
                       {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                     </div>
@@ -190,7 +190,7 @@ const featuredEvents = eventsBySemester
                   data-title={ev.title.toLowerCase()}
                   data-date={ev.date}
                 >
-                  <a href={ev.url}>
+                  <a href={`/events/${ev.semesterId}/${ev.id}`}>
                     <div class="card-media">
                       {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                     </div>

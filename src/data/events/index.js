@@ -22,7 +22,7 @@ function normalizeOverview(ev, filePath) {
     excerpt: o.excerpt ?? '',
     image: o.image ?? '',
     featured: o.featured ?? false,  
-    url: `/events/${semesterFolder}/${id}`,   // ✅ include semester folder
+    url: `/events/${semesterFolder}/${id}`,  
     _raw: raw,
     _filePath: filePath
   };
