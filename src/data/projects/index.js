@@ -18,6 +18,7 @@ const groups = {};
 
 allPaths.forEach(filePath => {
   if (filePath.endsWith('template.json')) return;
+  if (filePath.endsWith('TBC.json')) return;
 
   // ./sem-1-2024/cool-project.json
   const parts = filePath.split('/');
