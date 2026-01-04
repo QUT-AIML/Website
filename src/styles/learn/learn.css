@@ -288,7 +288,8 @@
   margin-bottom: 5rem;
   margin-left: 3rem;
   padding: 1.5rem;
-  background: #1f1f1f;
+  background: #272727;
+  box-shadow: 8px 8px 0 #1B1B1B;
   border-radius: 12px;
   width: 100%;
 }
@@ -425,7 +426,8 @@
   margin-bottom: 5rem;
   margin-left: 3rem;
   padding: 1.5rem;
-  background: #1f1f1f;
+  background: #272727;
+  box-shadow: 8px 8px 0 #1B1B1B;
   border-radius: 12px;
   width: 100%;
 }

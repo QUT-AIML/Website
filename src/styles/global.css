@@ -208,6 +208,7 @@ footer {
   border-radius: 10px;
   padding: 0.5rem 2rem;
   margin: 0rem 3rem;
+  box-shadow: 8px 8px 0 #66005c;
 }
 
 .pink-title {
