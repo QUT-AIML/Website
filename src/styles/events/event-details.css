@@ -11,10 +11,10 @@
 }
 
 .unique-event-card {
-  background-color: #1f1f1f;
+  background-color: #272727;
+  box-shadow: 8px 8px 0 #1B1B1B;
   color: #eaeaea;
   border-radius: 16px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
   width: 820px;
   max-width: 100%;
   padding: 2.5rem;

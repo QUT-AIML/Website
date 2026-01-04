@@ -276,10 +276,10 @@
   right: 0;
   top: 0.5rem;                   /* small offset from top of wrapper */
   bottom: 0.5rem;                /* small offset from bottom of wrapper */
-  background: #272727;           /* dark grey color (adjust as needed) */
+  background-color: #272727;
   border-radius: 12px;           /* rounded corners to match cards */
   z-index: 0;                    /* sits behind the grid */
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25); /* subtle depth */
+  box-shadow: 8px 8px 0 #1B1B1B;
 }
 
 .events-grid {
@@ -442,14 +442,14 @@
 }
 
 .toolkit-header-card {
-  background: #1a1a1a;
+  background: #272727;
   color: #fff;
   font-weight: 700;
   font-size: 1rem;
   padding: 0.9rem 1.25rem;
   border-radius: 14px;
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  box-shadow: 8px 8px 0 #1B1B1B;
   border: 1px solid rgba(255,255,255,0.06);
 }
 
@@ -479,11 +479,11 @@
 
 /* Card */
 .toolkit-card {
-  background: #1a1a1a;
+  background: #272727;
   border-radius: 18px;
   padding: 1.75rem;
   color: #fff;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  box-shadow: 8px 8px 0 #1B1B1B;
 }
 
 

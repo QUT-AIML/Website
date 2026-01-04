@@ -53,6 +53,7 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   text-shadow: 0 0 12px rgba(255,0,230,0.3);
+  box-shadow: 8px 8px 0 #66005c;
 }
 
 .yearbook-table {
