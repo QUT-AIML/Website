@@ -321,8 +321,10 @@
 .projects-panel {
   position: relative;
   padding: 1rem;               /* space around the grid */
-  display: block;
   width: 100%;
+  display: flex; /* make it a flex container */
+  justify-content: center; /* centers items horizontally */
+  align-items: center; /* centers items vertically */
 }
 
 .current-projects-panel {
@@ -346,12 +348,14 @@
 /* Ensure the grid and cards sit above the panel */
 .projects-grid {
   position: relative;
-  justify-content: start; /* aligns cards to the left instead of stretching */
+  justify-content: center; /* aligns cards to the left instead of stretching */
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, 360px); 
   gap: 1.5rem;
   padding: 1rem;                 /* inner spacing so cards don't touch panel edges */
+  width: auto;             /* let the grid shrink to fit content */
+  max-width: 1200px;       /* optional: prevent grid from stretching too wide */
 }
 
 .pink-panel,

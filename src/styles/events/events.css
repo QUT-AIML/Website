@@ -288,10 +288,14 @@
 /* Panel wrapper that creates the dark grey division */
 .events-panel {
   position: relative;
-  padding: 1.5rem;               /* space around the grid */
-  display: block;
+  padding: 1rem; /* shorthand for padding-top, right, bottom, left */
+  display: flex; /* make it a flex container */
+  justify-content: center; /* centers items horizontally */
+  align-items: center; /* centers items vertically */
+  max-width: 100%;
   width: 100%;
 }
+
 
 /* The dark grey background block behind the grid */
 .events-panel::before {
@@ -309,13 +313,13 @@
 
 /* Ensure the grid and cards sit above the panel */
 .events-grid {
-    position: relative;
-    justify-content: start; /* aligns cards to the left instead of stretching */
-    z-index: 1;
     display: grid;
     grid-template-columns: repeat(auto-fit, 360px); 
     gap: 1.5rem;
-    padding: 1rem;                 /* inner spacing so cards don't touch panel edges */
+    padding: 1rem;
+    width: auto;             /* let the grid shrink to fit content */
+    justify-content: center; /* center items if fewer than a full row */
+    max-width: 1200px;       /* optional: prevent grid from stretching too wide */
 }
 
 .pink-panel,
@@ -433,37 +437,6 @@
 
 
 
-/* === FEATURED EVENTS === */
-.featured-events-panel {
-  margin-top: 0.1rem;
-  margin-right: 3rem;
-  margin-bottom: 5rem;
-  margin-left: 3rem;
-  padding: 1.5rem;
-  background: #272727;
-  box-shadow: 8px 8px 0 #1B1B1B;
-  border-radius: 12px;
-  width: 100%;
-}
-
-.featured-events-grid {
-  display: grid;
-  justify-content: start; /* aligns cards to the left instead of stretching */
-  grid-template-columns: repeat(auto-fit, 360px); /* 360px cards, auto-fit columns */
-  gap: 1.5rem; /* same gap as main grid */
-  padding: 1rem; /* inner spacing */
-  width: 100%;
-}
-
-.featured-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #FF8BF4; /* match pink accent */
-  margin-bottom: 1rem;
-}
-
-
-
 
 
 
@@ -552,20 +525,8 @@
     display: none;
   }
 
-  /* Events grid: single column for mobile */
-  .events-grid,
-  .featured-events-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 0.5rem;
-  }
 
-  /* Featured events panel padding */
-  .featured-events-panel {
-    padding: 1rem;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-  }
+  
 
   /* Events panel padding */
   .events-panel {

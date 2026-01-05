@@ -260,12 +260,12 @@
   margin-left: 3rem;
   margin-right: 3rem;
   margin-bottom: 5rem;
-  padding-top: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-bottom: 1rem;
-  display: block;
+  padding: 1rem; /* shorthand for padding-top, right, bottom, left */
+  display: flex; /* make it a flex container */
+  justify-content: center; /* centers items horizontally */
+  align-items: center; /* centers items vertically */
   max-width: 100%;
+  flex-direction: column; /* optional: stacks items vertically */
 }
 
 /* The dark grey background block behind the grid */
@@ -282,15 +282,19 @@
   box-shadow: 8px 8px 0 #1B1B1B;
 }
 
-.events-grid {
+ .events-grid {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 360px);
+  grid-template-columns: repeat(auto-fit, 400px);
   gap: 1.5rem;
   padding: 1rem;
-  justify-content: start;
-}
+  justify-content: center;
+  max-width: 1200px;       
+} 
+
+
+
 
 @media (max-width: 768px) {
   .events-grid {
