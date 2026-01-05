@@ -428,6 +428,11 @@
 
 @media (max-width: 768px) {
 
+  .key-content {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
   /* Reduce top spacing */
   .learning-space {
     padding-top: 6rem;
@@ -483,51 +488,12 @@
     border-radius: 12px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
   }
-  
-
-  .learning-panel {
-    margin-top: 0.1rem;
-    margin-right: 1rem;
-    margin-bottom: 5rem;
-    margin-left: 1rem;
-    padding: 1.5rem;
-  }
 
   /* Adjust grid layout for mobile */
   .learning-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    padding-bottom: 1.5rem;
-    width: 100%;
   }
 
-  /* Remove outer margins on content wrapper */
-  .key-content {
-    margin-left: 1.3rem;
-    margin-right: 1.3rem;
-    margin-bottom: 0.1rem;
-    width: 100%;
-  }
-
-  .learning-panel {
-    margin-bottom: 1rem;
-  }
-
-
-  /* Panel adjustments */
-  .learning-panel {
-    padding: 0.5rem 1rem;
-  }
-
-  .learning-panel::before {
-    left: 0;
-    right: 0;
-    top: 0.25rem;
-    bottom: 0.25rem;
-    border-radius: 10px;
-  }
 
   /* Learn cards full width */
   .learn-card {
@@ -539,6 +505,7 @@
     position: relative;
     flex-wrap: wrap;
     gap: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   .learning-controls {
@@ -576,6 +543,10 @@
     padding: 0.45rem 0.6rem;
     font-size: 0.9rem;
     cursor: pointer;
+  }
+
+  .panel-topspace {
+    margin-top: 3rem;
   }
 
 }

@@ -526,7 +526,18 @@
   }
 
 
-  
+    /* MAIN EVENTS GRID FIX */
+  .events-panel .events-grid {
+    grid-template-columns: 1fr;   /* full-width column */
+    width: 100%;                  /* fill screen */
+    max-width: 100%;              /* prevent overflow */
+    padding: 0.75rem;             /* optional tighter padding */
+  }
+
+  /* Ensure cards stretch properly */
+  .events-panel .event-card {
+    width: 100%;
+  }
 
   /* Events panel padding */
   .events-panel {
