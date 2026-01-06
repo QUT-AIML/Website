@@ -451,12 +451,13 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  background: #1c1c1c;
+  background: #272727;
   border-radius: 16px;
   padding: 1rem;
   flex: 1 1 45%; /* two cards per row in grid */
   opacity: 1;
   transition: opacity 0.6s ease;
+  box-shadow: 8px 8px 0 #1B1B1B;
 }
 
 /* Empty cards still maintain height even with hidden photo */
