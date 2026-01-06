@@ -62,7 +62,7 @@ const featuredEvents = eventsBySemester
         <div class="key-content">
 
           <section class="events-panel">
-            <section id="events-grid" class="events-grid">
+            <section class="events-grid">
               {featuredEvents.map(ev => (
                 <article class="event-card" data-semester={ev.semesterId} data-category={ev.category} data-type={ev.type ?? ev.category ?? "Other"} data-title={ev.title.toLowerCase()} data-date={ev.date}>
                   <a href={`/events/${ev.semesterId}/${ev.id}`}>
