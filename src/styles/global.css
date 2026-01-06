@@ -564,3 +564,69 @@ footer {
 }
 
 
+
+
+
+
+/* ------------------------------------ */
+/*                 OTHER                */
+/* ------------------------------------ */
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;        
+  justify-content: flex-start;
+  padding-top: 5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100vw;
+}
+
+.header-section {
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.centered-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;   
+  text-align: center;  
+  width: 100%;      
+}
+
+.pink-divider {
+  width: 60px;          
+  height: 2px;           
+  background-color: #A30093; 
+  margin: 1.5rem auto;    
+  border-radius: 2px;   
+  width: 80%;
+}
+
+.site-logo {
+    padding-top: 3rem;
+    display: block; /* ensures centering works reliably */
+    margin-left: auto;
+    margin-right: auto;    
+    width: 65vw; /* desktop default */
+    max-width: 80vw;
+}
+
