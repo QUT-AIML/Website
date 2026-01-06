@@ -57,7 +57,9 @@
   background-color: var(--color-primary);
   color: #000;
   font-weight: 500;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
 }
 
 /* ===============================

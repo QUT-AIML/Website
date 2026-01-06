@@ -38,33 +38,36 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
         <section class="pink-panel">
           <p class="pink-title">Featured Learning</p>
         </section>
-        <section class="featured-learning-panel">
-          <div class="featured-learning-grid">
-            {featuredLearnings.map(ev => (
-              <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-                <a href={`/learn/${ev.id}`}>
-                  <div class="card-media">
-                    {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
-                  </div>
-                  <div class="card-body">
-                    <h3 class="card-title">{ev.title}</h3>
-                    <div class="card-divider"></div>
-                    <time class="card-date">{ev.dateLabel || ev.date}</time>
-                    <p class="card-description">{ev.excerpt}</p>
-                    <div class="card-footer">
-                      <span class="card-view-more">View more →</span>
-                    </div>
-                  </div>
-                </a>
-              </article>
-            ))}
-          </div>
-        </section>
+
+        <div class="key-content">
+            <section class="learning-panel">
+              <section class="learning-grid">
+                {featuredLearnings.map(ev => (
+                  <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
+                    <a href={`/learn/${ev.id}`}>
+                      <div class="card-media">
+                        {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
+                      </div>
+                      <div class="card-body">
+                        <h3 class="card-title">{ev.title}</h3>
+                        <div class="card-divider"></div>
+                        <time class="card-date">{ev.dateLabel || ev.date}</time>
+                        <p class="card-description">{ev.excerpt}</p>
+                        <div class="card-footer">
+                          <span class="card-view-more">View more →</span>
+                        </div>
+                      </div>
+                    </a>
+                  </article>
+                ))}
+              </section>
+            </section>       
+          </div>  
       </>
     )}
 
     <!-- All Learnings -->
-    <section class="pink-panel">
+    <section class="pink-panel panel-topspace">
       <p class="pink-title">Learn about AI & ML</p>
     </section>
 
@@ -124,7 +127,6 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
             </div>
           </div>
         </section>
-      </div>
 
       <section class="learning-panel">
         <section id="learning-grid" class="learning-grid">

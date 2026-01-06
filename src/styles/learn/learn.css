@@ -262,16 +262,6 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
 .key-content {
     margin-left: 3rem;
     margin-right: 3rem;
@@ -283,26 +273,43 @@
 
 /* Panel wrapper that creates the dark grey division */
 .learning-panel {
-  margin-top: 0.1rem;
-  margin-right: 3rem;
-  margin-bottom: 5rem;
-  margin-left: 3rem;
-  padding: 1.5rem;
-  background: #272727;
-  box-shadow: 8px 8px 0 #1B1B1B;
-  border-radius: 12px;
+  position: relative;
+  padding: 1rem; /* shorthand for padding-top, right, bottom, left */
+  display: flex; /* make it a flex container */
+  justify-content: center; /* centers items horizontally */
+  align-items: center; /* centers items vertically */
+  max-width: 100%;
   width: 100%;
+}
+
+
+/* The dark grey background block behind the grid */
+.learning-panel::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0.5rem;                   /* small offset from top of wrapper */
+  bottom: 0.5rem;                /* small offset from bottom of wrapper */
+  background: #272727;           /* dark grey color (adjust as needed) */
+  border-radius: 12px;           /* rounded corners to match cards */
+  z-index: 0;                    /* sits behind the grid */
+  box-shadow: 8px 8px 0 #1B1B1B;
 }
 
 /* Ensure the grid and cards sit above the panel */
 .learning-grid {
-  display: grid;
-  justify-content: start; /* aligns cards to the left instead of stretching */
-  grid-template-columns: repeat(auto-fit, 360px); /* 360px cards, auto-fit columns */
-  gap: 1.5rem; /* same gap as main grid */
-  padding: 1rem; /* inner spacing */
-  width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 360px); 
+    gap: 1.5rem;
+    padding: 1rem;
+    width: auto;             /* let the grid shrink to fit content */
+    justify-content: center; /* center items if fewer than a full row */
+    max-width: 1200px;       /* optional: prevent grid from stretching too wide */
 }
+
+
+
 
 .pink-panel,
 .learning-controls {
@@ -419,36 +426,12 @@
 
 
 
-/* === FEATURED LEARNING === */
-.featured-learning-panel {
-  margin-top: 0.1rem;
-  margin-right: 3rem;
-  margin-bottom: 5rem;
-  margin-left: 3rem;
-  padding: 1.5rem;
-  background: #272727;
-  box-shadow: 8px 8px 0 #1B1B1B;
-  border-radius: 12px;
-  width: 100%;
-}
-
-.featured-learning-grid {
-  display: grid;
-  justify-content: start; /* aligns cards to the left instead of stretching */
-  grid-template-columns: repeat(auto-fit, 360px); /* 360px cards, auto-fit columns */
-  gap: 1.5rem; /* same gap as main grid */
-  padding: 1rem; /* inner spacing */
-  width: 100%;
-}
-
-.featured-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #FF8BF4; /* match pink accent */
-  margin-bottom: 1rem;
-}
-
 @media (max-width: 768px) {
+
+  .key-content {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 
   /* Reduce top spacing */
   .learning-space {
@@ -505,59 +488,12 @@
     border-radius: 12px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
   }
-  
-
-  .learning-panel {
-    margin-top: 0.1rem;
-    margin-right: 1rem;
-    margin-bottom: 5rem;
-    margin-left: 1rem;
-    padding: 1.5rem;
-  }
 
   /* Adjust grid layout for mobile */
-  .learning-grid,
-  .featured-learning-grid {
+  .learning-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    padding-bottom: 1.5rem;
-    width: 100%;
   }
 
-  /* Remove outer margins on content wrapper */
-  .key-content {
-    margin-left: 1.3rem;
-    margin-right: 1.3rem;
-    margin-bottom: 0.1rem;
-    width: 100%;
-  }
-
-  .featured-learning-panel {
-    margin-left: 1rem;
-    margin-right: 1rem;
-  }
-
-  .learning-panel {
-    margin-bottom: 1rem;
-  }
-
-
-  /* Panel adjustments */
-  .learning-panel,
-  .featured-learning-panel {
-    padding: 0.5rem 1rem;
-  }
-
-  .learning-panel::before,
-  .featured-learning-panel::before {
-    left: 0;
-    right: 0;
-    top: 0.25rem;
-    bottom: 0.25rem;
-    border-radius: 10px;
-  }
 
   /* Learn cards full width */
   .learn-card {
@@ -569,6 +505,7 @@
     position: relative;
     flex-wrap: wrap;
     gap: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   .learning-controls {
@@ -608,6 +545,10 @@
     cursor: pointer;
   }
 
+  .panel-topspace {
+    margin-top: 3rem;
+  }
+
 }
 
 
@@ -629,11 +570,6 @@
 }
 
 
-/* Remove extra bottom margin from learning panel */
-.learning-panel {
-  margin-bottom: 1rem; /* was 5rem on desktop, 1rem for tighter spacing */
-  padding-bottom: 1rem; /* optional: reduce inner padding if needed */
-}
 
 /* Pagination spacing */
 #learning-pagination {
@@ -685,10 +621,6 @@
 
 /* Desktop adjustments */
 @media (min-width: 769px) {
-  .learning-panel {
-    margin-bottom: 0; /* remove extra spacing */
-    padding-bottom: 0; /* remove inner padding at bottom */
-  }
 
   #learning-pagination {
     margin-top: 0.5rem; /* small gap, adjust as needed */
