@@ -7,9 +7,6 @@ import Footer from "@/components/Footer.astro";
 // Import all team-details.json files eagerly from all year folders
 const teamFiles = import.meta.glob('/public/data/about/*/team-details.json', { eager: true });
 
-// Debug: see all files found
-console.log("[ABOUT] Raw teamFiles from glob:", teamFiles);
-
 // Map to { path, year } objects, ignoring non-numeric folders like Template
 const teamFileYears = Object.keys(teamFiles)
   .map(path => {
@@ -19,8 +16,6 @@ const teamFileYears = Object.keys(teamFiles)
   })
   .filter(f => f.valid);
 
-console.log("[ABOUT] Filtered numeric years:", teamFileYears);
-
 // Pick the latest numeric year
 const latestTeamFile = teamFileYears
   .sort((a, b) => b.year - a.year)[0];
@@ -29,11 +24,8 @@ if (!latestTeamFile) {
   throw new Error("No valid year found in about data");
 }
 
-console.log("[ABOUT] Latest team file selected:", latestTeamFile.path);
-
 // Get the JSON array from that file
 const latestTeamData = teamFiles[latestTeamFile.path].default;
-console.log("[ABOUT] Latest team data (raw JSON):", latestTeamData);
 
 // Normalise image paths for exec-photos
 const teamsForClient = latestTeamData.map(section => ({
@@ -46,7 +38,6 @@ const teamsForClient = latestTeamData.map(section => ({
   })),
 }));
 
-console.log("[ABOUT] Final teamsForClient:", teamsForClient);
 ---
 
 
@@ -61,7 +52,7 @@ console.log("[ABOUT] Final teamsForClient:", teamsForClient);
       name="description"
       content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning."
     />
-    <title>QUT AIML</title>
+    <title>QUT AI & ML Society</title>
   </head>
 
   <body class="background-dots">
