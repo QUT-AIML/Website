@@ -1,18 +1,38 @@
 {
   "title": "BANDS x AIML Collab P2 – How to Maintain a ML Portfolio",
   "slug": "bands-aiml-collab-p2",
-  "date": "2024-2-2",
+  "date": "2025-08-12",
   "description": "Part 2 of our collaboration with BANDS focuses on maintaining your ML portfolio and keeping it relevant.",
+  "dateLabel": "Tuesday, 12 Aug 2025",
   "category": "Resource",
   "featured": true,
-  "image": "bands.png", 
+  "image": "bands.png",
+  "slides": "BANDS Part 2.pdf",
 
-  "url": "https://drive.google.com/file/d/1hc7PR2XOKLB5oktEHT6oZ2-tkmhmy9Vl/view?usp=share_link",
-  "content": [
-    "Explore strategies for keeping projects relevant through newsletters, blogs, and competitions.",
-    "Learn to use platforms like Weights & Biases, DVC, Trello, and Evernote.",
-    "Hear from industry guest Albert Dai and participate in interactive sessions on portfolio management.",
+  "overview": {
+    "definition": "Learn strategies to maintain and update your ML portfolio to keep it relevant and impactful.",
+    "types": ["Collaboration", "Portfolio Maintenance"],
+    "key_concepts": [
+      "Portfolio Maintenance",
+      "Using ML Tools Effectively",
+      "Industry Guidance & Trends"
+    ]
+  },
+
+  "tutorials": [],
+
+  "videos": [],
+  "applications": [
+    "Use platforms like Weights & Biases, DVC, Trello, and Evernote to manage your projects.",
+    "Participate in interactive sessions on portfolio management.",
     "Stay current with ML trends and showcase your skills effectively."
   ],
-  "tags": ["ML Portfolio", "Collaboration", "Project Management", "Tools", "Industry Guest"]
+
+  "resources": [],
+
+  "tips": [
+    "Regularly update your portfolio projects.",
+    "Document your work clearly using tools like Trello or Evernote.",
+    "Engage with competitions and industry insights to stay relevant."
+  ]
 }
