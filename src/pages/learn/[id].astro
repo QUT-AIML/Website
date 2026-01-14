@@ -55,6 +55,7 @@ const learnings = Object.values(rawLearnFiles)
     return {
       ...ev,
       slug,
+      slides: ev.slides ? `/data/learn/data/slides/${ev.slides}` : null,
       image: ev.image ? `/data/learn/data/images/${ev.image}` : null,
       dateLabel: ev.date
         ? new Date(ev.date).toLocaleDateString("en-GB", {
@@ -140,6 +141,26 @@ function formatDate(dateStr) {
             <img src={learning.image} alt={learning.title} />
           </section>
         )}
+
+        <!-- SLIDES -->
+        {learning.slides && (
+          <section class="learn-section">
+            <h3>Slides / Presentation</h3>
+            <object 
+              data={learning.slides} 
+              type="application/pdf" 
+              width="100%" 
+              height="600">
+              <p>
+                Your browser does not support inline PDFs. 
+                <a href={learning.slides} target="_blank" class="learn-link">
+                  Download the slides
+                </a>
+              </p>
+            </object>
+          </section>
+        )}
+
 
         <!-- DEFINITION -->
         {learning.overview?.definition && (

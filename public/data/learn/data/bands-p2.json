@@ -7,6 +7,7 @@
   "category": "Resource",
   "featured": true,
   "image": "bands.png",
+  "slides": "BANDS Part 2.pdf",
 
   "overview": {
     "definition": "Learn strategies to maintain and update your ML portfolio to keep it relevant and impactful.",
@@ -18,13 +19,7 @@
     ]
   },
 
-  "tutorials": [
-    {
-      "title": "Portfolio Maintenance Guide",
-      "url": "https://drive.google.com/file/d/1hc7PR2XOKLB5oktEHT6oZ2-tkmhmy9Vl/view?usp=share_link",
-      "description": "Explore strategies for keeping projects relevant through newsletters, blogs, and competitions."
-    }
-  ],
+  "tutorials": [],
 
   "videos": [],
   "applications": [
@@ -33,12 +28,7 @@
     "Stay current with ML trends and showcase your skills effectively."
   ],
 
-  "resources": [
-    {
-      "title": "Collaboration Materials",
-      "url": "https://drive.google.com/file/d/1hc7PR2XOKLB5oktEHT6oZ2-tkmhmy9Vl/view?usp=share_link"
-    }
-  ],
+  "resources": [],
 
   "tips": [
     "Regularly update your portfolio projects.",
