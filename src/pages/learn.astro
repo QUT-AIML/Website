@@ -369,13 +369,17 @@ function formatDate(dateStr) {
 
     paginationContainer.innerHTML = html;
 
+
     Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
       btn.addEventListener('click', () => {
         let page = parseInt(btn.dataset.page);
         if (isNaN(page)) return;
         currentPage = Math.min(Math.max(page, 1), totalPages);
+
         renderPage();
         renderPagination();
+
+        window.scrollBy({ top: -650, left: 0, behavior: 'smooth' });
       });
     });
   }
