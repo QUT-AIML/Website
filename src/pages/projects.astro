@@ -19,7 +19,6 @@ function formatSemesterLabel(label) {
 // Step 1: Load all project.json files
 // -----------------------------
 const rawProjectFiles = import.meta.glob('/public/data/projects/*/*.json', { eager: true });
-console.log("[PROJECTS] Raw project files:", rawProjectFiles);
 
 // -----------------------------
 // Step 2: Map files into semesters
@@ -106,9 +105,6 @@ if (allTypesSet.size > 1) {
   types = ["All", ...preferredExisting, ...remaining];
 }
 
-console.log("[PROJECTS] Current:", currentProjects);
-console.log("[PROJECTS] Past:", pastProjects);
-console.log("[PROJECTS] Types:", types);
 ---
 
 
@@ -121,7 +117,7 @@ console.log("[PROJECTS] Types:", types);
       name="description"
       content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning."
     />
-    <title>QUT AIML</title>
+    <title>QUT AI & ML Society</title>
     <link rel="stylesheet" href="/styles/global.css" />
     <link rel="stylesheet" href="/styles/projects/projects.css" />
   </head>
@@ -308,147 +304,125 @@ console.log("[PROJECTS] Types:", types);
     </body>
     </htmll>
     
-
+    
     <script type="module">
-      const searchInput = document.getElementById('projects-search');
-      const grid = document.getElementById('projects-grid');
-      const paginationContainer = document.getElementById('projects-pagination');
-      const filtersToggle = document.getElementById('filters-toggle');
-      const filtersPopover = document.getElementById('filters-popover');
-      const semesterSelectPop = document.getElementById('semester-select-pop');
-      const sortSelectPop = document.getElementById('sort-select-pop');
-      const typeSelectPop = document.getElementById('type-select-pop');
-      const typeFiltersContainer = document.getElementById('type-filters');
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('projects-search');
+  const pastGrid = document.querySelector('#type-filters #projects-grid'); // past projects grid
+  const paginationContainer = document.getElementById('projects-pagination');
+  const semesterSelectPop = document.getElementById('semester-select-pop');
+  const sortSelectPop = document.getElementById('sort-select-pop');
+  const typeSelectPop = document.getElementById('type-select-pop');
 
-      const PROJECTS_PER_PAGE = 6;
-      let currentPage = 1;
-      let currentSemester = 'all';
-      let currentSort = '';
-      let filteredCards = [];
-      let typeButtons = [];
+  if (!pastGrid || !paginationContainer) return;
 
-      // Render desktop type buttons
-      function renderTypeButtons(types) {
-        if (!typeFiltersContainer) return; // safety check
+  const PROJECTS_PER_PAGE = 6;
+  let currentPage = 1;
+  let currentSemester = 'all';
+  let currentSort = '';
+  let filteredCards = [];
 
-        typeFiltersContainer.innerHTML = '';
+  // ---------- Get selected type ----------
+  function getSelectedType() {
+    return typeSelectPop?.value || 'All';
+  }
 
-        types.forEach((t, index) => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.dataset.type = t;
-          btn.textContent = t;
-          btn.className = `type-btn ${index === 0 ? 'active' : ''}`;
+  // ---------- Apply filters ----------
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    const selectedType = getSelectedType();
 
-          btn.addEventListener('click', () => {
-            typeButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentPage = 1;
-            applyFilters();
-          });
+    filteredCards = Array.from(pastGrid.querySelectorAll('.project-card')).filter(card => {
+      const title = card.dataset.title || '';
+      const excerpt = card.querySelector('.card-description')?.textContent.toLowerCase() || '';
+      const cardType = card.dataset.type || '';
+      const cardSemester = card.dataset.semester || '';
 
-          typeFiltersContainer.appendChild(btn);
-        });
+      return (!query || title.includes(query) || excerpt.includes(query)) &&
+             (selectedType === 'All' || cardType === selectedType) &&
+             (currentSemester === 'all' || cardSemester === currentSemester);
+    });
 
-        typeButtons = Array.from(typeFiltersContainer.querySelectorAll('.type-btn'));
-      }
+    applySort();
+    currentPage = 1;
+    renderPage();
+    renderPagination();
+  }
 
+  // ---------- Sorting ----------
+  function applySort() {
+    if (!currentSort) return;
+    filteredCards.sort((a, b) => {
+      const aTitle = a.querySelector('.card-title')?.textContent || '';
+      const bTitle = b.querySelector('.card-title')?.textContent || '';
+      if (currentSort === 'title-asc') return aTitle.localeCompare(bTitle, undefined, { sensitivity: 'base' });
+      if (currentSort === 'title-desc') return bTitle.localeCompare(aTitle, undefined, { sensitivity: 'base' });
+      return 0;
+    });
+  }
 
-      // ---------- Sorting ----------
-      function applySort() {
-        if (!currentSort) return;
-        filteredCards.sort((a, b) => {
-          const aTitle = a.querySelector('.card-title')?.textContent || '';
-          const bTitle = b.querySelector('.card-title')?.textContent || '';
-          if (currentSort === 'title-asc') return aTitle.localeCompare(bTitle, undefined, { sensitivity: 'base' });
-          if (currentSort === 'title-desc') return bTitle.localeCompare(aTitle, undefined, { sensitivity: 'base' });
-          return 0;
-        });
-      }
+  // ---------- Render current page ----------
+  function renderPage() {
+    const start = (currentPage - 1) * PROJECTS_PER_PAGE;
+    const end = start + PROJECTS_PER_PAGE;
 
-      // ---------- Get selected type ----------
-      function getSelectedType() {
-        if (typeSelectPop) {
-          return typeSelectPop.value;
-        } 
-      }
+    Array.from(pastGrid.querySelectorAll('.project-card')).forEach(card => card.style.display = 'none');
+    filteredCards.slice(start, end).forEach(card => card.style.display = '');
+  }
 
-      // ---------- Filtering ----------
-      function applyFilters() {
-        const query = searchInput.value.trim().toLowerCase();
-        const selectedType = getSelectedType();
+  // ---------- Render pagination ----------
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredCards.length / PROJECTS_PER_PAGE);
+    paginationContainer.innerHTML = '';
 
-        filteredCards = Array.from(grid.querySelectorAll('.project-card')).filter(card => {
-          const title = card.dataset.title || '';
-          const excerpt = card.querySelector('.card-description')?.textContent.toLowerCase() || '';
-          const cardType = card.dataset.type || '';
-          const cardSemester = card.dataset.semester || '';
+    if (totalPages === 0) {
+      paginationContainer.style.display = 'none';
+      return;
+    }
 
-          return (!query || title.includes(query) || excerpt.includes(query)) &&
-                 (selectedType === 'All' || cardType === selectedType) &&
-                 (currentSemester === 'all' || cardSemester === currentSemester);
-        });
+    paginationContainer.style.display = 'flex';
 
-        applySort();
-        filteredCards.forEach(card => grid.appendChild(card));
-        currentPage = 1;
-        renderPage();
-        renderPagination();
-      }
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = 'Prev';
+    prevBtn.className = 'pagination-btn';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.dataset.page = currentPage - 1;
+    paginationContainer.appendChild(prevBtn);
 
-      // ---------- Render page ----------
-      function renderPage() {
-        const start = (currentPage - 1) * PROJECTS_PER_PAGE;
-        const end = start + PROJECTS_PER_PAGE;
-        Array.from(grid.querySelectorAll('.project-card')).forEach(card => card.style.display = 'none');
-        filteredCards.slice(start, end).forEach(card => card.style.display = '');
-      }
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = i;
+      btn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+      btn.dataset.page = i;
+      paginationContainer.appendChild(btn);
+    }
 
-      // ---------- Render pagination ----------
-      function renderPagination() {
-        const totalPages = Math.ceil(filteredCards.length / PROJECTS_PER_PAGE);
-        paginationContainer.innerHTML = '';
-        if (totalPages <= 1) return;
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Next';
+    nextBtn.className = 'pagination-btn';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.dataset.page = currentPage + 1;
+    paginationContainer.appendChild(nextBtn);
 
-        let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
-        for (let i = 1; i <= totalPages; i++) {
-          html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+    Array.from(paginationContainer.querySelectorAll('button')).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const page = parseInt(btn.dataset.page);
+        if (!isNaN(page) && page >= 1 && page <= totalPages) {
+          currentPage = page;
+          renderPage();
+          renderPagination();
         }
-        html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
-        paginationContainer.innerHTML = html;
-
-        Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
-          btn.addEventListener('click', () => {
-            const page = parseInt(btn.dataset.page);
-            if (!isNaN(page)) {
-              currentPage = page;
-              renderPage();
-              renderPagination();
-            }
-          });
-        });
-      }
-
-      // ---------- Event listeners ----------
-      searchInput.addEventListener('input', () => { currentPage = 1; applyFilters(); });
-      semesterSelectPop.addEventListener('change', () => { currentSemester = semesterSelectPop.value; currentPage = 1; applyFilters(); });
-      sortSelectPop.addEventListener('change', () => { currentSort = sortSelectPop.value; currentPage = 1; applyFilters(); });
-      if (typeSelectPop) typeSelectPop.addEventListener('change', () => { currentPage = 1; applyFilters(); });
-
-      filtersToggle.addEventListener('click', e => {
-        e.stopPropagation();
-        filtersPopover.style.display = (filtersPopover.style.display==='block') ? 'none' : 'block';
-        filtersToggle.setAttribute('aria-expanded', filtersPopover.style.display==='block');
       });
-      document.addEventListener('click', e => { if(!filtersPopover.contains(e.target) && e.target!==filtersToggle) filtersPopover.style.display='none'; });
-      document.addEventListener('keydown', e => { if(e.key==='Escape') filtersPopover.style.display='none'; });
+    });
+  }
 
-      window.addEventListener('resize', applyFilters);
+  // ---------- Event listeners ----------
+  searchInput?.addEventListener('input', () => { currentPage = 1; applyFilters(); });
+  semesterSelectPop?.addEventListener('change', () => { currentSemester = semesterSelectPop.value; currentPage = 1; applyFilters(); });
+  sortSelectPop?.addEventListener('change', () => { currentSort = sortSelectPop.value; currentPage = 1; applyFilters(); });
+  typeSelectPop?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
 
-      // ---------- Initialize ----------
-      renderTypeButtons(["All", ...types.filter(t => t !== "All")]);
-      applyFilters();
-    </script>
-  </body>
-</html>
- 
+  // ---------- Initialize ----------
+  applyFilters();
+});
+</script>

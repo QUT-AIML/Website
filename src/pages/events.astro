@@ -8,7 +8,6 @@ import Footer from "@/components/Footer.astro";
 // Step 1: Import all event JSON files dynamically
 // ----------------------------------------------------
 const rawEventFiles = import.meta.glob('/public/data/events/*/*.json', { eager: true });
-console.log("[EVENTS] Raw event files:", rawEventFiles);
 
 // ----------------------------------------------------
 // Step 2: Map JSON files into semesters
@@ -29,8 +28,6 @@ for (const [path, mod] of Object.entries(rawEventFiles)) {
     semestersMap[folder].push(data);
   }
 }
-
-console.log("[EVENTS] Semesters map:", semestersMap);
 
 // ----------------------------------------------------
 // Step 3: Normalize semesters
@@ -64,16 +61,12 @@ const semesters = Object.entries(semestersMap).map(([id, events]) => ({
   })),
 }));
 
-console.log("[EVENTS] Normalized semesters with images:", semesters);
-
 // ----------------------------------------------------
 // Step 4: Flatten events for filtering/pagination
 // ----------------------------------------------------
 const eventsBySemester = semesters
   .map(s => s.events.map(ev => ({ ...ev, semesterId: s.id })))
   .flat();
-
-console.log("[EVENTS] Flattened events:", eventsBySemester);
 
 // ----------------------------------------------------
 // Step 5: Determine dynamic types for filtering
@@ -91,7 +84,6 @@ const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.include
 remaining.sort((a, b) => a.localeCompare(b));
 
 const types = ["All", ...preferredExisting, ...remaining];
-console.log("[EVENTS] Event types:", types);
 
 // ----------------------------------------------------
 // Step 6: Featured events (future only)
@@ -106,8 +98,6 @@ const featuredEvents = eventsBySemester
     eventDate.setHours(0, 0, 0, 0);
     return eventDate >= today;
   });
-
-console.log("[EVENTS] Featured events:", featuredEvents);
 ---
 
 
@@ -121,7 +111,7 @@ console.log("[EVENTS] Featured events:", featuredEvents);
       name="description"
       content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning."
     />
-    <title>QUT AIML</title>
+    <title>QUT AI & ML Society</title>
   </head>
 
   <body class="background-dots">

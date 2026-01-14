@@ -9,8 +9,6 @@ import Footer from "@/components/Footer.astro";
 // -----------------------------
 const rawLearnFiles = import.meta.glob('/public/data/learn/data/*.json', { eager: true });
 
-console.log("[LEARN] Raw learn files:", rawLearnFiles);
-
 // -----------------------------
 // Step 2: Flatten files into a single array
 // -----------------------------
@@ -79,7 +77,6 @@ function formatDate(dateStr) {
   }).format(date);
 }
 
-console.log("[LEARN] Slugs, categories, featured loaded");
 ---
 
 
@@ -89,7 +86,7 @@ console.log("[LEARN] Slugs, categories, featured loaded");
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width" />
   <meta name="description" content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning." />
-  <title>QUT AIML</title>
+  <title>QUT AI & ML Society</title>
 </head>
 
 <body class="background-dots">

@@ -8,7 +8,6 @@ import Footer from "@/components/Footer.astro";
 // Step 1: Import all team-details.json files dynamically
 // ----------------------------------------------------
 const rawTeamFiles = import.meta.glob('/public/data/about/*/team-details.json', { eager: true });
-console.log("[HISTORY] Raw teamFiles from glob:", rawTeamFiles);
 
 // ----------------------------------------------------
 // Step 2: Map to year + path, ignore non-numeric folders like Template
@@ -21,14 +20,12 @@ const teamsByYear = Object.keys(rawTeamFiles)
   })
   .filter(f => f.valid)
   .sort((a, b) => b.year - a.year); // descending
-console.log("[HISTORY] teamsByYear after filtering & sorting:", teamsByYear);
 
 // ----------------------------------------------------
 // Step 3: Normalize data with executiveList and teamPhoto
 // ----------------------------------------------------
 // Also check if team-photo.png exists in the folder
 const photoFiles = import.meta.glob('/public/data/about/*/team-photo.png', { eager: true });
-console.log("[HISTORY] Raw photoFiles from glob:", photoFiles);
 
 const teamsData = teamsByYear.map(({ year, path }) => {
   const teamJson = rawTeamFiles[path].default;
@@ -50,8 +47,6 @@ const teamsData = teamsByYear.map(({ year, path }) => {
 
   return { year, executiveList, teamPhoto };
 });
-
-console.log("[HISTORY] Final teamsData:", teamsData);
 
 // ----------------------------------------------------
 // Step 4: Helper function to group members by role
