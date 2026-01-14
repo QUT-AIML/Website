@@ -4,31 +4,26 @@ import "@/styles/learn/learn-details.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// --- Helper: slugify function for URLs ---
-function slugify(title: string) {
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-");
-}
-
 // ----------------------------------------------------
 // Step 0: Export static paths for all learning pages
 // ----------------------------------------------------
 export async function getStaticPaths() {
   const rawLearnFiles = import.meta.glob('/public/data/learn/data/*.json', { eager: true });
-  const paths: { params: { id: string } }[] = [];
+  const paths = [];
 
   for (const mod of Object.values(rawLearnFiles)) {
     const data = mod.default;
     const items = Array.isArray(data) ? data : [data];
 
-    items.forEach((ev: any) => {
+    items.forEach((ev) => {
+      const slug = ev.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-");
+
       paths.push({
-        params: {
-          id: slugify(ev.title),
-        },
+        params: { id: slug },
       });
     });
   }
@@ -46,22 +41,31 @@ const idSlug = params.id;
 // Step 2: Load all learnings
 // ----------------------------------------------------
 const rawLearnFiles = import.meta.glob('/public/data/learn/data/*.json', { eager: true });
+
 const learnings = Object.values(rawLearnFiles)
   .map(mod => mod.default)
   .flat()
-  .map(ev => ({
-    ...ev,
-    slug: slugify(ev.title),
-    image: ev.image ? `/data/learn/data/images/${ev.image}` : null,
-    dateLabel: ev.date
-      ? new Date(ev.date).toLocaleDateString("en-GB", {
-          weekday: "long",
-          day: "numeric",
-          month: "short",
-          year: "numeric"
-        })
-      : "",
-  }));
+  .map(ev => {
+    const slug = ev.title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
+
+    return {
+      ...ev,
+      slug,
+      image: ev.image ? `/data/learn/data/images/${ev.image}` : null,
+      dateLabel: ev.date
+        ? new Date(ev.date).toLocaleDateString("en-GB", {
+            weekday: "long",
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+          })
+        : "",
+    };
+  });
 
 // ----------------------------------------------------
 // Step 3: Find the specific learning
@@ -72,7 +76,7 @@ const notFound = !learning;
 // ----------------------------------------------------
 // Step 4: Utility function for formatted date
 // ----------------------------------------------------
-function formatDate(dateStr: string) {
+function formatDate(dateStr) {
   if (!dateStr) return "";
   const date = new Date(dateStr);
   return new Intl.DateTimeFormat("en-GB", {

@@ -4,12 +4,15 @@ import "@/styles/events/event-details.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// --- Helper: slugify title to match URL ---
+// ----------------------------------------------------
+// Helper: slugify title to match URL (must be defined
+// BEFORE getStaticPaths and inside the frontmatter)
+// ----------------------------------------------------
 function slugify(title: string) {
   return title
     .toLowerCase()
-    .replace(/[^\w\s-]/g, "") // remove special chars
-    .replace(/\s+/g, "-");    // spaces → dash
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-");
 }
 
 // ----------------------------------------------------
@@ -17,7 +20,7 @@ function slugify(title: string) {
 // ----------------------------------------------------
 export async function getStaticPaths() {
   const rawEventFiles = import.meta.glob('/public/data/events/*/*.json', { eager: true });
-  const paths: { params: { semester: string; event: string } }[] = [];
+  const paths = [];
 
   for (const [path, mod] of Object.entries(rawEventFiles)) {
     const segments = path.split('/');
@@ -25,11 +28,16 @@ export async function getStaticPaths() {
     const data = mod.default;
     const events = Array.isArray(data) ? data : [data];
 
-    events.forEach((ev: any) => {
+    events.forEach(ev => {
+      const slug = ev.title
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-");
+
       paths.push({
         params: {
           semester: semesterId,
-          event: slugify(ev.title),
+          event: slug,
         },
       });
     });
@@ -39,60 +47,41 @@ export async function getStaticPaths() {
 }
 
 // ----------------------------------------------------
-// Step 1: Get route params (for the current page)
+// Step 1: Get route params
 // ----------------------------------------------------
 const { params } = Astro;
 const semester = params.semester;
 const eventSlug = params.event;
 
 // ----------------------------------------------------
-// Step 2: Load all events (same as before)
-// ----------------------------------------------------
+// Step 2: Load all events (build-time)
 const rawEventFiles = import.meta.glob('/public/data/events/*/*.json', { eager: true });
-const semestersMap: Record<string, any[]> = {};
+const allEvents = [];
 
 for (const [path, mod] of Object.entries(rawEventFiles)) {
   const segments = path.split('/');
-  const folder = segments.at(-2);
-
-  if (!semestersMap[folder]) semestersMap[folder] = [];
-
+  const semesterId = segments.at(-2);
   const data = mod.default;
-  if (Array.isArray(data)) {
-    semestersMap[folder].push(...data);
-  } else if (data && typeof data === "object") {
-    semestersMap[folder].push(data);
-  }
+  const events = Array.isArray(data) ? data : [data];
+
+  events.forEach(ev => {
+    allEvents.push({
+      ...ev,
+      semesterId,
+      slug: slugify(ev.title),
+      image: ev.image ? `/data/events/${semesterId}/images/${ev.image}` : null,
+      gallery: ev.gallery?.map(g => ({
+        ...g,
+        src: g.src ? `/data/events/${semesterId}/images/${g.src}` : null,
+      })) ?? [],
+    });
+  });
 }
 
 // ----------------------------------------------------
-// Step 3: Normalize semester events
+// Step 3: Find the requested event
 // ----------------------------------------------------
-const semesters = Object.entries(semestersMap).map(([id, events]) => ({
-  id,
-  events: events.map((ev, index) => ({
-    ...ev,
-    slug: slugify(ev.title),
-    id: ev.id ?? `${id}-${index}`,
-    dateLabel: new Date(ev.date).toLocaleDateString("en-AU", {
-      weekday: "long",
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }),
-    image: ev.image ? `/data/events/${id}/images/${ev.image}` : null,
-    gallery: ev.gallery?.map(g => ({
-      ...g,
-      src: g.src ? `/data/events/${id}/images/${g.src}` : null,
-    })) ?? [],
-  })),
-}));
-
-// ----------------------------------------------------
-// Step 4: Find the requested event
-// ----------------------------------------------------
-const eventsForSemester = semesters.find(s => s.id === semester)?.events ?? [];
-const eventData = eventsForSemester.find(ev => ev.slug === eventSlug);
+const eventData = allEvents.find(ev => ev.semesterId === semester && ev.slug === eventSlug);
 
 const notFound = !eventData;
 const overview = eventData ?? null;
