@@ -4,11 +4,6 @@ import "@/styles/events/event-details.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// --- Get route params ---
-const { params } = Astro;
-const semester = params.semester;  // e.g., "sem-1-2026"
-const eventSlug = params.event;    // e.g., "welcome-night"
-
 // --- Helper: slugify title to match URL ---
 function slugify(title: string) {
   return title
@@ -18,18 +13,47 @@ function slugify(title: string) {
 }
 
 // ----------------------------------------------------
-// Step 1: Import all event JSON files dynamically
+// Step 0: Export static paths for all events
 // ----------------------------------------------------
-const rawEventFiles = import.meta.glob('/public/data/events/*/*.json', { eager: true });
+export async function getStaticPaths() {
+  const rawEventFiles = import.meta.glob('/public/data/events/*/*.json', { eager: true });
+  const paths: { params: { semester: string; event: string } }[] = [];
+
+  for (const [path, mod] of Object.entries(rawEventFiles)) {
+    const segments = path.split('/');
+    const semesterId = segments.at(-2);
+    const data = mod.default;
+    const events = Array.isArray(data) ? data : [data];
+
+    events.forEach((ev: any) => {
+      paths.push({
+        params: {
+          semester: semesterId,
+          event: slugify(ev.title),
+        },
+      });
+    });
+  }
+
+  return paths;
+}
 
 // ----------------------------------------------------
-// Step 2: Map JSON files into semesters
+// Step 1: Get route params (for the current page)
 // ----------------------------------------------------
+const { params } = Astro;
+const semester = params.semester;
+const eventSlug = params.event;
+
+// ----------------------------------------------------
+// Step 2: Load all events (same as before)
+// ----------------------------------------------------
+const rawEventFiles = import.meta.glob('/public/data/events/*/*.json', { eager: true });
 const semestersMap: Record<string, any[]> = {};
 
 for (const [path, mod] of Object.entries(rawEventFiles)) {
   const segments = path.split('/');
-  const folder = segments.at(-2); // folder name = semester ID
+  const folder = segments.at(-2);
 
   if (!semestersMap[folder]) semestersMap[folder] = [];
 
@@ -56,9 +80,7 @@ const semesters = Object.entries(semestersMap).map(([id, events]) => ({
       month: "short",
       year: "numeric",
     }),
-    // Ensure image path is correct
     image: ev.image ? `/data/events/${id}/images/${ev.image}` : null,
-    // Normalize gallery images if they exist
     gallery: ev.gallery?.map(g => ({
       ...g,
       src: g.src ? `/data/events/${id}/images/${g.src}` : null,
@@ -78,7 +100,6 @@ const details = eventData ?? {};
 const pageTitle = eventData
   ? `${details.title} — QUT AIML`
   : "Event not found";
-
 ---
 
 
