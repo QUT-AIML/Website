@@ -4,37 +4,46 @@ import "@/styles/events/events.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-/**
- * Fetch events from API (same-origin, no hard-coded domain)
- */
-const res = await fetch(new URL("/api/events", Astro.url));
+// ----------------------------------------------------
+// Step 1: Import all event JSON files dynamically
+// ----------------------------------------------------
+const rawEventFiles = import.meta.glob('/public/data/events/*/*.json', { eager: true });
+console.log("[EVENTS] Raw event files:", rawEventFiles);
 
-if (!res.ok) {
-  throw new Error("Failed to load events API");
+// ----------------------------------------------------
+// Step 2: Map JSON files into semesters
+// Each folder is a semester ID, e.g., "sem1-2026"
+// ----------------------------------------------------
+const semestersMap = {};
+
+for (const [path, mod] of Object.entries(rawEventFiles)) {
+  const segments = path.split('/');
+  const folder = segments.at(-2); // folder name = semester ID
+
+  if (!semestersMap[folder]) semestersMap[folder] = [];
+
+  const data = mod.default;
+  if (Array.isArray(data)) {
+    semestersMap[folder].push(...data);
+  } else if (data && typeof data === "object") {
+    semestersMap[folder].push(data);
+  }
 }
 
-const apiData = await res.json();
+console.log("[EVENTS] Semesters map:", semestersMap);
 
-
-
-// --- Helper: convert title to URL slug ---
-function slugify(title: string) {
+// ----------------------------------------------------
+// Step 3: Normalize semesters
+// Add slug, dateLabel, full image path, and unique ID
+// ----------------------------------------------------
+function slugify(title) {
   return title
     .toLowerCase()
-    .replace(/[^\w\s-]/g, "") // remove special chars
-    .replace(/\s+/g, "-");    // spaces → dash
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-");
 }
 
-/**
- * Normalize API data into the structure expected by the page
- * {
- *   semesters: [
- *     { id, label, events: [...] }
- *   ]
- * }
- */
-// Inside your semesters mapping
-const semesters = Object.entries(apiData).map(([id, events]) => ({
+const semesters = Object.entries(semestersMap).map(([id, events]) => ({
   id,
   label: id
     .replace(/-/g, " ")
@@ -43,25 +52,32 @@ const semesters = Object.entries(apiData).map(([id, events]) => ({
   events: events.map((ev, index) => ({
     ...ev,
     id: ev.id ?? `${id}-${index}`,
-    slug: slugify(ev.title), // <-- add slug here
+    slug: slugify(ev.title),
     dateLabel: new Date(ev.date).toLocaleDateString("en-AU", {
       weekday: "long",
       day: "numeric",
       month: "short",
       year: "numeric",
     }),
+    // <-- Correct image path
+    image: ev.image ? `/data/events/${id}/images/${ev.image}` : null,
   })),
 }));
 
-/* ===============================
-   EXISTING LOGIC (UNCHANGED)
-   =============================== */
+console.log("[EVENTS] Normalized semesters with images:", semesters);
 
+// ----------------------------------------------------
+// Step 4: Flatten events for filtering/pagination
+// ----------------------------------------------------
 const eventsBySemester = semesters
   .map(s => s.events.map(ev => ({ ...ev, semesterId: s.id })))
   .flat();
 
-// Determine dynamic types
+console.log("[EVENTS] Flattened events:", eventsBySemester);
+
+// ----------------------------------------------------
+// Step 5: Determine dynamic types for filtering
+// ----------------------------------------------------
 const preferred = ["Social", "Industry", "Projects", "Major"];
 const allTypesSet = new Set();
 
@@ -71,18 +87,18 @@ eventsBySemester.forEach(ev => {
 });
 
 const preferredExisting = preferred.filter(p => allTypesSet.has(p));
-const remaining = Array.from(allTypesSet).filter(
-  t => !preferredExisting.includes(t)
-);
-
+const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
 remaining.sort((a, b) => a.localeCompare(b));
 
 const types = ["All", ...preferredExisting, ...remaining];
+console.log("[EVENTS] Event types:", types);
 
+// ----------------------------------------------------
+// Step 6: Featured events (future only)
+// ----------------------------------------------------
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
-// Featured events (future only)
 const featuredEvents = eventsBySemester
   .filter(ev => ev.featured)
   .filter(ev => {
@@ -90,7 +106,11 @@ const featuredEvents = eventsBySemester
     eventDate.setHours(0, 0, 0, 0);
     return eventDate >= today;
   });
+
+console.log("[EVENTS] Featured events:", featuredEvents);
 ---
+
+
 
 <html lang="en">
   <head>

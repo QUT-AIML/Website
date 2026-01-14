@@ -5,44 +5,54 @@ import KeyLogo from "@/logos/Logo-Full.svg";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// Fetch events from API
-const res = await fetch(new URL("/api/events", Astro.url));
-if (!res.ok) throw new Error("Failed to fetch events API");
+// --- Load all event JSON files dynamically (exclude images folder)
+const eventFiles = import.meta.glob("/public/data/events/*/*.json", { eager: true });
 
-const apiData = await res.json();
+// --- Map events and attach slug + image
+const eventsBySemester = Object.entries(eventFiles).map(([path, mod]) => {
+  const event = mod.default;
 
-// Flatten events from API object
-const eventsBySemester = Object.entries(apiData)
-  .map(([semesterId, events]) =>
-    events.map((ev) => ({
-      ...ev,
-      semesterId,
-      dateLabel: new Date(ev.date).toLocaleDateString("en-AU", {
-        weekday: "long",  // Full weekday
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      }),
-    }))
-  )
-  .flat();
+  // semester folder, e.g., "sem-1-2026"
+  const semesterId = path.split("/").at(-2);
 
-console.log("Raw events from API:", apiData);
-console.log("Flattened eventsBySemester:", eventsBySemester);
+  // Resolve image URL if present
+  const image = event.image
+    ? `/data/events/${semesterId}/images/${event.image}`
+    : null;
 
-// Filter upcoming events
+  // Generate slug for URL
+  const slug = event.title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-");
+
+  return {
+    ...event,
+    semesterId,
+    image,
+    slug,
+    // Pre-format date for display
+    dateLabel: new Date(event.date).toLocaleDateString("en-AU", {
+      weekday: "long",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }),
+    // Event page URL
+    url: `/events/${semesterId}/${slug}`,
+  };
+});
+
+// --- Filter upcoming events
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
-// Next 3 upcoming events
 const upcomingEvents = eventsBySemester
   .filter(ev => new Date(ev.date) >= today)
   .sort((a, b) => new Date(a.date) - new Date(b.date))
   .slice(0, 3);
-
-console.log("Next 3 upcoming events:", upcomingEvents);
-
 ---
+
 
 <html lang="en">
   <head>

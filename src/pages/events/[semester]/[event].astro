@@ -17,26 +17,62 @@ function slugify(title: string) {
     .replace(/\s+/g, "-");    // spaces → dash
 }
 
-// --- Fetch events API at runtime ---
-const res = await fetch(new URL("/api/events", Astro.url));
-if (!res.ok) throw new Error("Failed to fetch events API");
-const apiData = await res.json();
+// ----------------------------------------------------
+// Step 1: Import all event JSON files dynamically
+// ----------------------------------------------------
+const rawEventFiles = import.meta.glob('/public/data/events/*/*.json', { eager: true });
 
-// --- Find the specific event by semester & slug ---
-const eventsForSemester = (apiData[semester] ?? []).map(ev => ({
-  ...ev,
-  slug: slugify(ev.title),
-  dateLabel: new Date(ev.date).toLocaleDateString("en-AU", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }),
+// ----------------------------------------------------
+// Step 2: Map JSON files into semesters
+// ----------------------------------------------------
+const semestersMap: Record<string, any[]> = {};
+
+for (const [path, mod] of Object.entries(rawEventFiles)) {
+  const segments = path.split('/');
+  const folder = segments.at(-2); // folder name = semester ID
+
+  if (!semestersMap[folder]) semestersMap[folder] = [];
+
+  const data = mod.default;
+  if (Array.isArray(data)) {
+    semestersMap[folder].push(...data);
+  } else if (data && typeof data === "object") {
+    semestersMap[folder].push(data);
+  }
+}
+
+// ----------------------------------------------------
+// Step 3: Normalize semester events
+// ----------------------------------------------------
+const semesters = Object.entries(semestersMap).map(([id, events]) => ({
+  id,
+  events: events.map((ev, index) => ({
+    ...ev,
+    slug: slugify(ev.title),
+    id: ev.id ?? `${id}-${index}`,
+    dateLabel: new Date(ev.date).toLocaleDateString("en-AU", {
+      weekday: "long",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }),
+    // Ensure image path is correct
+    image: ev.image ? `/data/events/${id}/images/${ev.image}` : null,
+    // Normalize gallery images if they exist
+    gallery: ev.gallery?.map(g => ({
+      ...g,
+      src: g.src ? `/data/events/${id}/images/${g.src}` : null,
+    })) ?? [],
+  })),
 }));
 
+// ----------------------------------------------------
+// Step 4: Find the requested event
+// ----------------------------------------------------
+const eventsForSemester = semesters.find(s => s.id === semester)?.events ?? [];
 const eventData = eventsForSemester.find(ev => ev.slug === eventSlug);
-const notFound = !eventData;
 
+const notFound = !eventData;
 const overview = eventData ?? null;
 const details = eventData ?? {};
 const pageTitle = eventData
@@ -46,6 +82,7 @@ const pageTitle = eventData
 // --- Make this page server-rendered, no getStaticPaths needed ---
 export const prerender = false;
 ---
+
 
 
 <html lang="en">

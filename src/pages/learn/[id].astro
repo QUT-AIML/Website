@@ -8,37 +8,54 @@ import Footer from "@/components/Footer.astro";
 const { params } = Astro;
 const idSlug = params.id;
 
-// --- Slugify title → URL ---
+// --- Slugify function (for URLs) ---
 function slugify(title: string) {
-  const slug = title
+  return title
     .toLowerCase()
     .trim()
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-");
-  return slug;
 }
 
-// --- Fetch learning ---
-const res = await fetch(new URL("/api/learn", Astro.url));
+// --- Load all learn JSON files from local data ---
+const rawLearnFiles = import.meta.glob('/public/data/learn/data/*.json', { eager: true });
+const learnings = Object.values(rawLearnFiles)
+  .map(mod => mod.default)
+  .flat()
+  .map(ev => ({
+    ...ev,
+    slug: slugify(ev.title),
+    image: ev.image ? `/data/learn/data/images/${ev.image}` : null,
+    dateLabel: ev.date
+      ? new Date(ev.date).toLocaleDateString("en-GB", {
+          weekday: "long",
+          day: "numeric",
+          month: "short",
+          year: "numeric"
+        })
+      : "",
+  }));
 
-if (!res.ok) throw new Error("Failed to fetch learn API");
-
-const apiData = await res.json();
-
-// --- Normalize to array ---
-const learn = Array.isArray(apiData)
-  ? apiData
-  : apiData.learn ?? apiData.data ?? [];
-
-// --- Match by slugified title ---
-const learning = learn.find((learning) => {
-  const learnSlug = slugify(learning.title);
-  const match = learnSlug === idSlug;
-  return match;
-});
-
+// --- Find the specific learning by slug ---
+const learning = learnings.find(ev => ev.slug === idSlug);
 const notFound = !learning;
+
+// --- Export prerender false to ensure dynamic matching ---
 export const prerender = false;
+
+// --- Utility function for formatted date ---
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  return new Intl.DateTimeFormat("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  }).format(date);
+}
+
+console.log("[LEARN DETAILS] Loaded learning:", learning);
 ---
 
 
