@@ -4,35 +4,62 @@ import "@/styles/learn/learn-details.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// Dynamic routes
-export async function getStaticPaths() {
-  const modules = import.meta.glob('../../data/learn/**/*.json', { eager: true });
+// --- Get route param ---
+const { params } = Astro;
+const idSlug = params.id;
+console.log("[learn] URL slug param:", idSlug);
 
-  return Object.keys(modules)
-    .map(path => {
-      const match = path.match(/\/([^/]+)\.json$/);
-      return match ? { params: { id: match[1] } } : null;
-    })
-    .filter(Boolean);
+// --- Slugify title → URL ---
+function slugify(title: string) {
+  const slug = title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-");
+
+  console.log("[learn] slugify:", `"${title}" → "${slug}"`);
+  return slug;
 }
 
-// Get route param
-const { id } = Astro.params;
+// --- Fetch learning ---
+const res = await fetch(new URL("/api/learn", Astro.url));
+console.log("learn API status:", res.status);
 
-// Load JSON data
-const modules = import.meta.glob('../../data/learn/**/*.json');
-const matchKey = Object.keys(modules).find(k => k.endsWith(`/${id}.json`));
+if (!res.ok) throw new Error("Failed to fetch learn API");
 
-let notFound = false;
-let learning = null;
+const apiData = await res.json();
+console.log("[earn raw API response:", apiData);
 
-if (!matchKey) {
-  notFound = true;
-} else {
-  const mod = await modules[matchKey]();
-  learning = mod.default ?? mod;
-}
+// --- Normalize to array ---
+const learn = Array.isArray(apiData)
+  ? apiData
+  : apiData.learn ?? apiData.data ?? [];
+
+console.log("learning normalized count:", learn.length);
+
+// --- Match by slugified title ---
+const learning = learn.find((learning) => {
+  const learnSlug = slugify(learning.title);
+  const match = learnSlug === idSlug;
+
+  console.log(
+    "[learn] compare:",
+    `"${learnSlug}" === "${idSlug}" →`,
+    match
+  );
+
+  return match;
+});
+
+console.log("[learn] matched title:", learning);
+
+const notFound = !learning;
+console.log("[learn] notFound:", notFound);
+
+export const prerender = false;
 ---
+
+
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -77,11 +104,12 @@ if (!matchKey) {
         )}
 
         <!-- HERO IMAGE -->
-        {learning.image && (
+        {learning?.image && (
           <section class="learn-hero">
             <img src={learning.image} alt={learning.title} />
           </section>
         )}
+
 
         <!-- OVERVIEW -->
         {learning.overview?.definition && (
