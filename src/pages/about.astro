@@ -4,40 +4,53 @@ import "@/styles/about/about.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-/**
- * Fetch about data from API (same-origin)
- */
-const res = await fetch(new URL("/api/about", Astro.url));
+// Import all team-details.json files eagerly from all year folders
+const teamFiles = import.meta.glob('/public/data/about/*/team-details.json', { eager: true });
 
-if (!res.ok) {
-  throw new Error("Failed to load about API");
+// Debug: see all files found
+console.log("[ABOUT] Raw teamFiles from glob:", teamFiles);
+
+// Map to { path, year } objects, ignoring non-numeric folders like Template
+const teamFileYears = Object.keys(teamFiles)
+  .map(path => {
+    const folderName = path.split("/").at(-2);
+    const year = parseInt(folderName);
+    return { path, year, valid: /^\d{4}$/.test(folderName) };
+  })
+  .filter(f => f.valid);
+
+console.log("[ABOUT] Filtered numeric years:", teamFileYears);
+
+// Pick the latest numeric year
+const latestTeamFile = teamFileYears
+  .sort((a, b) => b.year - a.year)[0];
+
+if (!latestTeamFile) {
+  throw new Error("No valid year found in about data");
 }
 
-const apiData = await res.json();
+console.log("[ABOUT] Latest team file selected:", latestTeamFile.path);
 
-/**
- * Determine latest numeric year (ignore "Template")
- */
-const latestYear = Object.keys(apiData)
-  .filter(key => /^\d{4}$/.test(key)) // only years like "2025", "2026"
-  .map(Number)
-  .sort((a, b) => b - a)[0];
+// Get the JSON array from that file
+const latestTeamData = teamFiles[latestTeamFile.path].default;
+console.log("[ABOUT] Latest team data (raw JSON):", latestTeamData);
 
-if (!latestYear) {
-  throw new Error("No valid year found in about API");
-}
+// Normalise image paths for exec-photos
+const teamsForClient = latestTeamData.map(section => ({
+  ...section,
+  items: section.items.map(member => ({
+    ...member,
+    image: member.image
+      ? `/data/about/${latestTeamFile.year}/exec-photos/${member.image}`
+      : null,
+  })),
+}));
 
-const latestTeamData = apiData[String(latestYear)];
-
-/**
- * Normalise for existing client-side carousel
- * Expected shape:
- * [
- *   { title, items: [...] }
- * ]
- */
-const teamsForClient = latestTeamData.executiveList;
+console.log("[ABOUT] Final teamsForClient:", teamsForClient);
 ---
+
+
+
 
 <html lang="en">
   <head>

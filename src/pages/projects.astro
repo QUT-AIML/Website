@@ -4,40 +4,49 @@ import "@/styles/projects/projects.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-/* -----------------------------
-   Helpers
------------------------------ */
+// -----------------------------
+// Helpers
+// -----------------------------
 function isTBCProject(p) {
   return p?.overview?.title?.toLowerCase() === "tbc";
 }
 
-/* Capitalize first letter, lowercase the rest */
 function formatSemesterLabel(label) {
   return label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
 }
 
-/* -----------------------------
-   Fetch projects from API
------------------------------ */
-const res = await fetch(new URL("/api/projects", Astro.url));
-if (!res.ok) throw new Error("Failed to fetch projects API");
+// -----------------------------
+// Step 1: Load all project.json files
+// -----------------------------
+const rawProjectFiles = import.meta.glob('/public/data/projects/*/*.json', { eager: true });
+console.log("[PROJECTS] Raw project files:", rawProjectFiles);
 
-const apiData = await res.json();
-console.log("Raw projects from API:", apiData);
+// -----------------------------
+// Step 2: Map files into semesters
+// -----------------------------
+const semestersMap = {};
+for (const [path, mod] of Object.entries(rawProjectFiles)) {
+  const semesterId = path.split('/').at(-2);
+  if (!semestersMap[semesterId]) semestersMap[semesterId] = [];
+  semestersMap[semesterId].push(mod.default);
+}
 
-/* -----------------------------
-   Flatten semesters
------------------------------ */
-const semesters = Object.keys(apiData).map(key => ({
-  id: key,
-  label: formatSemesterLabel(key.replace(/-/g, " ")), // Sem 1, 2026
-  projects: apiData[key]
+// -----------------------------
+// Step 3: Flatten semesters and add image paths
+// -----------------------------
+const semesters = Object.entries(semestersMap).map(([id, projects]) => ({
+  id,
+  label: formatSemesterLabel(id.replace(/-/g, " ")),
+  projects: projects.map(p => ({
+    ...p,
+    semesterId: id,
+    image: p.image ? `/data/projects/${id}/images/${p.image}` : null
+  }))
 }));
 
-/* -----------------------------
-   Sort semesters (newest first by date in id)
-   Assumes format sem-{num}-{year}
------------------------------ */
+// -----------------------------
+// Step 4: Sort semesters newest first (sem-{num}-{year})
+// -----------------------------
 const sortedSemesters = [...semesters].sort((a, b) => {
   const [aSem, aNum, aYear] = a.id.split("-");
   const [bSem, bNum, bYear] = b.id.split("-");
@@ -49,16 +58,14 @@ const sortedSemesters = [...semesters].sort((a, b) => {
 const latestSemester = sortedSemesters[0] ?? null;
 const latestProjectsRaw = latestSemester?.projects ?? [];
 
-/* -----------------------------
-   Determine if latest semester is TBC
------------------------------ */
-const latestIsTBC =
-  latestProjectsRaw.length === 0 ||
-  latestProjectsRaw.every(isTBCProject);
+// -----------------------------
+// Step 5: Determine if latest semester is TBC
+// -----------------------------
+const latestIsTBC = latestProjectsRaw.length === 0 || latestProjectsRaw.every(isTBCProject);
 
-/* -----------------------------
-   Current projects (only from latest semester if not TBC)
------------------------------ */
+// -----------------------------
+// Step 6: Current projects
+// -----------------------------
 const currentProjects = latestIsTBC
   ? []
   : latestProjectsRaw.map(p => ({
@@ -66,9 +73,9 @@ const currentProjects = latestIsTBC
       semesterId: latestSemester.id
     }));
 
-/* -----------------------------
-   Past projects (exclude TBC)
------------------------------ */
+// -----------------------------
+// Step 7: Past projects (exclude TBC)
+// -----------------------------
 const pastProjects = sortedSemesters
   .filter(s => s.id !== latestSemester?.id || latestIsTBC)
   .flatMap(s =>
@@ -80,14 +87,14 @@ const pastProjects = sortedSemesters
       }))
   );
 
-/* -----------------------------
-   Build filter types from past projects
------------------------------ */
+// -----------------------------
+// Step 8: Build filter types from past projects
+// -----------------------------
 const preferred = ["CNN", "Linear Regression"];
 const allTypesSet = new Set();
 
-pastProjects.forEach(ev => {
-  const t = (ev.type ?? ev.category ?? "Other")?.toString() ?? "Other";
+pastProjects.forEach(p => {
+  const t = (p.type ?? p.category ?? "Other")?.toString() ?? "Other";
   allTypesSet.add(t);
 });
 
@@ -96,12 +103,12 @@ if (allTypesSet.size > 1) {
   const preferredExisting = preferred.filter(p => allTypesSet.has(p));
   const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
   remaining.sort((a, b) => a.localeCompare(b));
-
   types = ["All", ...preferredExisting, ...remaining];
 }
 
-console.log("Current Projects:", currentProjects);
-console.log("Past Projects:", pastProjects);
+console.log("[PROJECTS] Current:", currentProjects);
+console.log("[PROJECTS] Past:", pastProjects);
+console.log("[PROJECTS] Types:", types);
 ---
 
 

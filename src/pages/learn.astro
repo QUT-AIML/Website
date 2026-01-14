@@ -4,42 +4,70 @@ import "@/styles/learn/learn.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// Fetch learnings directly from the API
-const res = await fetch(new URL("/api/learn", Astro.url));
-if (!res.ok) throw new Error("Failed to fetch learnings API");
+// -----------------------------
+// Step 1: Import all learn JSON files
+// -----------------------------
+const rawLearnFiles = import.meta.glob('/public/data/learn/data/*.json', { eager: true });
 
-let learnings = await res.json();
+console.log("[LEARN] Raw learn files:", rawLearnFiles);
 
-// Generate slugs for all learnings (always use slugify)
+// -----------------------------
+// Step 2: Flatten files into a single array
+// -----------------------------
+let learnings = Object.values(rawLearnFiles)
+  .map(mod => mod.default)
+  .flat();
+
+// -----------------------------
+// Step 3: Generate slugs and resolve image paths
+// -----------------------------
 learnings = learnings.map(ev => {
-  const title = ev.title;
+  const title = ev.title ?? ev.slug ?? "untitled";
 
-  // Generate full slug from title
-  const fullSlug = title
-    .toLowerCase()              
-    .replace(/[–—]/g, "-")      
-    .replace(/[^\w\s-]/g, "")   
-    .trim()                
-    .replace(/\s+/g, "-")      
-    .replace(/-+/g, "-");   
+  // Slugify
+  const slug = title
+    .toLowerCase()
+    .replace(/[–—]/g, "-")
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 
-  console.log(`[learn] slugify: "${title}" → "${fullSlug}"`);
+  // Resolve image path
+  const image = ev.image
+    ? `/data/learn/data/images/${ev.image}`
+    : null;
 
   return {
     ...ev,
-    slug: fullSlug, // always use the full slug
+    slug,
+    image,
+    dateLabel: ev.date
+      ? new Date(ev.date).toLocaleDateString("en-GB", {
+          weekday: "long",
+          day: "numeric",
+          month: "short",
+          year: "numeric"
+        })
+      : "",
   };
 });
 
-// Determine unique categories
+// -----------------------------
+// Step 4: Unique categories
+// -----------------------------
 const allCategoriesSet = new Set();
 learnings.forEach(ev => allCategoriesSet.add(ev.category ?? "Other"));
 const categories = ["All", ...Array.from(allCategoriesSet).sort()];
 
-// Featured learnings
+// -----------------------------
+// Step 5: Featured learnings
+// -----------------------------
 const featuredLearnings = learnings.filter(ev => ev.featured === true);
 
-// --- ADD THIS FUNCTION BACK ---
+// -----------------------------
+// Step 6: Utility function for dates
+// -----------------------------
 function formatDate(dateStr) {
   if (!dateStr) return "";
   const date = new Date(dateStr);
@@ -50,6 +78,8 @@ function formatDate(dateStr) {
     year: "numeric"
   }).format(date);
 }
+
+console.log("[LEARN] Slugs, categories, featured loaded");
 ---
 
 
@@ -77,7 +107,7 @@ function formatDate(dateStr) {
             <section class="learning-panel">
               <section class="learning-grid">
                 {featuredLearnings.map(ev => (
-                  <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date} data-slug={ev.slug}>
+                  <article class="learn-card" data-category={ev.category} data-title={ev.title} data-date={ev.date} data-slug={ev.slug}>
                     <a href={`/learn/${ev.slug}`}>
                       <div class="card-media">
                         {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
@@ -165,7 +195,7 @@ function formatDate(dateStr) {
         <section class="learning-panel">
         <section id="learning-grid" class="learning-grid">
           {learnings.map(ev => (
-            <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date} data-slug={ev.slug}>
+            <article class="learn-card" data-category={ev.category} data-title={ev.title} data-date={ev.date} data-slug={ev.slug}>
               <a href={`/learn/${ev.slug}`}>
                 <div class="card-media">
                   {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}

@@ -4,33 +4,58 @@ import "@/styles/about/history.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-/**
- * Fetch about/team API
- */
-const res = await fetch(new URL("/api/about", Astro.url));
+// ----------------------------------------------------
+// Step 1: Import all team-details.json files dynamically
+// ----------------------------------------------------
+const rawTeamFiles = import.meta.glob('/public/data/about/*/team-details.json', { eager: true });
+console.log("[HISTORY] Raw teamFiles from glob:", rawTeamFiles);
 
-if (!res.ok) {
-  throw new Error("Failed to load about API");
-}
+// ----------------------------------------------------
+// Step 2: Map to year + path, ignore non-numeric folders like Template
+// ----------------------------------------------------
+const teamsByYear = Object.keys(rawTeamFiles)
+  .map(path => {
+    const folderName = path.split("/").at(-2);
+    const year = parseInt(folderName);
+    return { path, year, valid: /^\d{4}$/.test(folderName) };
+  })
+  .filter(f => f.valid)
+  .sort((a, b) => b.year - a.year); // descending
+console.log("[HISTORY] teamsByYear after filtering & sorting:", teamsByYear);
 
-const apiData = await res.json();
+// ----------------------------------------------------
+// Step 3: Normalize data with executiveList and teamPhoto
+// ----------------------------------------------------
+// Also check if team-photo.png exists in the folder
+const photoFiles = import.meta.glob('/public/data/about/*/team-photo.png', { eager: true });
+console.log("[HISTORY] Raw photoFiles from glob:", photoFiles);
 
-/**
- * Convert API data into array sorted by year descending
- * Structure: [{ year, executiveList, teamPhoto }]
- */
-const teamsByYear = Object.entries(apiData)
-  .filter(([year]) => year !== "Template") // exclude Template
-  .map(([year, data]) => ({
-    year: parseInt(year),
-    executiveList: data.executiveList || [],
-    teamPhoto: data.teamPhoto || null
-  }))
-  .sort((a, b) => b.year - a.year);
+const teamsData = teamsByYear.map(({ year, path }) => {
+  const teamJson = rawTeamFiles[path].default;
 
-/**
- * Helper: group items by role
- */
+  // Normalize exec images
+  const executiveList = teamJson.map(section => ({
+    ...section,
+    items: section.items.map(member => ({
+      ...member,
+      image: member.image
+        ? `/data/about/${year}/exec-photos/${member.image}`
+        : null,
+    })),
+  }));
+
+  // Check if team-photo.png exists
+  const photoPathCandidate = `/public/data/about/${year}/team-photo.png`;
+  const teamPhoto = photoFiles[photoPathCandidate] ? `/data/about/${year}/team-photo.png` : null;
+
+  return { year, executiveList, teamPhoto };
+});
+
+console.log("[HISTORY] Final teamsData:", teamsData);
+
+// ----------------------------------------------------
+// Step 4: Helper function to group members by role
+// ----------------------------------------------------
 function groupByRole(items) {
   const map = {};
   items.forEach(p => {
@@ -40,7 +65,6 @@ function groupByRole(items) {
   return map;
 }
 ---
-
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -60,7 +84,7 @@ function groupByRole(items) {
       <div class="info-panel-wrapper">
         <div class="thick-line-behind"></div>
 
-        {teamsByYear.map(({ year, executiveList, teamPhoto }, yearIndex) => {
+        {teamsData.map(({ year, executiveList, teamPhoto }, yearIndex) => {
           const sectionTitle = `Team ${year}`;
 
           return (
