@@ -16,12 +16,12 @@ learnings = learnings.map(ev => {
 
   // Generate full slug from title
   const fullSlug = title
-    .toLowerCase()              // lowercase
-    .replace(/[–—]/g, "-")      // convert long dashes to hyphens
-    .replace(/[^\w\s-]/g, "")   // remove non-alphanumeric chars
-    .trim()                      // trim spaces
-    .replace(/\s+/g, "-")       // spaces → hyphens
-    .replace(/-+/g, "-");       // collapse multiple hyphens
+    .toLowerCase()              
+    .replace(/[–—]/g, "-")      
+    .replace(/[^\w\s-]/g, "")   
+    .trim()                
+    .replace(/\s+/g, "-")      
+    .replace(/-+/g, "-");   
 
   console.log(`[learn] slugify: "${title}" → "${fullSlug}"`);
 
