@@ -8,5 +8,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   integrations: [icon()],
-  adapter: nodeAdapter(),
+  adapter: nodeAdapter({
+    mode: "standalone",
+  }),
 });
