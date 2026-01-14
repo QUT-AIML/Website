@@ -119,6 +119,7 @@ function formatDate(dateStr) {
 
         <!-- META -->
         <div class="learn-meta">
+          {learning.dateLabel && <span class="meta-pill">{learning.dateLabel}</span>}
           {learning.category && <span class="meta-pill">{learning.category}</span>}
         </div>
 
