@@ -319,11 +319,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!pastGrid || !paginationContainer) return;
 
-  const PROJECTS_PER_PAGE = 6;
+  let PROJECTS_PER_PAGE = window.innerWidth < 768 ? 3 : 6; // 3 for small screens
   let currentPage = 1;
   let currentSemester = 'all';
   let currentSort = '';
   let filteredCards = [];
+
+  // ---------- Update page size on resize ----------
+  window.addEventListener('resize', () => {
+    PROJECTS_PER_PAGE = window.innerWidth < 768 ? 3 : 6;
+    renderPage();
+    renderPagination();
+  });
 
   // ---------- Get selected type ----------
   function getSelectedType() {
@@ -371,6 +378,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     Array.from(pastGrid.querySelectorAll('.project-card')).forEach(card => card.style.display = 'none');
     filteredCards.slice(start, end).forEach(card => card.style.display = '');
+
+    const offset = 300; // px above the first project
+    const topPosition = filteredCards[start].getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: topPosition, behavior: 'smooth' });
+  
   }
 
   // ---------- Render pagination ----------
