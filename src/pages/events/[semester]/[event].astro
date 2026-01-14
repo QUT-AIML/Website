@@ -113,9 +113,6 @@ const eventData = allEvents.find(ev => ev.semesterId === semester && ev.slug ===
 const notFound = !eventData;
 const overview = eventData ?? null;
 const details = eventData ?? {};
-const pageTitle = eventData
-  ? `${details.title} — QUT AIML`
-  : "Event not found";
 ---
 
 
@@ -125,7 +122,7 @@ const pageTitle = eventData
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={overview ? overview.excerpt ?? details.description : "Event not found"} />
-    <title>{pageTitle}</title>
+    <title>QUT AI & ML Society</title>
   </head>
 
   <body class="background-dots">
