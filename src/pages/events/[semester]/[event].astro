@@ -4,47 +4,44 @@ import "@/styles/events/event-details.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// === Generate static paths ===
-export async function getStaticPaths() {
-  const modules = import.meta.glob('../../../data/events/**/*.json', { eager: true });
-
-  // Create { semester, event } pairs
-  const paths = Object.keys(modules).map((filePath) => {
-    // Match folder (semester) and filename (event)
-    const match = filePath.replaceAll("\\", "/").match(/\/data\/events\/([^/]+)\/([^/]+)\.json$/);
-    if (!match) return null;
-    const [, semester, eventFile] = match;
-    return { params: { semester, event: eventFile } };
-  }).filter(Boolean);
-
-  return paths;
-}
-
 // === Get params from route ===
 const { params } = Astro;
-const semester = params.semester;  // folder name like "sem-1-2026"
-const event = params.event;        // filename without .json
+const semester = params.semester; // e.g., "sem-1-2026"
+const eventSlug = params.event;   // e.g., "social-night"
 
-// === Dynamically import the JSON file for this semester/event ===
-const modules = import.meta.glob('../../../data/events/**/*.json');
-const matchKey = Object.keys(modules).find(k =>
-  k.replaceAll("\\", "/").endsWith(`/${semester}/${event}.json`)
-);
+// === Fetch the API data for all semesters ===
+const res = await fetch(new URL("/api/events", Astro.url));
+if (!res.ok) throw new Error("Failed to fetch events API");
+const apiData = await res.json();
 
-let notFound = false;
-let eventData = null;
-
-if (!matchKey) {
-  notFound = true;
-} else {
-  const mod = await modules[matchKey]();
-  eventData = mod.default ?? mod;
+// === Normalize title to slug helper ===
+function slugify(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "") // remove special chars
+    .replace(/\s+/g, "-");    // replace spaces with dash
 }
 
-const overview = eventData ? (eventData.overview ?? eventData) : null;
-const details = eventData ? (eventData.details ?? {}) : {};
+// === Find event for this semester and slug ===
+const eventsForSemester = apiData[semester] ?? [];
+const eventData = eventsForSemester.find(ev => slugify(ev.title) === eventSlug);
+
+let notFound = !eventData;
+
+// Optional: add dateLabel
+if (eventData) {
+  eventData.dateLabel = new Date(eventData.date).toLocaleDateString("en-AU", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+const overview = eventData ?? null;
+const details = eventData ?? {};
 const pageTitle = eventData
-  ? `${details.title ?? overview.title} — QUT AIML`
+  ? `${details.title} — QUT AIML`
   : "Event not found";
 ---
 

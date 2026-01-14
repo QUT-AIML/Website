@@ -3,11 +3,51 @@ import "@/styles/global.css";
 import "@/styles/events/events.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
-import eventsIndex from "@/data/events/index.js";
 
-const semesters = eventsIndex?.semesters ?? [];
+/**
+ * Fetch events from API (same-origin, no hard-coded domain)
+ */
+const res = await fetch(new URL("/api/events", Astro.url));
 
-// Flatten events and attach semester id
+if (!res.ok) {
+  throw new Error("Failed to load events API");
+}
+
+const apiData = await res.json();
+
+/**
+ * Normalize API data into the structure expected by the page
+ * {
+ *   semesters: [
+ *     { id, label, events: [...] }
+ *   ]
+ * }
+ */
+// Inside your semesters mapping
+const semesters = Object.entries(apiData).map(([id, events]) => ({
+  id,
+  label: id
+    .replace(/-/g, " ")
+    .replace(/^sem/i, "Sem")
+    .replace(/\b(\d)\b/g, " $1"),
+  events: events.map((ev, index) => ({
+    ...ev,
+    id: ev.id ?? `${id}-${index}`,
+    dateLabel: new Date(ev.date).toLocaleDateString("en-AU", {
+      weekday: "long",   // <-- Full weekday
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }),
+  })),
+}));
+
+
+
+/* ===============================
+   EXISTING LOGIC (UNCHANGED)
+   =============================== */
+
 const eventsBySemester = semesters
   .map(s => s.events.map(ev => ({ ...ev, semesterId: s.id })))
   .flat();
@@ -15,13 +55,19 @@ const eventsBySemester = semesters
 // Determine dynamic types
 const preferred = ["Social", "Industry", "Projects", "Major"];
 const allTypesSet = new Set();
+
 eventsBySemester.forEach(ev => {
   const t = (ev.type ?? ev.category ?? "Other").toString();
   if (t) allTypesSet.add(t);
 });
+
 const preferredExisting = preferred.filter(p => allTypesSet.has(p));
-const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
+const remaining = Array.from(allTypesSet).filter(
+  t => !preferredExisting.includes(t)
+);
+
 remaining.sort((a, b) => a.localeCompare(b));
+
 const types = ["All", ...preferredExisting, ...remaining];
 
 const today = new Date();
@@ -36,6 +82,7 @@ const featuredEvents = eventsBySemester
     return eventDate >= today;
   });
 ---
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />

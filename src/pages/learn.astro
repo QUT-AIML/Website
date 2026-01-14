@@ -3,20 +3,34 @@ import "@/styles/global.css";
 import "@/styles/learn/learn.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
-import articlesIndex from "@/data/learn/index.js";
 
-const learnings = articlesIndex?.topics ?? [];
+// Fetch learnings directly from the API
+const res = await fetch(new URL("/api/learn", Astro.url));
+if (!res.ok) throw new Error("Failed to fetch learnings API");
 
-// Determine dynamic categories
+const learnings = await res.json();
+
+// Determine unique categories
 const allCategoriesSet = new Set();
 learnings.forEach(ev => {
-  const c = ev.category ?? "Other";
-  if (c) allCategoriesSet.add(c);
+  allCategoriesSet.add(ev.category ?? "Other");
 });
 const categories = ["All", ...Array.from(allCategoriesSet).sort()];
 
-// Featured learnings (strictly featured)
+// Featured learnings
 const featuredLearnings = learnings.filter(ev => ev.featured === true);
+
+// Helper to format date
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  return new Intl.DateTimeFormat("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  }).format(date);
+}
 ---
 
 <html lang="en">
@@ -44,15 +58,15 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
               <section class="learning-grid">
                 {featuredLearnings.map(ev => (
                   <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-                    <a href={`/learn/${ev.id}`}>
+                    <a href={`/learn/${ev.slug}`}>
                       <div class="card-media">
                         {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                       </div>
                       <div class="card-body">
                         <h3 class="card-title">{ev.title}</h3>
                         <div class="card-divider"></div>
-                        <time class="card-date">{ev.dateLabel || ev.date}</time>
-                        <p class="card-description">{ev.excerpt}</p>
+                        <time class="card-date">{formatDate(ev.date)}</time>
+                        <p class="card-description">{ev.description}</p>
                         <div class="card-footer">
                           <span class="card-view-more">View more →</span>
                         </div>
@@ -127,20 +141,20 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
             </div>
           </div>
         </section>
-
-      <section class="learning-panel">
+        
+        <section class="learning-panel">
         <section id="learning-grid" class="learning-grid">
           {learnings.map(ev => (
             <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-              <a href={`/learn/${ev.id}`}>
+              <a href={`/learn/${ev.slug}`}>
                 <div class="card-media">
                   {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                 </div>
                 <div class="card-body">
                   <h3 class="card-title">{ev.title}</h3>
                   <div class="card-divider"></div>
-                  <time class="card-date">{ev.dateLabel || ev.date}</time>
-                  <p class="card-description">{ev.excerpt}</p>
+                    <time class="card-date">{formatDate(ev.date)}</time>
+                  <p class="card-description">{ev.description}</p>
                   <div class="card-footer">
                     <span class="card-view-more">View more →</span>
                   </div>
@@ -162,164 +176,144 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
 
 
 <script type="module">
-const searchInput = document.getElementById('learning-search');
-const grid = document.getElementById('learning-grid');
-const sortDropdown = document.getElementById('sort-select-pop');
-const filtersToggle = document.getElementById('filters-toggle');
-const filtersPopover = document.getElementById('filters-popover');
-let paginationContainer = document.getElementById('learning-pagination');
+    // Vanilla JS pagination, search & category filter
+    const searchInput = document.getElementById('learning-search');
+    const grid = document.getElementById('learning-grid');
+    const sortDropdown = document.getElementById('sort-select-pop');
+    const filtersToggle = document.getElementById('filters-toggle');
+    const filtersPopover = document.getElementById('filters-popover');
+    let paginationContainer = document.getElementById('learning-pagination');
 
-if (!paginationContainer) {
-  paginationContainer = document.createElement('div');
-  paginationContainer.id = 'learning-pagination';
-  paginationContainer.style.textAlign = 'center';
-  paginationContainer.style.marginTop = '2rem';
-  grid.parentNode.appendChild(paginationContainer);
-}
+    if (!paginationContainer) {
+      paginationContainer = document.createElement('div');
+      paginationContainer.id = 'learning-pagination';
+      paginationContainer.style.textAlign = 'center';
+      paginationContainer.style.marginTop = '2rem';
+      grid.parentNode.appendChild(paginationContainer);
+    }
 
-const LEARNINGS_PER_PAGE = 6;
-let currentPage = 1;
-let filteredCards = [];
-let categoryButtons = [];
+    const LEARNINGS_PER_PAGE = 6;
+    let currentPage = 1;
+    let filteredCards = [];
+    let categoryButtons = [];
 
-// Store all cards
-const allCards = Array.from(grid.querySelectorAll('.learn-card'));
+    const allCards = Array.from(grid.querySelectorAll('.learn-card'));
+    const allCategoriesSet = new Set(allCards.map(c => c.dataset.category || 'Other'));
+    const allCategories = ['All', ...Array.from(allCategoriesSet).sort()];
 
-// Determine unique categories
-const allCategoriesSet = new Set(allCards.map(c => c.dataset.category || 'Other'));
-const allCategories = ['All', ...Array.from(allCategoriesSet).sort()];
+    // Render category buttons dynamically
+    function renderCategoryButtons(activeCategory = 'All') {
+      const container = document.getElementById('type-filters');
+      container.innerHTML = '';
+      allCategories.forEach(c => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.category = c;
+        btn.textContent = c;
+        btn.className = `type-btn ${c === activeCategory ? 'active' : ''}`;
+        btn.addEventListener('click', () => {
+          categoryButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentPage = 1;
+          applyFilters();
+        });
+        container.appendChild(btn);
+      });
+      categoryButtons = Array.from(container.querySelectorAll('.type-btn'));
+    }
 
-// Build card HTML
-function buildCardHTML(card) {
-  return `<article class="learn-card" data-category="${card.dataset.category}" data-title="${card.dataset.title}" data-date="${card.dataset.date}">
-    ${card.innerHTML}
-  </article>`;
-}
+    // Filter & search
+    function applyFilters() {
+      const query = searchInput.value.trim().toLowerCase();
+      const activeBtn = categoryButtons.find(b => b.classList.contains('active'));
+      const selectedCategory = activeBtn ? activeBtn.dataset.category : 'All';
 
-// Render category buttons
-function renderCategoryButtons(activeCategory = 'All') {
-  const container = document.getElementById('type-filters');
-  container.innerHTML = '';
-  allCategories.forEach(c => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.dataset.category = c;
-    btn.textContent = c;
-    btn.className = `type-btn ${c === activeCategory ? 'active' : ''}`;
-    btn.addEventListener('click', () => {
-      categoryButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      filteredCards = allCards.filter(card => {
+        const title = card.dataset.title || '';
+        const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
+        const cardCategory = card.dataset.category || '';
+        const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
+        const matchesCategory = selectedCategory === 'All' || cardCategory === selectedCategory;
+        return matchesQuery && matchesCategory;
+      });
+
+      applySort();
       currentPage = 1;
-      applyFilters();
-    });
-    container.appendChild(btn);
-  });
-  categoryButtons = Array.from(container.querySelectorAll('.type-btn'));
-}
-
-// Apply filters and sorting
-function applyFilters() {
-  const query = searchInput.value.trim().toLowerCase();
-  const activeBtn = categoryButtons.find(b => b.classList.contains('active'));
-  const selectedCategory = activeBtn ? activeBtn.dataset.category : 'All';
-
-  filteredCards = allCards.filter(card => {
-    const title = card.dataset.title || '';
-    const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
-    const cardCategory = card.dataset.category || '';
-    const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
-    const matchesCategory = selectedCategory === 'All' || cardCategory === selectedCategory;
-    return matchesQuery && matchesCategory;
-  });
-
-  applySort();
-  currentPage = 1;
-  renderPage();
-  renderPagination();
-  renderNoResults();
-}
-
-// Sorting
-function applySort() {
-  const sortOption = sortDropdown.value;
-  filteredCards.sort((a, b) => {
-    switch(sortOption) {
-      case 'title-asc': return a.dataset.title.localeCompare(b.dataset.title);
-      case 'title-desc': return b.dataset.title.localeCompare(a.dataset.title);
-      case 'date-asc': return new Date(a.dataset.date) - new Date(b.dataset.date);
-      case 'date-desc': return new Date(b.dataset.date) - new Date(a.dataset.date);
-      default: return 0;
-    }
-  });
-}
-
-// Render current page
-function renderPage() {
-  const start = (currentPage - 1) * LEARNINGS_PER_PAGE;
-  const end = start + LEARNINGS_PER_PAGE;
-  const cardsToShow = filteredCards.slice(start, end);
-  grid.innerHTML = cardsToShow.map(buildCardHTML).join('');
-}
-
-// Render pagination
-function renderPagination() {
-  const totalPages = Math.ceil(filteredCards.length / LEARNINGS_PER_PAGE);
-  if(totalPages <= 1) { paginationContainer.innerHTML = ''; return; }
-
-  const isMobile = window.innerWidth <= 768;
-  let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
-
-  if (isMobile) {
-    let startPage = currentPage === totalPages && totalPages > 1 ? currentPage - 1 : currentPage;
-    let endPage = Math.min(currentPage + 1, totalPages);
-    for (let i = startPage; i <= endPage; i++) {
-      html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
-    }
-  } else {
-    for (let i = 1; i <= totalPages; i++) {
-      html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
-    }
-  }
-
-  html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
-  paginationContainer.innerHTML = html;
-
-  Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
-    btn.addEventListener('click', () => {
-      let page = parseInt(btn.dataset.page);
-      if (isNaN(page)) return;
-      page = Math.min(Math.max(page, 1), totalPages);
-      currentPage = page;
       renderPage();
       renderPagination();
+      renderNoResults();
+    }
+
+    // Sorting
+    function applySort() {
+      const sortOption = sortDropdown.value;
+      filteredCards.sort((a, b) => {
+        switch(sortOption) {
+          case 'title-asc': return a.dataset.title.localeCompare(b.dataset.title);
+          case 'title-desc': return b.dataset.title.localeCompare(a.dataset.title);
+          case 'date-asc': return new Date(a.dataset.date) - new Date(b.dataset.date);
+          case 'date-desc': return new Date(b.dataset.date) - new Date(a.dataset.date);
+          default: return 0;
+        }
+      });
+    }
+
+    // Render current page
+    function renderPage() {
+      const start = (currentPage - 1) * LEARNINGS_PER_PAGE;
+      const end = start + LEARNINGS_PER_PAGE;
+      const cardsToShow = filteredCards.slice(start, end);
+      grid.innerHTML = cardsToShow.map(card => card.outerHTML).join('');
+    }
+
+    // Render pagination
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredCards.length / LEARNINGS_PER_PAGE);
+      if(totalPages <= 1) { paginationContainer.innerHTML = ''; return; }
+
+      let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
+      }
+      html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
+      paginationContainer.innerHTML = html;
+
+      Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
+        btn.addEventListener('click', () => {
+          let page = parseInt(btn.dataset.page);
+          if (isNaN(page)) return;
+          page = Math.min(Math.max(page, 1), totalPages);
+          currentPage = page;
+          renderPage();
+          renderPagination();
+        });
+      });
+    }
+
+    // No results
+    function renderNoResults() {
+      let msg = document.getElementById('no-learning-message');
+      if (!msg) {
+        msg = document.createElement('div');
+        msg.id = 'no-learning-message';
+        msg.textContent = 'No learnings found';
+        msg.style.textAlign = 'center';
+        msg.style.padding = '2rem';
+        msg.style.gridColumn = '1 / -1';
+        grid.appendChild(msg);
+      }
+      msg.style.display = filteredCards.length === 0 ? 'block' : 'none';
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', applyFilters);
+    sortDropdown.addEventListener('change', applyFilters);
+    filtersToggle.addEventListener('click', e => {
+      e.stopPropagation();
+      filtersPopover.style.display = (filtersPopover.style.display==='block') ? 'none' : 'block';
     });
-  });
-}
 
-// No results message
-function renderNoResults() {
-  let msg = document.getElementById('no-learning-message');
-  if (!msg) {
-    msg = document.createElement('div');
-    msg.id = 'no-learning-message';
-    msg.textContent = 'No learnings found';
-    msg.style.textAlign = 'center';
-    msg.style.padding = '2rem';
-    msg.style.gridColumn = '1 / -1';
-    grid.appendChild(msg);
-  }
-  msg.style.display = filteredCards.length === 0 ? 'block' : 'none';
-}
-
-// Event listeners
-searchInput.addEventListener('input', applyFilters);
-sortDropdown.addEventListener('change', applyFilters);
-filtersToggle.addEventListener('click', e => {
-  e.stopPropagation();
-  filtersPopover.style.display = (filtersPopover.style.display==='block') ? 'none' : 'block';
-});
-
-// Initialize category buttons and filters
-renderCategoryButtons();
-applyFilters();
+    // Init
+    renderCategoryButtons();
+    applyFilters();
 </script>
