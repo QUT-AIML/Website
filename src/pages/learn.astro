@@ -223,7 +223,9 @@ function formatDate(dateStr) {
 
 
 <script type="module">
-  // Vanilla JS pagination, search & category filter
+  // -----------------------------
+  // Vanilla JS: Pagination, Search, Category Filter
+  // -----------------------------
 
   const searchInput = document.getElementById('learning-search');
   const grid = document.getElementById('learning-grid');
@@ -240,12 +242,22 @@ function formatDate(dateStr) {
     grid.parentNode.appendChild(paginationContainer);
   }
 
-  const LEARNINGS_PER_PAGE = 6;
+  // -----------------------------
+  // Config
+  // -----------------------------
+  const DESKTOP_LEARNINGS_PER_PAGE = 6;
+  const MOBILE_LEARNINGS_PER_PAGE = 3;
   let currentPage = 1;
   let filteredCards = [];
   let categoryButtons = [];
 
-  // STEP 1: Collect all learnings from the DOM but attach original API data
+  function getLearningsPerPage() {
+    return window.innerWidth <= 768 ? MOBILE_LEARNINGS_PER_PAGE : DESKTOP_LEARNINGS_PER_PAGE;
+  }
+
+  // -----------------------------
+  // Collect all learnings from DOM
+  // -----------------------------
   const allCards = Array.from(grid.querySelectorAll('.learn-card')).map(card => ({
     apiData: {
       title: card.dataset.title,
@@ -257,11 +269,12 @@ function formatDate(dateStr) {
     }
   }));
 
-  // STEP 2: Determine all categories dynamically
+  // -----------------------------
+  // Categories
+  // -----------------------------
   const allCategoriesSet = new Set(allCards.map(c => c.apiData.category || 'Other'));
   const allCategories = ['All', ...Array.from(allCategoriesSet).sort()];
 
-  // STEP 3: Render category buttons
   function renderCategoryButtons(activeCategory = 'All') {
     const container = document.getElementById('type-filters');
     container.innerHTML = '';
@@ -282,7 +295,9 @@ function formatDate(dateStr) {
     categoryButtons = Array.from(container.querySelectorAll('.type-btn'));
   }
 
-  // STEP 4: Apply filters (search + category)
+  // -----------------------------
+  // Filter + Search
+  // -----------------------------
   function applyFilters() {
     const query = searchInput.value.trim().toLowerCase();
     const activeBtn = categoryButtons.find(b => b.classList.contains('active'));
@@ -290,7 +305,7 @@ function formatDate(dateStr) {
 
     filteredCards = allCards.filter(c => {
       const { title, description, category } = c.apiData;
-      const matchesQuery = !query || title.includes(query) || description.toLowerCase().includes(query);
+      const matchesQuery = !query || title.toLowerCase().includes(query) || description.toLowerCase().includes(query);
       const matchesCategory = selectedCategory === 'All' || category === selectedCategory;
       return matchesQuery && matchesCategory;
     });
@@ -302,7 +317,9 @@ function formatDate(dateStr) {
     renderNoResults();
   }
 
-  // STEP 5: Sorting
+  // -----------------------------
+  // Sort
+  // -----------------------------
   function applySort() {
     const sortOption = sortDropdown.value;
     filteredCards.sort((a, b) => {
@@ -319,8 +336,11 @@ function formatDate(dateStr) {
     });
   }
 
-  // STEP 6: Render current page
-  function renderPage() {
+  // -----------------------------
+  // Render page
+  // -----------------------------
+  function renderPage(scrollToTop = false) {
+    const LEARNINGS_PER_PAGE = getLearningsPerPage();
     const start = (currentPage - 1) * LEARNINGS_PER_PAGE;
     const end = start + LEARNINGS_PER_PAGE;
     const cardsToShow = filteredCards.slice(start, end);
@@ -351,14 +371,25 @@ function formatDate(dateStr) {
         </article>
       `;
     }).join('');
+
+    // Scroll dynamically
+    if (scrollToTop) {
+      const scrollAmount = window.innerWidth <= 768 ? 1300 : 900;
+      window.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+    }
   }
 
-  // STEP 7: Pagination
+
+  // -----------------------------
+  // Render pagination
+  // -----------------------------
   function renderPagination() {
+    const LEARNINGS_PER_PAGE = getLearningsPerPage();
     const totalPages = Math.ceil(filteredCards.length / LEARNINGS_PER_PAGE);
-    if (totalPages <= 1) { 
-      paginationContainer.innerHTML = ''; 
-      return; 
+
+    if (totalPages <= 1) {
+      paginationContainer.innerHTML = '';
+      return;
     }
 
     let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
@@ -369,22 +400,20 @@ function formatDate(dateStr) {
 
     paginationContainer.innerHTML = html;
 
-
     Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
       btn.addEventListener('click', () => {
         let page = parseInt(btn.dataset.page);
         if (isNaN(page)) return;
         currentPage = Math.min(Math.max(page, 1), totalPages);
-
-        renderPage();
+        renderPage(true); // scroll 900px up
         renderPagination();
-
-        window.scrollBy({ top: -650, left: 0, behavior: 'smooth' });
       });
     });
   }
 
-  // STEP 8: No results message
+  // -----------------------------
+  // No results message
+  // -----------------------------
   function renderNoResults() {
     let msg = document.getElementById('no-learning-message');
     if (!msg) {
@@ -399,7 +428,9 @@ function formatDate(dateStr) {
     msg.style.display = filteredCards.length === 0 ? 'block' : 'none';
   }
 
-  // STEP 9: Event listeners
+  // -----------------------------
+  // Event listeners
+  // -----------------------------
   searchInput.addEventListener('input', applyFilters);
   sortDropdown.addEventListener('change', applyFilters);
   filtersToggle.addEventListener('click', e => {
@@ -407,7 +438,15 @@ function formatDate(dateStr) {
     filtersPopover.style.display = filtersPopover.style.display === 'block' ? 'none' : 'block';
   });
 
-  // STEP 10: Init
+  window.addEventListener('resize', () => {
+    currentPage = 1;
+    renderPage();
+    renderPagination();
+  });
+
+  // -----------------------------
+  // Init
+  // -----------------------------
   renderCategoryButtons();
   applyFilters();
 </script>
