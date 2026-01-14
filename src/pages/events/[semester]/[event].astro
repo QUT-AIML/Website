@@ -174,12 +174,25 @@ const pageTitle = eventData
             <section class="unique-section">
               <h3 class="unique-section-title">Gallery</h3>
               <div class="unique-gallery">
-                {details.gallery.map(g => (
+                {details.gallery.map((g, i) => (
                   <div class="unique-gallery-item">
-                    <img src={g.src} alt={g.alt ?? details.title} class="unique-gallery-image" />
+                    <img
+                      src={g.src}
+                      alt={g.alt ?? details.title}
+                      class="unique-gallery-image"
+                      id={`galleryImg-${i}`}
+                    />
                   </div>
                 ))}
               </div>
+
+              {/* Modals */}
+              {details.gallery.map((g, i) => (
+                <div id={`galleryModal-${i}`} class="modal">
+                  <span class="modal-close" id={`galleryClose-${i}`}>&times;</span>
+                  <img class="modal-content" id={`galleryModalImg-${i}`} />
+                </div>
+              ))}
             </section>
           )}
 
@@ -199,3 +212,31 @@ const pageTitle = eventData
     <Footer />
   </body>
 </html>
+
+
+<script>
+  // Gallery modals
+  document.querySelectorAll('.unique-gallery-image').forEach((img, i) => {
+    const modal = document.getElementById(`galleryModal-${i}`);
+    const modalImg = document.getElementById(`galleryModalImg-${i}`);
+    const closeBtn = document.getElementById(`galleryClose-${i}`);
+
+    img.onclick = () => {
+      modal.style.display = "block";
+      modalImg.src = img.src;
+      document.body.classList.add("modal-open");
+    };
+
+    closeBtn.onclick = () => {
+      modal.style.display = "none";
+      document.body.classList.remove("modal-open");
+    };
+
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+        document.body.classList.remove("modal-open");
+      }
+    };
+  });
+</script>

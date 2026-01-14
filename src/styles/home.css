@@ -101,6 +101,10 @@
     padding-top: 4.5rem;
 }
 
+.header-spacing {
+  width: 80vw;
+}
+
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 768px) {
@@ -114,6 +118,10 @@
 
   .button-group {
     gap: 0.75rem;
+  }
+
+  .header-spacing {
+    width:100vw;
   }
 }
 
