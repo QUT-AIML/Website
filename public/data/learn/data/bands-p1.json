@@ -1,17 +1,50 @@
 {
   "title": "BANDS x AIML Collab P1 – How to Build an ML Portfolio",
   "slug": "bands-aiml-collab-p1",
-  "date": "2025-8-5",
+  "date": "2025-08-05",
   "description": "Join a special collaboration between BANDS and AIML for How to Build an ML Portfolio 101 – Part 1 of a two-part series.",
+  "dateLabel": "Tuesday, 5 Aug 2025",
   "category": "Resource",
   "featured": true,
-  "image": "bands.png", 
+  "image": "bands.png",
 
-  "url": "https://drive.google.com/file/d/1ozWcQT-nmFZWlEs1fFdMWnlMa_SuhaYK/view?usp=share_link",
-  "content": [
-    "Explore ML tools like GitHub, Kaggle, and practical documentation.",
-    "Learn how to showcase your skills through hands-on experience.",
-    "Participate in student-led guidance sessions to build your portfolio."
+  "overview": {
+    "definition": "Learn how to build a machine learning portfolio through practical projects and collaborations.",
+    "types": ["Collaboration", "Portfolio Project"],
+    "key_concepts": [
+      "ML Portfolio Building",
+      "Practical ML Tools",
+      "Student-led Guidance"
+    ]
+  },
+
+  "tutorials": [
+    {
+      "title": "Portfolio Tools Overview",
+      "url": "https://drive.google.com/file/d/1ozWcQT-nmFZWlEs1fFdMWnlMa_SuhaYK/view?usp=share_link",
+      "description": "Explore ML tools like GitHub, Kaggle, and practical documentation."
+    }
   ],
-  "tags": ["ML Portfolio", "Collaboration", "GitHub", "Kaggle", "Hands-on"]
+
+  "videos": [],
+  "applications": [
+    "Showcase your ML skills through hands-on projects.",
+    "Participate in student-led guidance sessions.",
+    "Learn practical portfolio development strategies."
+  ],
+
+  "resources": [
+    {
+      "title": "Collaboration Materials",
+      "url": "https://drive.google.com/file/d/1ozWcQT-nmFZWlEs1fFdMWnlMa_SuhaYK/view?usp=share_link"
+    }
+  ],
+
+  "tips": [
+    "Start documenting your projects early.",
+    "Use GitHub and Kaggle to showcase practical skills.",
+    "Break your portfolio into small, achievable milestones."
+  ],
+
+  "videos": []
 }
