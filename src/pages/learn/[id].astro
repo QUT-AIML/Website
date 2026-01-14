@@ -129,6 +129,7 @@ function formatDate(dateStr) {
         <!-- DESCRIPTION -->
         {learning.description && (
           <section class="learn-description">
+            <h3>Overview</h3>
             <p>{learning.description}</p>
           </section>
         )}
@@ -140,34 +141,43 @@ function formatDate(dateStr) {
           </section>
         )}
 
-
-        <!-- OVERVIEW -->
+        <!-- DEFINITION -->
         {learning.overview?.definition && (
           <section class="learn-section">
-            <h3>What is it?</h3>
+            <h3>Definition</h3>
             <p>{learning.overview.definition}</p>
           </section>
         )}
 
+        <!-- TYPES -->
+        {learning.overview?.types && learning.overview.types.length > 0 && (
+          <section class="learn-section">
+            <h3>Types / Variants</h3>
+            <ul class="learn-bullets">
+              {learning.overview.types.map((t, i) => <li key={i}>{t}</li>)}
+            </ul>
+          </section>
+        )}
+
         <!-- KEY CONCEPTS -->
-        {learning.overview?.key_concepts && (
+        {learning.overview?.key_concepts && learning.overview.key_concepts.length > 0 && (
           <section class="learn-section">
             <h3>Key Concepts</h3>
-            <ul>
-              {learning.overview.key_concepts.map(k => <li>{k}</li>)}
+            <ul class="learn-bullets">
+              {learning.overview.key_concepts.map((k, i) => <li key={i}>{k}</li>)}
             </ul>
           </section>
         )}
 
         <!-- TUTORIALS -->
-        {learning.tutorials && (
+        {learning.tutorials && learning.tutorials.length > 0 && (
           <section class="learn-section">
             <h3>Tutorials</h3>
             <ul class="learn-links">
-              {learning.tutorials.map(t => (
-                <li>
-                  <a href={t.url} target="_blank" class="learn-link">{t.title}</a>
-                  <p>{t.description}</p>
+              {learning.tutorials.map((t, i) => (
+                <li key={i}>
+                  <strong><a href={t.url} target="_blank" class="learn-link">{t.title}</a></strong>
+                  <p>• {t.description}</p>
                 </li>
               ))}
             </ul>
@@ -175,52 +185,54 @@ function formatDate(dateStr) {
         )}
 
         <!-- VIDEOS -->
-        {learning.videos && (
+        {learning.videos && learning.videos.length > 0 && (
           <section class="learn-section">
             <h3>Videos</h3>
             <div class="learn-video-grid">
-              {learning.videos.map(v => (
-                <iframe
-                  src={v.url}
-                  title={v.title}
-                  allowfullscreen
-                ></iframe>
+              {learning.videos.map((v, i) => (
+                <div key={i} class="learn-video-item">
+                  <iframe src={v.url} title={v.title} allowfullscreen></iframe>
+                  <p>• {v.description}</p>
+                </div>
               ))}
             </div>
           </section>
         )}
 
         <!-- APPLICATIONS -->
-        {learning.applications && (
+        {learning.applications && learning.applications.length > 0 && (
           <section class="learn-section">
             <h3>Applications</h3>
-            <ul>
-              {learning.applications.map(a => <li>{a}</li>)}
+            <ul class="learn-bullets">
+              {learning.applications.map((a, i) => <li key={i}>{a}</li>)}
             </ul>
           </section>
         )}
 
         <!-- RESOURCES -->
-        {learning.resources && (
+        {learning.resources && learning.resources.length > 0 && (
           <section class="learn-section">
             <h3>Resources</h3>
             <ul class="learn-links">
-              {learning.resources.map(r => (
-                <li><a href={r.url} target="_blank" class="learn-link">{r.title}</a></li>
+              {learning.resources.map((r, i) => (
+                <li key={i}>
+                  <a href={r.url} target="_blank" class="learn-link">• {r.title}</a>
+                </li>
               ))}
             </ul>
           </section>
         )}
 
         <!-- TIPS -->
-        {learning.tips && (
+        {learning.tips && learning.tips.length > 0 && (
           <section class="learn-section learn-tips">
-            <h3>Tips</h3>
-            <ul>
-              {learning.tips.map(t => <li>{t}</li>)}
+            <h3>Tips & Best Practices</h3>
+            <ul class="learn-bullets">
+              {learning.tips.map((t, i) => <li key={i}>{t}</li>)}
             </ul>
           </section>
         )}
+
 
       </article>
     )}
