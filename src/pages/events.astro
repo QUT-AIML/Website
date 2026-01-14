@@ -456,16 +456,26 @@ const featuredEvents = eventsBySemester
   }
 
 
+function renderPage(scrollToTop = false) {
+  const isMobile = window.innerWidth < 768;
+  const EVENTS_PER_PAGE_MOBILE = 3;
+  const perPage = isMobile ? EVENTS_PER_PAGE_MOBILE : EVENTS_PER_PAGE;
 
-  function renderPage() {
-    const start = (currentPage - 1) * EVENTS_PER_PAGE;
-    const end = start + EVENTS_PER_PAGE;
+  const start = (currentPage - 1) * perPage;
+  const end = start + perPage;
 
-    getCards().forEach(card => card.style.display = 'none');
-    filteredCards.slice(start, end).forEach(card => {
-      card.style.display = '';
-    });
+  getCards().forEach(card => (card.style.display = 'none'));
+  filteredCards.slice(start, end).forEach(card => (card.style.display = ''));
+
+  if (scrollToTop && filteredCards[start]) {
+    const offset = 850; // px above the first event
+    const topPosition =
+      filteredCards[start].getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: topPosition, behavior: 'smooth' });
   }
+}
+
+
 
   function renderPagination() {
     const totalPages = Math.ceil(filteredCards.length / EVENTS_PER_PAGE);
@@ -482,7 +492,7 @@ const featuredEvents = eventsBySemester
       btn.disabled = disabled;
       btn.onclick = () => {
         currentPage = page;
-        renderPage();
+        renderPage(true);
         renderPagination();
       };
       return btn;
