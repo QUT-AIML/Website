@@ -3,21 +3,55 @@ import "@/styles/global.css";
 import "@/styles/learn/learn.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
-import articlesIndex from "@/data/learn/index.js";
 
-const learnings = articlesIndex?.topics ?? [];
+// Fetch learnings directly from the API
+const res = await fetch(new URL("/api/learn", Astro.url));
+if (!res.ok) throw new Error("Failed to fetch learnings API");
 
-// Determine dynamic categories
-const allCategoriesSet = new Set();
-learnings.forEach(ev => {
-  const c = ev.category ?? "Other";
-  if (c) allCategoriesSet.add(c);
+let learnings = await res.json();
+
+// Generate slugs for all learnings (always use slugify)
+learnings = learnings.map(ev => {
+  const title = ev.title;
+
+  // Generate full slug from title
+  const fullSlug = title
+    .toLowerCase()              // lowercase
+    .replace(/[–—]/g, "-")      // convert long dashes to hyphens
+    .replace(/[^\w\s-]/g, "")   // remove non-alphanumeric chars
+    .trim()                      // trim spaces
+    .replace(/\s+/g, "-")       // spaces → hyphens
+    .replace(/-+/g, "-");       // collapse multiple hyphens
+
+  console.log(`[learn] slugify: "${title}" → "${fullSlug}"`);
+
+  return {
+    ...ev,
+    slug: fullSlug, // always use the full slug
+  };
 });
+
+// Determine unique categories
+const allCategoriesSet = new Set();
+learnings.forEach(ev => allCategoriesSet.add(ev.category ?? "Other"));
 const categories = ["All", ...Array.from(allCategoriesSet).sort()];
 
-// Featured learnings (strictly featured)
+// Featured learnings
 const featuredLearnings = learnings.filter(ev => ev.featured === true);
+
+// --- ADD THIS FUNCTION BACK ---
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  return new Intl.DateTimeFormat("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  }).format(date);
+}
 ---
+
 
 <html lang="en">
 <head>
@@ -43,16 +77,16 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
             <section class="learning-panel">
               <section class="learning-grid">
                 {featuredLearnings.map(ev => (
-                  <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-                    <a href={`/learn/${ev.id}`}>
+                  <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date} data-slug={ev.slug}>
+                    <a href={`/learn/${ev.slug}`}>
                       <div class="card-media">
                         {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                       </div>
                       <div class="card-body">
                         <h3 class="card-title">{ev.title}</h3>
                         <div class="card-divider"></div>
-                        <time class="card-date">{ev.dateLabel || ev.date}</time>
-                        <p class="card-description">{ev.excerpt}</p>
+                        <time class="card-date">{formatDate(ev.date)}</time>
+                        <p class="card-description">{ev.description}</p>
                         <div class="card-footer">
                           <span class="card-view-more">View more →</span>
                         </div>
@@ -127,20 +161,20 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
             </div>
           </div>
         </section>
-
-      <section class="learning-panel">
+        
+        <section class="learning-panel">
         <section id="learning-grid" class="learning-grid">
           {learnings.map(ev => (
-            <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-              <a href={`/learn/${ev.id}`}>
+            <article class="learn-card" data-category={ev.category} data-title={ev.title.toLowerCase()} data-date={ev.date} data-slug={ev.slug}>
+              <a href={`/learn/${ev.slug}`}>
                 <div class="card-media">
                   {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                 </div>
                 <div class="card-body">
                   <h3 class="card-title">{ev.title}</h3>
                   <div class="card-divider"></div>
-                  <time class="card-date">{ev.dateLabel || ev.date}</time>
-                  <p class="card-description">{ev.excerpt}</p>
+                    <time class="card-date">{formatDate(ev.date)}</time>
+                  <p class="card-description">{ev.description}</p>
                   <div class="card-footer">
                     <span class="card-view-more">View more →</span>
                   </div>
@@ -162,164 +196,187 @@ const featuredLearnings = learnings.filter(ev => ev.featured === true);
 
 
 <script type="module">
-const searchInput = document.getElementById('learning-search');
-const grid = document.getElementById('learning-grid');
-const sortDropdown = document.getElementById('sort-select-pop');
-const filtersToggle = document.getElementById('filters-toggle');
-const filtersPopover = document.getElementById('filters-popover');
-let paginationContainer = document.getElementById('learning-pagination');
+  // Vanilla JS pagination, search & category filter
 
-if (!paginationContainer) {
-  paginationContainer = document.createElement('div');
-  paginationContainer.id = 'learning-pagination';
-  paginationContainer.style.textAlign = 'center';
-  paginationContainer.style.marginTop = '2rem';
-  grid.parentNode.appendChild(paginationContainer);
-}
+  const searchInput = document.getElementById('learning-search');
+  const grid = document.getElementById('learning-grid');
+  const sortDropdown = document.getElementById('sort-select-pop');
+  const filtersToggle = document.getElementById('filters-toggle');
+  const filtersPopover = document.getElementById('filters-popover');
+  let paginationContainer = document.getElementById('learning-pagination');
 
-const LEARNINGS_PER_PAGE = 6;
-let currentPage = 1;
-let filteredCards = [];
-let categoryButtons = [];
+  if (!paginationContainer) {
+    paginationContainer = document.createElement('div');
+    paginationContainer.id = 'learning-pagination';
+    paginationContainer.style.textAlign = 'center';
+    paginationContainer.style.marginTop = '2rem';
+    grid.parentNode.appendChild(paginationContainer);
+  }
 
-// Store all cards
-const allCards = Array.from(grid.querySelectorAll('.learn-card'));
+  const LEARNINGS_PER_PAGE = 6;
+  let currentPage = 1;
+  let filteredCards = [];
+  let categoryButtons = [];
 
-// Determine unique categories
-const allCategoriesSet = new Set(allCards.map(c => c.dataset.category || 'Other'));
-const allCategories = ['All', ...Array.from(allCategoriesSet).sort()];
+  // STEP 1: Collect all learnings from the DOM but attach original API data
+  const allCards = Array.from(grid.querySelectorAll('.learn-card')).map(card => ({
+    apiData: {
+      title: card.dataset.title,
+      category: card.dataset.category,
+      date: card.dataset.date,
+      slug: card.dataset.slug,
+      img: card.querySelector('img')?.src || null,
+      description: card.querySelector('p')?.textContent || ''
+    }
+  }));
 
-// Build card HTML
-function buildCardHTML(card) {
-  return `<article class="learn-card" data-category="${card.dataset.category}" data-title="${card.dataset.title}" data-date="${card.dataset.date}">
-    ${card.innerHTML}
-  </article>`;
-}
+  // STEP 2: Determine all categories dynamically
+  const allCategoriesSet = new Set(allCards.map(c => c.apiData.category || 'Other'));
+  const allCategories = ['All', ...Array.from(allCategoriesSet).sort()];
 
-// Render category buttons
-function renderCategoryButtons(activeCategory = 'All') {
-  const container = document.getElementById('type-filters');
-  container.innerHTML = '';
-  allCategories.forEach(c => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.dataset.category = c;
-    btn.textContent = c;
-    btn.className = `type-btn ${c === activeCategory ? 'active' : ''}`;
-    btn.addEventListener('click', () => {
-      categoryButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentPage = 1;
-      applyFilters();
+  // STEP 3: Render category buttons
+  function renderCategoryButtons(activeCategory = 'All') {
+    const container = document.getElementById('type-filters');
+    container.innerHTML = '';
+    allCategories.forEach(c => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.dataset.category = c;
+      btn.textContent = c;
+      btn.className = `type-btn ${c === activeCategory ? 'active' : ''}`;
+      btn.addEventListener('click', () => {
+        categoryButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentPage = 1;
+        applyFilters();
+      });
+      container.appendChild(btn);
     });
-    container.appendChild(btn);
-  });
-  categoryButtons = Array.from(container.querySelectorAll('.type-btn'));
-}
+    categoryButtons = Array.from(container.querySelectorAll('.type-btn'));
+  }
 
-// Apply filters and sorting
-function applyFilters() {
-  const query = searchInput.value.trim().toLowerCase();
-  const activeBtn = categoryButtons.find(b => b.classList.contains('active'));
-  const selectedCategory = activeBtn ? activeBtn.dataset.category : 'All';
+  // STEP 4: Apply filters (search + category)
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    const activeBtn = categoryButtons.find(b => b.classList.contains('active'));
+    const selectedCategory = activeBtn ? activeBtn.dataset.category : 'All';
 
-  filteredCards = allCards.filter(card => {
-    const title = card.dataset.title || '';
-    const excerpt = card.querySelector('p')?.textContent.toLowerCase() || '';
-    const cardCategory = card.dataset.category || '';
-    const matchesQuery = !query || title.includes(query) || excerpt.includes(query);
-    const matchesCategory = selectedCategory === 'All' || cardCategory === selectedCategory;
-    return matchesQuery && matchesCategory;
-  });
+    filteredCards = allCards.filter(c => {
+      const { title, description, category } = c.apiData;
+      const matchesQuery = !query || title.includes(query) || description.toLowerCase().includes(query);
+      const matchesCategory = selectedCategory === 'All' || category === selectedCategory;
+      return matchesQuery && matchesCategory;
+    });
 
-  applySort();
-  currentPage = 1;
-  renderPage();
-  renderPagination();
-  renderNoResults();
-}
+    applySort();
+    currentPage = 1;
+    renderPage();
+    renderPagination();
+    renderNoResults();
+  }
 
-// Sorting
-function applySort() {
-  const sortOption = sortDropdown.value;
-  filteredCards.sort((a, b) => {
-    switch(sortOption) {
-      case 'title-asc': return a.dataset.title.localeCompare(b.dataset.title);
-      case 'title-desc': return b.dataset.title.localeCompare(a.dataset.title);
-      case 'date-asc': return new Date(a.dataset.date) - new Date(b.dataset.date);
-      case 'date-desc': return new Date(b.dataset.date) - new Date(a.dataset.date);
-      default: return 0;
+  // STEP 5: Sorting
+  function applySort() {
+    const sortOption = sortDropdown.value;
+    filteredCards.sort((a, b) => {
+      const aData = a.apiData;
+      const bData = b.apiData;
+
+      switch(sortOption) {
+        case 'title-asc': return aData.title.localeCompare(bData.title);
+        case 'title-desc': return bData.title.localeCompare(aData.title);
+        case 'date-asc': return new Date(aData.date) - new Date(bData.date);
+        case 'date-desc': return new Date(bData.date) - new Date(aData.date);
+        default: return 0;
+      }
+    });
+  }
+
+  // STEP 6: Render current page
+  function renderPage() {
+    const start = (currentPage - 1) * LEARNINGS_PER_PAGE;
+    const end = start + LEARNINGS_PER_PAGE;
+    const cardsToShow = filteredCards.slice(start, end);
+
+    grid.innerHTML = cardsToShow.map(c => {
+      const { title, category, date, slug, img, description } = c.apiData;
+      const formattedDate = new Date(date).toLocaleDateString('en-GB', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+
+      return `
+        <article class="learn-card" data-category="${category}" data-title="${title.toLowerCase()}" data-date="${date}" data-slug="${slug}">
+          <a href="/learn/${slug}">
+            <div class="card-media">${img ? `<img src="${img}" alt="${title}" />` : '<div class="no-image">No image</div>'}</div>
+            <div class="card-body">
+              <h3 class="card-title">${title}</h3>
+              <div class="card-divider"></div>
+              <time class="card-date">${formattedDate}</time>
+              <p class="card-description">${description}</p>
+              <div class="card-footer">
+                <span class="card-view-more">View more →</span>
+              </div>
+            </div>
+          </a>
+        </article>
+      `;
+    }).join('');
+  }
+
+  // STEP 7: Pagination
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredCards.length / LEARNINGS_PER_PAGE);
+    if (totalPages <= 1) { 
+      paginationContainer.innerHTML = ''; 
+      return; 
     }
-  });
-}
 
-// Render current page
-function renderPage() {
-  const start = (currentPage - 1) * LEARNINGS_PER_PAGE;
-  const end = start + LEARNINGS_PER_PAGE;
-  const cardsToShow = filteredCards.slice(start, end);
-  grid.innerHTML = cardsToShow.map(buildCardHTML).join('');
-}
-
-// Render pagination
-function renderPagination() {
-  const totalPages = Math.ceil(filteredCards.length / LEARNINGS_PER_PAGE);
-  if(totalPages <= 1) { paginationContainer.innerHTML = ''; return; }
-
-  const isMobile = window.innerWidth <= 768;
-  let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
-
-  if (isMobile) {
-    let startPage = currentPage === totalPages && totalPages > 1 ? currentPage - 1 : currentPage;
-    let endPage = Math.min(currentPage + 1, totalPages);
-    for (let i = startPage; i <= endPage; i++) {
-      html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
-    }
-  } else {
+    let html = `<button class="pagination-btn" data-page="${currentPage-1}" ${currentPage===1?'disabled':''}>Prev</button>`;
     for (let i = 1; i <= totalPages; i++) {
       html += `<button class="pagination-btn ${i===currentPage?'active':''}" data-page="${i}">${i}</button>`;
     }
-  }
+    html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
 
-  html += `<button class="pagination-btn" data-page="${currentPage+1}" ${currentPage===totalPages?'disabled':''}>Next</button>`;
-  paginationContainer.innerHTML = html;
+    paginationContainer.innerHTML = html;
 
-  Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
-    btn.addEventListener('click', () => {
-      let page = parseInt(btn.dataset.page);
-      if (isNaN(page)) return;
-      page = Math.min(Math.max(page, 1), totalPages);
-      currentPage = page;
-      renderPage();
-      renderPagination();
+    Array.from(paginationContainer.querySelectorAll('.pagination-btn')).forEach(btn => {
+      btn.addEventListener('click', () => {
+        let page = parseInt(btn.dataset.page);
+        if (isNaN(page)) return;
+        currentPage = Math.min(Math.max(page, 1), totalPages);
+        renderPage();
+        renderPagination();
+      });
     });
-  });
-}
-
-// No results message
-function renderNoResults() {
-  let msg = document.getElementById('no-learning-message');
-  if (!msg) {
-    msg = document.createElement('div');
-    msg.id = 'no-learning-message';
-    msg.textContent = 'No learnings found';
-    msg.style.textAlign = 'center';
-    msg.style.padding = '2rem';
-    msg.style.gridColumn = '1 / -1';
-    grid.appendChild(msg);
   }
-  msg.style.display = filteredCards.length === 0 ? 'block' : 'none';
-}
 
-// Event listeners
-searchInput.addEventListener('input', applyFilters);
-sortDropdown.addEventListener('change', applyFilters);
-filtersToggle.addEventListener('click', e => {
-  e.stopPropagation();
-  filtersPopover.style.display = (filtersPopover.style.display==='block') ? 'none' : 'block';
-});
+  // STEP 8: No results message
+  function renderNoResults() {
+    let msg = document.getElementById('no-learning-message');
+    if (!msg) {
+      msg = document.createElement('div');
+      msg.id = 'no-learning-message';
+      msg.textContent = 'No learnings found';
+      msg.style.textAlign = 'center';
+      msg.style.padding = '2rem';
+      msg.style.gridColumn = '1 / -1';
+      grid.appendChild(msg);
+    }
+    msg.style.display = filteredCards.length === 0 ? 'block' : 'none';
+  }
 
-// Initialize category buttons and filters
-renderCategoryButtons();
-applyFilters();
+  // STEP 9: Event listeners
+  searchInput.addEventListener('input', applyFilters);
+  sortDropdown.addEventListener('change', applyFilters);
+  filtersToggle.addEventListener('click', e => {
+    e.stopPropagation();
+    filtersPopover.style.display = filtersPopover.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // STEP 10: Init
+  renderCategoryButtons();
+  applyFilters();
 </script>

@@ -1,0 +1,7 @@
+{
+  "title": "Video Classification",
+  "category": "Transformers",
+  "excerpt": "Classify YouTube videos based on content and metadata using Transformer models.",
+  "image": "video-classification.png",
+  "github": "https://github.com/QUT-AIML/Transformers/blob/main/Video_Classification/Video_Classification.ipynb"
+}

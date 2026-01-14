@@ -5,6 +5,8 @@
   "category": "Tutorial",
   "date": "2024-6-2",
   "featured": false,
+  "image": "logistic-regression.png", 
+
   "overview": {
     "definition": "Logistic Regression is a supervised learning algorithm used for classification tasks. It models the probability that a given input belongs to a particular class using the logistic (sigmoid) function.",
     "types": [

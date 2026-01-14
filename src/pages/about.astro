@@ -4,22 +4,39 @@ import "@/styles/about/about.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// Import all JSON files eagerly
-const teamFiles = import.meta.glob('/src/data/teams/*.json', { eager: true, query: '?json' });
+/**
+ * Fetch about data from API (same-origin)
+ */
+const res = await fetch(new URL("/api/about", Astro.url));
 
-// Get the latest team JSON based on the year in the filename
-const latestTeamFile = Object.keys(teamFiles)
-  .map(path => ({
-    path,
-    year: parseInt(path.match(/(\d{4})/)[0]) // extract year
-  }))
-  .sort((a, b) => b.year - a.year)[0].path;
+if (!res.ok) {
+  throw new Error("Failed to load about API");
+}
 
-// Get the JSON array from the file
-const teamData = teamFiles[latestTeamFile].default;
+const apiData = await res.json();
 
-// Filter out overview
-const teamsForClient = teamData.filter(t => t.id !== "overview");
+/**
+ * Determine latest numeric year (ignore "Template")
+ */
+const latestYear = Object.keys(apiData)
+  .filter(key => /^\d{4}$/.test(key)) // only years like "2025", "2026"
+  .map(Number)
+  .sort((a, b) => b - a)[0];
+
+if (!latestYear) {
+  throw new Error("No valid year found in about API");
+}
+
+const latestTeamData = apiData[String(latestYear)];
+
+/**
+ * Normalise for existing client-side carousel
+ * Expected shape:
+ * [
+ *   { title, items: [...] }
+ * ]
+ */
+const teamsForClient = latestTeamData.executiveList;
 ---
 
 <html lang="en">
@@ -226,7 +243,7 @@ function renderPage(index) {
       card.innerHTML = `
         <div class="team-photo">
           <img
-            src="/people/${member.name.split(" ")[0]}.png"
+            src="${member.image || '/people/Anonymous.png'}"
             alt="${member.name}"
             onerror="this.src='/people/Anonymous.png';"
           />
@@ -236,6 +253,7 @@ function renderPage(index) {
           <h3>${member.name}</h3>
         </div>
       `;
+
 
       // start hidden
       card.classList.add("hidden-content");

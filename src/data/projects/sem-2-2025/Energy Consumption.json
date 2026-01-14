@@ -1,13 +1,7 @@
 {
-  "overview": {
-    "title": "Energy Consumption",
-    "category": "Linear Regression",
-    "excerpt": "Analyze energy usage patterns and predict future consumption with linear regression.",
-    "image": "/projects/energy_consumption.jpeg"
-  },
-  "details": {
-    "title": "Energy Consumption",
-    "github": "https://github.com/QUT-AIML/Linear-Regression",
-    "longDescription": "This project explores energy consumption data to predict future usage patterns using linear regression. Users can apply simple, multiple, and polynomial regression models, experiment with regularization, and evaluate performance using metrics such as R² and RMSE."  
-  }
+  "title": "Energy Consumption",
+  "category": "Linear Regression",
+  "excerpt": "Analyze energy usage patterns and predict future consumption with linear regression.",
+  "image": "energy-consumption.jpeg",
+  "github": "https://github.com/QUT-AIML/Linear-Regression/blob/main/Energy%20Consumption/Energy%20Consumption.ipynb"
 }

@@ -3,47 +3,62 @@ import "@/styles/global.css";
 import "@/styles/projects/projects.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
-import projectsIndex from "@/data/projects/index.js";
 
 /* -----------------------------
    Helpers
 ----------------------------- */
 function isTBCProject(p) {
-  return p?.id?.toLowerCase() === "tbc";
+  return p?.overview?.title?.toLowerCase() === "tbc";
+}
+
+/* Capitalize first letter, lowercase the rest */
+function formatSemesterLabel(label) {
+  return label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
 }
 
 /* -----------------------------
-   Load semesters
+   Fetch projects from API
 ----------------------------- */
-const semesters = projectsIndex?.semesters ?? [];
+const res = await fetch(new URL("/api/projects", Astro.url));
+if (!res.ok) throw new Error("Failed to fetch projects API");
+
+const apiData = await res.json();
+console.log("Raw projects from API:", apiData);
 
 /* -----------------------------
-   Sort semesters (newest first)
+   Flatten semesters
+----------------------------- */
+const semesters = Object.keys(apiData).map(key => ({
+  id: key,
+  label: formatSemesterLabel(key.replace(/-/g, " ")), // Sem 1, 2026
+  projects: apiData[key]
+}));
+
+/* -----------------------------
+   Sort semesters (newest first by date in id)
+   Assumes format sem-{num}-{year}
 ----------------------------- */
 const sortedSemesters = [...semesters].sort((a, b) => {
-  if (a.year && b.year) {
-    if (a.year !== b.year) return b.year - a.year;
-    return (b.sem ?? -1) - (a.sem ?? -1);
-  }
-  if (a.year && !b.year) return -1;
-  if (!a.year && b.year) return 1;
-  return (b.folder ?? "").localeCompare(a.folder ?? "");
+  const [aSem, aNum, aYear] = a.id.split("-");
+  const [bSem, bNum, bYear] = b.id.split("-");
+  const yearDiff = parseInt(bYear) - parseInt(aYear);
+  if (yearDiff !== 0) return yearDiff;
+  return parseInt(bNum) - parseInt(aNum);
 });
 
-/* -----------------------------
-   Latest semester logic
------------------------------ */
 const latestSemester = sortedSemesters[0] ?? null;
 const latestProjectsRaw = latestSemester?.projects ?? [];
 
-// Latest semester is considered TBC if:
-//  - empty
-//  - OR only contains TBC.json
+/* -----------------------------
+   Determine if latest semester is TBC
+----------------------------- */
 const latestIsTBC =
   latestProjectsRaw.length === 0 ||
   latestProjectsRaw.every(isTBCProject);
 
-// Current projects (ONLY if latest is not TBC)
+/* -----------------------------
+   Current projects (only from latest semester if not TBC)
+----------------------------- */
 const currentProjects = latestIsTBC
   ? []
   : latestProjectsRaw.map(p => ({
@@ -52,20 +67,10 @@ const currentProjects = latestIsTBC
     }));
 
 /* -----------------------------
-   Past projects
-   - If latest semester is TBC, include it as past
-   - Exclude TBC.json from display
+   Past projects (exclude TBC)
 ----------------------------- */
 const pastProjects = sortedSemesters
-  .filter(s => {
-    if (!s.projects || s.projects.length === 0) return false;
-
-    if (s.id === latestSemester?.id) {
-      return latestIsTBC;
-    }
-
-    return true;
-  })
+  .filter(s => s.id !== latestSemester?.id || latestIsTBC)
   .flatMap(s =>
     (s.projects ?? [])
       .filter(p => !isTBCProject(p))
@@ -76,7 +81,7 @@ const pastProjects = sortedSemesters
   );
 
 /* -----------------------------
-   Build filter types from PAST projects only
+   Build filter types from past projects
 ----------------------------- */
 const preferred = ["CNN", "Linear Regression"];
 const allTypesSet = new Set();
@@ -87,7 +92,6 @@ pastProjects.forEach(ev => {
 });
 
 let types = ["All"];
-
 if (allTypesSet.size > 1) {
   const preferredExisting = preferred.filter(p => allTypesSet.has(p));
   const remaining = Array.from(allTypesSet).filter(t => !preferredExisting.includes(t));
@@ -95,7 +99,11 @@ if (allTypesSet.size > 1) {
 
   types = ["All", ...preferredExisting, ...remaining];
 }
+
+console.log("Current Projects:", currentProjects);
+console.log("Past Projects:", pastProjects);
 ---
+
 
 <html lang="en">
   <head>
@@ -154,7 +162,7 @@ if (allTypesSet.size > 1) {
                   data-type={type}
                   data-title={ev.title.toLowerCase()}
                 >
-                  <a href={`/projects/${ev.semesterId}/${ev.id}`}>
+                  <a href={ev.github} target="_blank" rel="noopener noreferrer">
                     <div class="card-media">
                       {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                     </div>
@@ -165,7 +173,7 @@ if (allTypesSet.size > 1) {
                       <time class="card-date">{ev.dateLabel}</time>
                       <p class="card-description">{ev.excerpt}</p>
                       <div class="card-footer">
-                        <span class="card-view-more">View more →</span>
+                        <span class="card-view-more">View on GitHub →</span>
                       </div>
                     </div>
                   </a>
@@ -175,6 +183,7 @@ if (allTypesSet.size > 1) {
           </section>
         </section>
       )}
+
 
       <section class="pink-panel past-projects-space">
         <p class="pink-title">Previous Projects</p>
@@ -248,36 +257,37 @@ if (allTypesSet.size > 1) {
 
           <div id="type-filters" class="desktop-type-filters">
 
-          <section id="projects-grid" class="projects-grid">
-            {pastProjects.map((ev) => {
-              const type = ev.type ?? ev.category ?? "Other";
-              return (
-                <article
-                  class="project-card"
-                  data-semester={ev.semesterId}
-                  data-category={ev.category}
-                  data-type={type}
-                  data-title={ev.title.toLowerCase()}
-                >
-                  <a href={`/projects/${ev.semesterId}/${ev.id}`}>
-                    <div class="card-media">
-                      {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
-                    </div>
-
-                    <div class="card-body">
-                      <h3 class="card-title">{ev.title}</h3>
-                      <div class="card-divider"></div>
-                      <time class="card-date">{ev.dateLabel}</time>
-                      <p class="card-description">{ev.excerpt}</p>
-                      <div class="card-footer">
-                        <span class="card-view-more">View more →</span>
+            <section id="projects-grid" class="projects-grid">
+              {pastProjects.map((ev) => {
+                const type = ev.type ?? ev.category ?? "Other";
+                return (
+                  <article
+                    class="project-card"
+                    data-semester={ev.semesterId}
+                    data-category={ev.category}
+                    data-type={type}
+                    data-title={ev.title.toLowerCase()}
+                  >
+                    <a href={ev.github} target="_blank" rel="noopener noreferrer">
+                      <div class="card-media">
+                        {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                       </div>
-                    </div>
-                  </a>
-                </article>
-              );
-            })}
-          </section>
+
+                      <div class="card-body">
+                        <h3 class="card-title">{ev.title}</h3>
+                        <div class="card-divider"></div>
+                        <time class="card-date">{ev.dateLabel}</time>
+                        <p class="card-description">{ev.excerpt}</p>
+                        <div class="card-footer">
+                          <span class="card-view-more">View on GitHub →</span>
+                        </div>
+                      </div>
+                    </a>
+                  </article>
+                );
+              })}
+            </section>
+
           </div>
         </section>
 

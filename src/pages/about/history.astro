@@ -4,23 +4,33 @@ import "@/styles/about/history.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// Import all JSON files from /src/data
-const teamFiles = import.meta.glob('/src/data/teams/*.json', { eager: true, query: '?json' });
+/**
+ * Fetch about/team API
+ */
+const res = await fetch(new URL("/api/about", Astro.url));
 
-// Convert imported files into an array of datasets with year info
-const teamsByYear = Object.entries(teamFiles).map(([filepath, mod]) => {
-  const yearMatch = filepath.match(/(\d{4})\.json$/);
-  const year = yearMatch ? parseInt(yearMatch[1]) : null;
-  const data = mod.default;
-  return {
-    year,
-    teams: Array.isArray(data) ? data : []
-  };
-})
-.sort((a, b) => (b.year || 0) - (a.year || 0));
+if (!res.ok) {
+  throw new Error("Failed to load about API");
+}
 
-console.log("Teams by year:", teamsByYear);
+const apiData = await res.json();
 
+/**
+ * Convert API data into array sorted by year descending
+ * Structure: [{ year, executiveList, teamPhoto }]
+ */
+const teamsByYear = Object.entries(apiData)
+  .filter(([year]) => year !== "Template") // exclude Template
+  .map(([year, data]) => ({
+    year: parseInt(year),
+    executiveList: data.executiveList || [],
+    teamPhoto: data.teamPhoto || null
+  }))
+  .sort((a, b) => b.year - a.year);
+
+/**
+ * Helper: group items by role
+ */
 function groupByRole(items) {
   const map = {};
   items.forEach(p => {
@@ -40,135 +50,123 @@ function groupByRole(items) {
       name="description"
       content="The QUT AI & ML Society is a student-led community exploring artificial intelligence and machine learning."
     />
-    <title>QUT AIML</title>
+    <title>QUT AIML History</title>
   </head>
 
   <body class="background-dots">
     <Navigation />
 
     <div class="content-wrapper history-space">
+      <div class="info-panel-wrapper">
+        <div class="thick-line-behind"></div>
 
-    
-		<div class="info-panel-wrapper">
-			<div class="thick-line-behind"></div>			
-           
-        {teamsByYear.map(({ year, teams }, yearIndex) => {
-          if (!teams.length) return null;
-
-          const overviewSection = teams.find(t => t.id === 'overview');
-          const heroImg = overviewSection?.items?.[0]?.img || '';
-          const sectionTitle = overviewSection?.title || `Team ${year}`;
+        {teamsByYear.map(({ year, executiveList, teamPhoto }, yearIndex) => {
+          const sectionTitle = `Team ${year}`;
 
           return (
-
-            <section class="pink-panel full-width-banner">
-              <p class="pink-title">
+            <>
+              <section class="pink-panel full-width-banner">
+                <p class="pink-title">
                   {year === 2025 ? "Founding (2025) Team" : year + " Team"}
-              </p>
-            </section>
+                </p>
+              </section>
 
-            <section class="info-panel history-box" key={yearIndex}>
-              
-              <div class="team-split static-layout">
-                      {/* LEFT: Yearbook Table */}
-                    <aside class="yearbook">
-                      <table class="yearbook-table">
-                        {teams
-                          .filter(t => t.id !== 'overview')
-                          .map((t, index, arr) => {
-                            const grouped = groupByRole(t.items);
-                            return (
-                              <>
-                                <tbody class="team-group" key={t.id}>
-                                  {Object.entries(grouped).map(([role, names]) => (
-                                    <tr class="yearbook-row" key={role}>
-                                      <td class="role-cell">{role}</td>
-                                      <td class="names-cell">{names.join(', ')}</td>
-                                    </tr>
-                                  ))}
-                                </tbody>
+              <section class="info-panel history-box" key={yearIndex}>
+                <div class="team-split static-layout">
 
-                                {index < arr.length - 1 && (
-                                  <tbody>
-                                    <tr class="team-spacer">
-                                      <td colSpan="2"></td>
-                                    </tr>
-                                  </tbody>
-                                )}
-                              </>
-                            );
-                          })}
-                      </table>
-                    </aside>
+                  {/* LEFT: Yearbook Table */}
+                  <aside class="yearbook">
+                    <table class="yearbook-table">
+                      {executiveList.map((team, index, arr) => {
+                        const grouped = groupByRole(team.items);
+                        return (
+                          <>
+                            <tbody class="team-group" key={team.title}>
+                              {Object.entries(grouped).map(([role, names]) => (
+                                <tr class="yearbook-row" key={role}>
+                                  <td class="role-cell">{role}</td>
+                                  <td class="names-cell">{names.join(', ')}</td>
+                                </tr>
+                              ))}
+                            </tbody>
 
-                    {/* RIGHT: Hero Image with Loader */}
-                    <div class="team-photo-large">
-                      {heroImg && heroImg !== "N/A" ? (
-                        <div class="image-wrapper" style="position: relative;">
-                          <div class="loader" id={`loader-${yearIndex}`}>
-                            <div class="spinner"></div>
-                          </div>
-                          <img
-                            src={heroImg}
-                            alt={sectionTitle}
-                            class="team-hero"
-                            id={`teamHero-${yearIndex}`}
-                            onload={`document.getElementById('loader-${yearIndex}').style.display='none'`}
-                            style="display: block;"
-                          />
+                            {index < arr.length - 1 && (
+                              <tbody>
+                                <tr class="team-spacer">
+                                  <td colSpan="2"></td>
+                                </tr>
+                              </tbody>
+                            )}
+                          </>
+                        );
+                      })}
+                    </table>
+                  </aside>
+
+                  {/* RIGHT: Hero Image with Loader */}
+                  <div class="team-photo-large">
+                    {teamPhoto ? (
+                      <div class="image-wrapper" style="position: relative;">
+                        <div class="loader" id={`loader-${yearIndex}`}>
+                          <div class="spinner"></div>
                         </div>
-                      ) : (
-                        <div class="team-placeholder">
-                          Photo coming soon!
-                        </div>
-                      )}
-                    </div>
-
-
-                    {/* Modal */}
-                    <div id={`photoModal-${yearIndex}`} class="modal">
-                      <span class="modal-close" id={`modalClose-${yearIndex}`}>&times;</span>
-                      <img class="modal-content" id={`modalImg-${yearIndex}`} />
-                    </div>
+                        <img
+                          src={teamPhoto}
+                          alt={sectionTitle}
+                          class="team-hero"
+                          id={`teamHero-${yearIndex}`}
+                          onload={`document.getElementById('loader-${yearIndex}').style.display='none'`}
+                          style="display: block;"
+                        />
+                      </div>
+                    ) : (
+                      <div class="team-placeholder">
+                        Photo coming soon!
+                      </div>
+                    )}
                   </div>
-                </section>
-              );
-            })}
-            </div>
 
-        
-        
+                  {/* Modal */}
+                  <div id={`photoModal-${yearIndex}`} class="modal">
+                    <span class="modal-close" id={`modalClose-${yearIndex}`}>&times;</span>
+                    <img class="modal-content" id={`modalImg-${yearIndex}`} />
+                  </div>
 
-          </div>
+                </div>
+              </section>
+            </>
+          );
+        })}
+      </div>
+    </div>
 
-      <Footer />
+    <Footer />
+
+    <script>
+      // Handle multiple modals automatically
+      document.querySelectorAll('.team-hero').forEach((img, i) => {
+        const modal = document.getElementById(`photoModal-${i}`);
+        const modalImg = document.getElementById(`modalImg-${i}`);
+        const closeBtn = document.getElementById(`modalClose-${i}`);
+
+        img.onclick = () => {
+          modal.style.display = "block";
+          modalImg.src = img.src;
+          document.body.classList.add("modal-open");
+        }
+
+        closeBtn.onclick = () => {
+          modal.style.display = "none";
+          document.body.classList.remove("modal-open");
+        }
+
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            modal.style.display = "none";
+            document.body.classList.remove("modal-open");
+          }
+        }
+      });
+    </script>
   </body>
 </html>
-
-
-<script>
-  // Handle multiple modals automatically
-  document.querySelectorAll('.team-hero').forEach((img, i) => {
-    const modal = document.getElementById(`photoModal-${i}`);
-    const modalImg = document.getElementById(`modalImg-${i}`);
-    const closeBtn = document.getElementById(`modalClose-${i}`);
-
-    img.onclick = () => {
-      modal.style.display = "block";
-      modalImg.src = img.src;
-      document.body.classList.add("modal-open");
-    }
-
-    closeBtn.onclick = () => {
-      modal.style.display = "none";
-      document.body.classList.remove("modal-open");
-    }
-
-    modal.onclick = (e) => {
-      if (e.target === modal) {
-        modal.style.display = "none";
-        document.body.classList.remove("modal-open");
-      }
-    }
-  });
-</script>

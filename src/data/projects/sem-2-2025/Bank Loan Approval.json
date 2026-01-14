@@ -1,0 +1,7 @@
+{
+  "title": "Bank Loan Approval",
+  "category": "Logistic Regression",
+  "excerpt": "Predict loan approval decisions using logistic regression.",
+  "image": "bank-loan-approval.png",
+  "github": "https://github.com/QUT-AIML/Logistic-Regression/blob/main/Bank%20Loan%20Approval/predict-bank-personal-loan.ipynb"
+}

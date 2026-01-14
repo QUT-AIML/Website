@@ -4,28 +4,44 @@ import "@/styles/home.css";
 import KeyLogo from "@/logos/Logo-Full.svg";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
-import eventsIndex from "@/data/events/index.js";
 
-const semesters = eventsIndex?.semesters ?? [];
+// Fetch events from API
+const res = await fetch(new URL("/api/events", Astro.url));
+if (!res.ok) throw new Error("Failed to fetch events API");
 
-// Flatten events and attach semester id
-const eventsBySemester = semesters
-  .map(s => s.events.map(ev => ({ ...ev, semesterId: s.id })))
+const apiData = await res.json();
+
+// Flatten events from API object
+const eventsBySemester = Object.entries(apiData)
+  .map(([semesterId, events]) =>
+    events.map((ev) => ({
+      ...ev,
+      semesterId,
+      dateLabel: new Date(ev.date).toLocaleDateString("en-AU", {
+        weekday: "long",  // Full weekday
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }),
+    }))
+  )
   .flat();
 
+console.log("Raw events from API:", apiData);
+console.log("Flattened eventsBySemester:", eventsBySemester);
+
+// Filter upcoming events
 const today = new Date();
 today.setHours(0, 0, 0, 0);
-
-// Featured events (optional)
-const featuredEvents = eventsBySemester
-  .filter(ev => ev.featured)
-  .filter(ev => new Date(ev.date) >= today);
 
 // Next 3 upcoming events
 const upcomingEvents = eventsBySemester
   .filter(ev => new Date(ev.date) >= today)
   .sort((a, b) => new Date(a.date) - new Date(b.date))
   .slice(0, 3);
+
+console.log("Next 3 upcoming events:", upcomingEvents);
+
 ---
 
 <html lang="en">

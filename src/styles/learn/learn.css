@@ -2,6 +2,10 @@
     padding-top: 10rem;
 }
 
+  .panel-topspace {
+    margin-top: 6rem;
+  }
+
 /* === SEARCH BAR STYLING === */
 .search-wrapper {
   flex: 1;

@@ -4,55 +4,55 @@ import "@/styles/events/event-details.css";
 import Navigation from "@/components/Navigation.astro";
 import Footer from "@/components/Footer.astro";
 
-// === Generate static paths ===
-export async function getStaticPaths() {
-  const modules = import.meta.glob('../../../data/events/**/*.json', { eager: true });
-
-  // Create { semester, event } pairs
-  const paths = Object.keys(modules).map((filePath) => {
-    // Match folder (semester) and filename (event)
-    const match = filePath.replaceAll("\\", "/").match(/\/data\/events\/([^/]+)\/([^/]+)\.json$/);
-    if (!match) return null;
-    const [, semester, eventFile] = match;
-    return { params: { semester, event: eventFile } };
-  }).filter(Boolean);
-
-  return paths;
-}
-
-// === Get params from route ===
+// --- Get route params ---
 const { params } = Astro;
-const semester = params.semester;  // folder name like "sem-1-2026"
-const event = params.event;        // filename without .json
+const semester = params.semester;  // e.g., "sem-1-2026"
+const eventSlug = params.event;    // e.g., "welcome-night"
 
-// === Dynamically import the JSON file for this semester/event ===
-const modules = import.meta.glob('../../../data/events/**/*.json');
-const matchKey = Object.keys(modules).find(k =>
-  k.replaceAll("\\", "/").endsWith(`/${semester}/${event}.json`)
-);
-
-let notFound = false;
-let eventData = null;
-
-if (!matchKey) {
-  notFound = true;
-} else {
-  const mod = await modules[matchKey]();
-  eventData = mod.default ?? mod;
+// --- Helper: slugify title to match URL ---
+function slugify(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "") // remove special chars
+    .replace(/\s+/g, "-");    // spaces → dash
 }
 
-const overview = eventData ? (eventData.overview ?? eventData) : null;
-const details = eventData ? (eventData.details ?? {}) : {};
+// --- Fetch events API at runtime ---
+const res = await fetch(new URL("/api/events", Astro.url));
+if (!res.ok) throw new Error("Failed to fetch events API");
+const apiData = await res.json();
+
+// --- Find the specific event by semester & slug ---
+const eventsForSemester = (apiData[semester] ?? []).map(ev => ({
+  ...ev,
+  slug: slugify(ev.title),
+  dateLabel: new Date(ev.date).toLocaleDateString("en-AU", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }),
+}));
+
+const eventData = eventsForSemester.find(ev => ev.slug === eventSlug);
+const notFound = !eventData;
+
+const overview = eventData ?? null;
+const details = eventData ?? {};
 const pageTitle = eventData
-  ? `${details.title ?? overview.title} — QUT AIML`
+  ? `${details.title} — QUT AIML`
   : "Event not found";
+
+// --- Make this page server-rendered, no getStaticPaths needed ---
+export const prerender = false;
 ---
+
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={overview ? overview.excerpt ?? details.longDescription : "Event not found"} />
+    <meta name="description" content={overview ? overview.excerpt ?? details.description : "Event not found"} />
     <title>{pageTitle}</title>
   </head>
 
@@ -63,7 +63,7 @@ const pageTitle = eventData
       {notFound ? (
         <section class="unique-event-card unique-event-notfound">
           <h1>Event not found</h1>
-          <p>No event exists with ID <strong>{event}</strong> in semester <strong>{semester}</strong>.</p>
+          <p>No event exists with ID <strong>{eventSlug}</strong> in semester <strong>{semester}</strong>.</p>
           <a href="/events" class="unique-link">← Back to events</a>
         </section>
       ) : (
@@ -72,12 +72,10 @@ const pageTitle = eventData
             <a href="/events" class="unique-link">← Back to events</a>
           </nav>
 
-          <h1 class="event-title">{details.title ?? overview.title}</h1>
+          <h1 class="event-title">{details.title}</h1>
 
           <div class="event-meta-pills">
-            {(details.fullDate ?? overview.dateLabel ?? overview.date) && (
-              <span class="meta-pill">{details.fullDate ?? overview.dateLabel ?? overview.date}</span>
-            )}
+            {details.dateLabel && <span class="meta-pill">{details.dateLabel}</span>}
             {details.time && <span class="meta-pill">{details.time}</span>}
             {details.location && <span class="meta-pill">{details.location}</span>}
           </div>
@@ -85,12 +83,12 @@ const pageTitle = eventData
           <div class="event-divider"></div>
 
           <section class="event-description">
-            <p>{details.longDescription ?? overview.excerpt}</p>
+            <p>{details.description ?? details.excerpt}</p>
           </section>
 
-          {overview.image && (
+          {details.image && (
             <section class="event-image">
-              <img src={overview.image} alt={overview.title} />
+              <img src={details.image} alt={details.title} />
             </section>
           )}
 
@@ -105,7 +103,7 @@ const pageTitle = eventData
             </section>
           )}
 
-          {details.schedule && (
+          {details.schedule && details.schedule.length > 0 && (
             <section class="unique-section">
               <h3 class="unique-section-title">Schedule</h3>
               <ul>
@@ -116,7 +114,7 @@ const pageTitle = eventData
             </section>
           )}
 
-          {details.speakers && (
+          {details.speakers && details.speakers.length > 0 && (
             <section class="unique-section">
               <h3 class="unique-section-title">Speakers</h3>
               <ul>
@@ -127,13 +125,13 @@ const pageTitle = eventData
             </section>
           )}
 
-          {details.gallery && (
+          {details.gallery && details.gallery.length > 0 && (
             <section class="unique-section">
               <h3 class="unique-section-title">Gallery</h3>
               <div class="unique-gallery">
-                {details.gallery.map(src => (
+                {details.gallery.map(g => (
                   <div class="unique-gallery-item">
-                    <img src={src} alt={overview.title} class="unique-gallery-image" />
+                    <img src={g.src} alt={g.alt ?? details.title} class="unique-gallery-image" />
                   </div>
                 ))}
               </div>

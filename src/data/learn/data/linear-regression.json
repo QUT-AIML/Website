@@ -5,6 +5,8 @@
   "category": "Tutorial",
   "date": "2024-10-2",
   "featured": false,
+  "image": "linear-regression.png", 
+
   "overview": {
     "definition": "Linear Regression is a supervised learning algorithm used to model the relationship between a dependent variable (target) and one or more independent variables (features) by fitting a linear equation to observed data.",
     "types": [
