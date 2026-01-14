@@ -7,7 +7,6 @@ import Footer from "@/components/Footer.astro";
 // --- Get route param ---
 const { params } = Astro;
 const idSlug = params.id;
-console.log("[learn] URL slug param:", idSlug);
 
 // --- Slugify title → URL ---
 function slugify(title: string) {
@@ -16,46 +15,29 @@ function slugify(title: string) {
     .trim()
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-");
-
-  console.log("[learn] slugify:", `"${title}" → "${slug}"`);
   return slug;
 }
 
 // --- Fetch learning ---
 const res = await fetch(new URL("/api/learn", Astro.url));
-console.log("learn API status:", res.status);
 
 if (!res.ok) throw new Error("Failed to fetch learn API");
 
 const apiData = await res.json();
-console.log("[earn raw API response:", apiData);
 
 // --- Normalize to array ---
 const learn = Array.isArray(apiData)
   ? apiData
   : apiData.learn ?? apiData.data ?? [];
 
-console.log("learning normalized count:", learn.length);
-
 // --- Match by slugified title ---
 const learning = learn.find((learning) => {
   const learnSlug = slugify(learning.title);
   const match = learnSlug === idSlug;
-
-  console.log(
-    "[learn] compare:",
-    `"${learnSlug}" === "${idSlug}" →`,
-    match
-  );
-
   return match;
 });
 
-console.log("[learn] matched title:", learning);
-
 const notFound = !learning;
-console.log("[learn] notFound:", notFound);
-
 export const prerender = false;
 ---
 
