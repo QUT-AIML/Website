@@ -1,0 +1,7 @@
+{
+  "title": "Fake News Classification",
+  "category": "Logistic Regression",
+  "excerpt": "Classify news articles as real or fake using logistic regression.",
+  "image": "fake-news-classification.jpg",
+  "github": "https://github.com/QUT-AIML/Logistic-Regression/blob/main/Fake%20News%20Detection/fake-news-classification.ipynb"
+}

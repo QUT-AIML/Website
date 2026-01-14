@@ -5,6 +5,8 @@
   "category": "Tutorial",
   "date": "2024-7-2",
   "featured": false,
+  "image": "random-forest.jpg", 
+
   "overview": {
     "definition": "Random Forest is an ensemble learning method that constructs multiple decision trees during training and outputs the mode of classes (classification) or mean prediction (regression) of the individual trees.",
     "types": [

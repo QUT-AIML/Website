@@ -1,0 +1,48 @@
+[
+  {
+    "title": "Admin Team",
+    "items": [
+      { "role": "President", "name": "Zac Knight", "image": "Zac.png" },
+      { "role": "Vice President", "name": "Niam Nayani", "image": "Niam.png" },
+      { "role": "Secretary", "name": "Jackson Riding", "image": "Jackson.png" },
+      { "role": "Treasurer", "name": "Declan Whitty", "image": "Declan.png" }
+    ]
+  },
+  {
+    "title": "Projects Team",
+    "items": [
+      { "role": "Projects Director", "name": "Steve Hun", "image": "Steve.png" },
+      { "role": "Projects Officer", "name": "Iwan Kaczmar-Donaghue", "image": "Iwan.png" },
+      { "role": "Projects Officer", "name": "Valerie Annabella", "image": "Valerie.png" },
+      { "role": "Projects Officer", "name": "Jaidyn Snabel", "image": "Jaidyn.png" },
+      { "role": "Projects Officer", "name": "Rajinder Singh", "image": "Rajinder.png" },
+      { "role": "Projects Officer", "name": "Nhu Hieu Nguyen", "image": "Hieu.png" }
+    ]
+  },
+  {
+    "title": "Marketing Team",
+    "items": [
+      { "role": "Marketing Director", "name": "Amos Wat", "image": "Amos.png" },
+      { "role": "Marketing Officer", "name": "Belinda Zhou", "image": "Belinda.png" },
+      { "role": "Marketing Officer", "name": "John Wynter", "image": "John.png" },
+      { "role": "Marketing Officer", "name": "Venis Patel", "image": "Venis.png" }
+    ]
+  },
+  {
+    "title": "Events Team",
+    "items": [
+      { "role": "Events Director", "name": "Gemma O'Driscoll", "image": "Gemma.png" },
+      { "role": "Events Officer", "name": "Sophia Sweet", "image": "Sophia.png" },
+      { "role": "Events Officer", "name": "Amit Suthram", "image": "Amit.png" }
+    ]
+  },
+  {
+    "title": "General Executive",
+    "items": [
+      { "role": "General Executive", "name": "Leonora Van De Sande", "image": "Leonora.png" },
+      { "role": "General Executive", "name": "Mandeep Gautam", "image": "Mandeep.png" },
+      { "role": "General Executive", "name": "Ethan Regnart", "image": "Ethan.png" },
+      { "role": "General Executive", "name": "In Hwa Na", "image": "In Hwa.png" }
+    ]
+  }
+]

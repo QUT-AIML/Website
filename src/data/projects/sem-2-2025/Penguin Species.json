@@ -1,13 +1,7 @@
 {
-  "overview": {
-    "title": "Penguin Species",
-    "category": "Clustering",
-    "excerpt": "Cluster penguin species based on physical characteristics using unsupervised learning.",
-    "image": "/projects/penguins.jpg"
-  },
-  "details": {
-    "title": "Penguin Species",
-    "github": "https://github.com/QUT-AIML/Clustering",
-    "longDescription": "This project uses clustering algorithms to group penguin species from the Palmer Penguins dataset based on physical measurements. Users can experiment with K-Means, Gaussian Mixture Models, and Hierarchical Clustering to identify species clusters and understand biological patterns."
-  }
+  "title": "Penguin Species",
+  "category": "Clustering",
+  "excerpt": "Cluster penguin species based on physical characteristics using unsupervised learning.",
+  "image": "penguin-species.jpg",
+  "github": "https://github.com/QUT-AIML/Clustering/blob/main/Penguin%20Species/Biological_Grouping_of_Penguins_using_K_Means_Clustering.ipynb"
 }

@@ -1,25 +1,33 @@
 {
-  "overview": {
-    "title": "Projects Night",
-    "date": "2025-08-26",
-    "dateLabel": "26th August 2025",
-    "category": "Projects",
-    "excerpt": "🛠️🤖 Join QUT AI & ML Society for Projects Night! Collaborate, showcase ideas, and build AI/ML projects with fellow members. 🚀💡",
-    "image": "/events/Projects/Projects Night - 2.jpg",
-    "featured": false
+  "title": "Projects Night",
+  "date": "2025-08-26",
+  "time": "5:30 PM – 7:30 PM",
+  "location": "QUT GP-B223",
+  "category": "Projects",
+  "excerpt": "Join QUT AI & ML Society for Projects Night! Collaborate, showcase ideas, and build AI/ML projects with fellow members.",
+  "image": "projects-night-2.jpg",
+
+  "featured": false,
+  "isCollab": false,
+
+  "description": "Project Night is where ideas turn into progress. We start with a quick lightning talk covering the latest AI news and tips, including how to use Google Colab for your projects, then dive straight into hands-on building. Work on beginner, intermediate, or advanced projects, team up, share skills, and support each other. Learn by doing and grow your confidence. Build cool things from simple models to advanced AI tools. No long workshops, no lectures—just a short kick-off and then pure project time. Bring your laptop, your curiosity, and your energy and let’s make something awesome together!",
+
+  "schedule": [],
+  "speakers": [],
+
+  "registration": {
+    "required": false,
+    "link": "",
+    "capacity": null,
+    "price": "",
+    "opens": null,
+    "closes": null
   },
-  "details": {
-    "title": "Projects Night",
-    "fullDate": "Tuesday, 26 August 2025",
-    "time": "5:30 PM – 7:30 PM",
-    "location": "QUT GP-B223",
-    "longDescription": "Project Night is where ideas turn into progress. We start with a quick lightning talk covering the latest AI news and tips, including how to use Google Colab for your projects, then dive straight into hands-on building. Work on beginner, intermediate, or advanced projects, team up, share skills, and support each other. Learn by doing and grow your confidence. Build cool things from simple models to advanced AI tools. No long workshops, no lectures—just a short kick-off and then pure project time. Bring your laptop, your curiosity, and your energy and let’s make something awesome together! 🚀💡",
-    "isCollab": "false",
-    "gallery": [
-      "/events/Projects/Projects Night - 1.jpg",
-      "/events/Projects/Projects Night - 2.jpg",
-      "/events/Projects/Projects Night - 3.jpg",
-      "/events/Projects/Projects Night - 4.jpg"
-    ]
-  }
+
+  "gallery": [
+    { "src": "projects-night-1.jpg", "alt": "Projects Night photo 1" },
+    { "src": "projects-night-2.jpg", "alt": "Projects Night photo 2" },
+    { "src": "projects-night-3.jpg", "alt": "Projects Night photo 3" },
+    { "src": "projects-night-4.jpg", "alt": "Projects Night photo 4" }
+  ]
 }

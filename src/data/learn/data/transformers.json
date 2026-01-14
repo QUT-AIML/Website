@@ -5,6 +5,8 @@
   "date": "2024-9-2",
   "featured": false,
   "category": "Tutorial",
+  "image": "transformers.png", 
+
   "overview": {
     "definition": "A Transformer is a neural network architecture designed to handle sequential data, using self-attention mechanisms to process input in parallel.",
     "types": [

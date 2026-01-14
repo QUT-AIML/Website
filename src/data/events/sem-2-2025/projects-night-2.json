@@ -1,30 +1,33 @@
 {
-  "overview": {
-    "title": "BANDS x AIML Collab Projects Night – Part 1",
-    "date": "2025-08-05",
-    "dateLabel": "5th August 2025",
-    "category": "Projects",
-    "excerpt": "🛠️🤖 Join BANDS x QUT AI & ML Society for Collab Projects Night Part 1! Learn how to build and showcase your ML portfolio through hands-on experience. 🚀💡",
-    "image": "/events/Projects/Projects Night - 1.jpg",
-    "featured": false
+  "title": "BANDS x AIML Collab Projects Night – Part 1",
+  "date": "2025-08-05",
+  "time": "5:30 PM – 7:30 PM",
+  "location": "QUT GP-B233",
+  "category": "Projects",
+  "excerpt": "Join BANDS x QUT AI & ML Society for Collab Projects Night Part 1! Learn how to build and showcase your ML portfolio through hands-on experience.",
+  "image": "projects-night-2.jpg",
+
+  "featured": false,
+  "isCollab": true,
+
+  "description": "Join a special collaboration between BANDS and the QUT AI & ML Society for How to Build Your ML Portfolio 101 – Part 1 of a two-part series. Explore ML tools including GitHub, Kaggle, and practical documentation, and learn how to showcase your skills through hands-on experience and student-led guidance. Learn to build a polished ML portfolio, use GitHub for projects, level up on Kaggle, and make your work shine with clear READMEs and Jupyter demos. No experience needed – just bring your curiosity and energy and pair up with peers from both societies.",
+
+  "schedule": [],
+  "speakers": [],
+
+  "registration": {
+    "required": true,
+    "link": "https://campus.hellorubric.com/?eid=38194",
+    "capacity": null,
+    "price": "",
+    "opens": null,
+    "closes": null
   },
-  "details": {
-    "title": "BANDS x AIML Collab Projects Night – Part 1",
-    "fullDate": "Tuesday, 5 August 2025",
-    "time": "5:30 PM – 7:30 PM",
-    "location": "QUT GP-B233",
-    "longDescription": "Join a special collaboration between BANDS and the QUT AI & ML Society for How to Build Your ML Portfolio 101 – Part 1 of a two-part series. Explore ML tools including GitHub, Kaggle, and practical documentation, and learn how to showcase your skills through hands-on experience and student-led guidance. Learn to build a polished ML portfolio, use GitHub for projects, level up on Kaggle, and make your work shine with clear READMEs and Jupyter demos. No experience needed – just bring your curiosity and energy and pair up with peers from both societies. 🔗 RSVP via the link in our bio to secure your spot! 🚀💡",
-    "isCollab": "true",
-    "registration": {
-      "required": "true",
-      "link": "https://campus.hellorubric.com/?eid=38194",
-      "capacity": ""
-    },
-    "gallery": [
-      "/events/Projects/Projects Night - 1.jpg",
-      "/events/Projects/Projects Night - 2.jpg",
-      "/events/Projects/Projects Night - 3.jpg",
-      "/events/Projects/Projects Night - 4.jpg"
-    ]
-  }
+
+  "gallery": [
+    { "src": "projects-night-1.jpg", "alt": "Projects Night photo 1" },
+    { "src": "projects-night-2.jpg", "alt": "Projects Night photo 2" },
+    { "src": "projects-night-3.jpg", "alt": "Projects Night photo 3" },
+    { "src": "projects-night-4.jpg", "alt": "Projects Night photo 4" }
+  ]
 }

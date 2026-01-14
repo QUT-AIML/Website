@@ -1,0 +1,7 @@
+{
+  "title": "Income Prediction",
+  "category": "K-Nearest Neighbours",
+  "excerpt": "Predict whether an individual's income exceeds $50K using demographic data with KNN.",
+  "image": "income-prediction.jpg",
+  "github": "https://github.com/QUT-AIML/K-Nearest-Neighbours/blob/main/Income%20Prediction/Adult%20Income%20Prediction%20-%20KNN.ipynb"
+}

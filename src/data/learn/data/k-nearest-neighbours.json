@@ -5,6 +5,8 @@
   "category": "Tutorial",
   "date": "2024-5-2",
   "featured": false,
+  "image": "knn.png", 
+
   "overview": {
     "definition": "K-Nearest Neighbors (KNN) is a simple, instance-based supervised learning algorithm used for classification and regression. It predicts the output for a new data point based on the majority label or average of its k closest neighbors.",
     "types": [

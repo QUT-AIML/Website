@@ -1,19 +1,30 @@
 {
-  "overview": {
-    "title": "Welcome Night",
-    "date": "2026-02-24",
-    "dateLabel": "24th Feb 2026",
-    "category": "Social",
-    "excerpt": "✨ Join us for the AIML Welcome Night! Meet our members, discover workshops, projects, and enjoy games, activities, and free pizza! 🍕",
-    "image": "/events/Social/Social Night - 1.jpg",
-    "featured": true
+  "title": "Welcome Night",
+  "date": "2025-02-24",
+  "time": "5:30 PM – 7:30 PM",
+  "location": "QUT GP-D108",
+  "category": "Social",
+  "excerpt": "Join us for the QUT AI & ML Society Welcome Night! Meet our members, discover workshops, projects, and enjoy games, activities, and free pizza!",
+  "image": "social-night.jpg",
+
+  "featured": true,
+  "isCollab": false,
+
+  "description": "Come and get to know what the QUT AI & ML Society is all about. Meet our members, find out what we have planned for the year, and see how you can get involved in our workshops, projects, and fun socials. Meet like-minded students and future collaborators, have fun with games and activities, connect, relax, and belong in our growing community. And yes… free pizza!",
+
+  "schedule": [],
+  "speakers": [],
+
+  "registration": {
+    "required": false,
+    "link": "",
+    "capacity": null,
+    "price": "",
+    "opens": null,
+    "closes": null
   },
-  "details": {
-    "title": "Welcome Night",
-    "fullDate": "Tuesday, 24 Feburary 2025",
-    "time": "5:30 PM – 7:30 PM",
-    "location": "Location TBC",
-    "longDescription": "Come and get to know what AIML is all about. Meet our members, find out what we have planned for the year, and see how you can get involved in our workshops, projects, and fun socials. Meet like-minded students and future collaborators, have fun with games and activities, connect, relax, and belong in our growing community. And yes… free pizza! 🍕🎉",
-    "isCollab": "false"
-  }
+
+  "gallery": [
+    { "src": "social-night.jpg", "alt": "Welcome Night event photo" }
+  ]
 }

@@ -1,34 +1,35 @@
 {
-  "overview": {
-    "title": "BANDS x AIML Collab Projects Night – Part 2",
-    "date": "2025-08-12",
-    "dateLabel": "12th August 2025",
-    "category": "Projects",
-    "excerpt": "🛠️🤖 Join BANDS x QUT AI & ML Society for Collab Projects Night Part 2! Learn to build and showcase your ML portfolio with expert guidance. 🚀💡",
-    "image": "/events/Projects/Projects Night - 1.jpg",
-    "featured": false
+  "title": "BANDS x AIML Collab Projects Night – Part 2",
+  "date": "2025-08-12",
+  "time": "5:30 PM – 7:30 PM",
+  "location": "QUT GP-B233",
+  "category": "Projects",
+  "excerpt": "Join BANDS x QUT AI & ML Society for Collab Projects Night Part 2! Learn to build and showcase your ML portfolio with expert guidance.",
+  "image": "projects-night-1.jpg",
+
+  "featured": false,
+  "isCollab": true,
+
+  "description": "You’ve started building your ML portfolio, now let’s make it shine! Join us for Part 2 of the collaboration between BANDS and the QUT AI & ML Society as we dive deeper into maintaining and showcasing your Machine Learning journey. Highlights include a keynote by Albert Dai, tips on ML newsletters & staying updated, portfolio building & maintenance, and an interactive Q&A with hands-on challenges. Whether you’re starting fresh or already building your reputation, this event will give you the tools and confidence to maintain a professional ML presence.",
+
+  "schedule": [],
+  "speakers": [
+    { "name": "Albert Dai", "role": "Keynote Speaker / Industry Expert" }
+  ],
+
+  "registration": {
+    "required": true,
+    "link": "https://campus.hellorubric.com/?eid=38574",
+    "capacity": null,
+    "price": "",
+    "opens": null,
+    "closes": null
   },
-  "details": {
-    "title": "BANDS x AIML Collab Projects Night – Part 2",
-    "fullDate": "Tuesday, 12 August 2025",
-    "time": "5:30 PM – 7:30 PM",
-    "location": "QUT GP-B233",
-    "longDescription": "You’ve started building your ML portfolio, now let’s make it shine! Join us for Part 2 of the collaboration between BANDS and the QUT AI & ML Society as we dive deeper into maintaining and showcasing your Machine Learning journey. Highlights include a keynote by Albert Dai, tips on ML newsletters & staying updated, portfolio building & maintenance, and an interactive Q&A with hands-on challenges. Whether you’re starting fresh or already building your reputation, this event will give you the tools and confidence to maintain a professional ML presence. 🔗 RSVP now via the updated link in our bio to secure your spot. 🚀💡",
-    "isCollab": "true",
-    "schedule": [],
-    "speakers": [
-      { "name": "Albert Dai", "role": "Keynote Speaker / Industry Expert" }
-    ],
-    "registration": {
-      "required": "true",
-      "link": "https://campus.hellorubric.com/?eid=38574",
-      "capacity": ""
-    },
-    "gallery": [
-      "/events/Projects/Projects Night - 1.jpg",
-      "/events/Projects/Projects Night - 2.jpg",
-      "/events/Projects/Projects Night - 3.jpg",
-      "/events/Projects/Projects Night - 4.jpg"
-    ]
-  }
+
+  "gallery": [
+    { "src": "projects-night-1.jpg", "alt": "Projects Night photo 1" },
+    { "src": "projects-night-2.jpg", "alt": "Projects Night photo 2" },
+    { "src": "projects-night-3.jpg", "alt": "Projects Night photo 3" },
+    { "src": "projects-night-4.jpg", "alt": "Projects Night photo 4" }
+  ]
 }
