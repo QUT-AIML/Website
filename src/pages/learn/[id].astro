@@ -40,9 +40,6 @@ const learnings = Object.values(rawLearnFiles)
 const learning = learnings.find(ev => ev.slug === idSlug);
 const notFound = !learning;
 
-// --- Export prerender false to ensure dynamic matching ---
-export const prerender = false;
-
 // --- Utility function for formatted date ---
 function formatDate(dateStr) {
   if (!dateStr) return "";
