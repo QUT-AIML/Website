@@ -305,14 +305,17 @@ if (allTypesSet.size > 1) {
     </htmll>
     
     
+    
     <script type="module">
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('projects-search');
-  const pastGrid = document.querySelector('#type-filters #projects-grid'); // past projects grid
+  const pastGrid = document.querySelector('#type-filters #projects-grid');
   const paginationContainer = document.getElementById('projects-pagination');
   const semesterSelectPop = document.getElementById('semester-select-pop');
   const sortSelectPop = document.getElementById('sort-select-pop');
   const typeSelectPop = document.getElementById('type-select-pop');
+  const filtersToggle = document.getElementById('filters-toggle');
+  const filtersPopover = document.getElementById('filters-popover');
 
   if (!pastGrid || !paginationContainer) return;
 
@@ -421,6 +424,28 @@ document.addEventListener('DOMContentLoaded', () => {
   semesterSelectPop?.addEventListener('change', () => { currentSemester = semesterSelectPop.value; currentPage = 1; applyFilters(); });
   sortSelectPop?.addEventListener('change', () => { currentSort = sortSelectPop.value; currentPage = 1; applyFilters(); });
   typeSelectPop?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
+
+  // ---------- Filter popover toggle ----------
+  filtersToggle?.addEventListener('click', e => {
+    e.stopPropagation();
+    if (!filtersPopover) return;
+    filtersPopover.style.display = (filtersPopover.style.display === 'block') ? 'none' : 'block';
+    filtersToggle.setAttribute('aria-expanded', filtersPopover.style.display === 'block');
+  });
+
+  document.addEventListener('click', e => {
+    if (filtersPopover && !filtersPopover.contains(e.target) && e.target !== filtersToggle) {
+      filtersPopover.style.display = 'none';
+      filtersToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && filtersPopover) {
+      filtersPopover.style.display = 'none';
+      filtersToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   // ---------- Initialize ----------
   applyFilters();
