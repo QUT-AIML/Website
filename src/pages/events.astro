@@ -15,6 +15,16 @@ if (!res.ok) {
 
 const apiData = await res.json();
 
+
+
+// --- Helper: convert title to URL slug ---
+function slugify(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "") // remove special chars
+    .replace(/\s+/g, "-");    // spaces → dash
+}
+
 /**
  * Normalize API data into the structure expected by the page
  * {
@@ -33,16 +43,15 @@ const semesters = Object.entries(apiData).map(([id, events]) => ({
   events: events.map((ev, index) => ({
     ...ev,
     id: ev.id ?? `${id}-${index}`,
+    slug: slugify(ev.title), // <-- add slug here
     dateLabel: new Date(ev.date).toLocaleDateString("en-AU", {
-      weekday: "long",   // <-- Full weekday
+      weekday: "long",
       day: "numeric",
       month: "short",
       year: "numeric",
     }),
   })),
 }));
-
-
 
 /* ===============================
    EXISTING LOGIC (UNCHANGED)
@@ -112,7 +121,7 @@ const featuredEvents = eventsBySemester
             <section class="events-grid">
               {featuredEvents.map(ev => (
                 <article class="event-card" data-semester={ev.semesterId} data-category={ev.category} data-type={ev.type ?? ev.category ?? "Other"} data-title={ev.title.toLowerCase()} data-date={ev.date}>
-                  <a href={`/events/${ev.semesterId}/${ev.id}`}>
+                  <a href={`/events/${ev.semesterId}/${ev.slug}`}>
                     <div class="card-media">
                       {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                     </div>
@@ -231,7 +240,7 @@ const featuredEvents = eventsBySemester
                   data-title={ev.title.toLowerCase()}
                   data-date={ev.date}
                 >
-                  <a href={`/events/${ev.semesterId}/${ev.id}`}>
+                  <a href={`/events/${ev.semesterId}/${ev.slug}`}>
                     <div class="card-media">
                       {ev.image ? <img src={ev.image} alt={ev.title} /> : <div class="no-image">No image</div>}
                     </div>
