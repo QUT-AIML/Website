@@ -578,7 +578,7 @@
   }
 
   .panel-topspace {
-    margin-top: 3rem;
+    margin-top: 3rem !important;
   }
 
 }

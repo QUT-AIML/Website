@@ -500,7 +500,7 @@
 @media (max-width: 768px) {
 
   .featured-events-space {
-    padding-top: 4rem !important;
+    margin-top: 4rem !important;
   }
   
   .events-space {
