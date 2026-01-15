@@ -90,6 +90,7 @@
 
 /* Individual buttons */
 .type-filter-pill .type-btn {
+  white-space: nowrap;
   background: transparent;
   border: none;
   color: #e6e6e6;
@@ -210,8 +211,11 @@
 
 /* Desktop: search group can grow */
 .mobile-search-filter {
-  flex: 1;
+  flex: 1;          /* THIS grows */
   min-width: 0;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 /* Search input grows, NOT the button */
@@ -312,7 +316,7 @@
     margin-left: 3rem;
     margin-right: 3rem;
     margin-bottom: 5rem;
-    width: 100%;
+    max-width: 92vw;
 }
 
 
@@ -559,10 +563,97 @@
 
 
 
+
+
+/* === DESKTOP TYPE SCROLLER === */
+.type-scroll-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  flex: 0 1 50%;
+  max-width: 50%;
+  min-width: 0;
+}
+
+.type-filter-pill.scrollable {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  min-width: 0;
+}
+
+.type-filter-pill.scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll arrows */
+.type-scroll-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: #1f1f1f;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.type-scroll-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Show only on desktop */
+@media (min-width: 769px) {
+  .type-scroll-wrapper {
+    display: flex;
+  }
+
+  .filter-type {
+    display: none;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ========================= */
 /* ===== MOBILE LAYOUT ===== */
 /* ========================= */
 @media (max-width: 768px) {
+
+    .type-scroll-wrapper {
+    display: none;
+  }
 
     .hidden-type {
       display: block;
@@ -607,16 +698,20 @@
   /* REMOVE DESKTOP MARGINS */
   /* ------------------------- */
 
-  /* Kill outer page margins */
   .key-content {
-    margin-left: 1.3rem;
-    margin-right: 1.3rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
     margin-bottom: 3rem;
-    width: 100%;
+    max-width: 100%;    /* full width */
+    width: 100%;        /* ensure it fills container */
   }
 
   .current-projects-panel {
     margin: 0;
+  }
+
+  .type-filter-label {
+    display: none;
   }
 
   /* ------------------------- */
@@ -761,3 +856,9 @@
   color: #1f0f1b !important;
   border: none !important;
 }
+
+
+
+
+
+
