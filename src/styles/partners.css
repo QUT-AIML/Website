@@ -1,0 +1,37 @@
+/* ----------------------------- */
+/*           THICK LINE          */
+/* ----------------------------- */
+
+.info-panel-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.thick-line-behind {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw; /* full viewport */
+  max-width: 100vw;
+  transform: translate(-50%, -50%); /* center horizontally and vertically */
+  height: 2cm;
+  background-color: var(--color-secondary);
+  z-index: -1;
+}
+
+
+.top-space {
+  padding-top: 10rem;
+}
+
+.vacant-space {
+  margin-bottom: 20vh;
+}
+
+/* MOBILE: show arrows side by side above the team grid */
+@media (max-width: 768px) {
+  
+  .top-space {
+    padding-top: 6rem;
+  }
+}
