@@ -93,10 +93,26 @@ function formatDate(dateStr) {
   <Navigation />
 
   <div class="content-wrapper learning-space">
+
+    <!-- ABOUT -->
+    <section class="pink-panel">
+      <p class="pink-title">Explore & Learn</p>
+    </section>
+
+    <div class="info-panel-wrapper">
+      <div class="thick-line-behind"></div>
+      <section class="info-panel">
+        The QUT AI & ML Society provides members with diverse learning opportunities to explore artificial intelligence and machine learning at every level.  
+        Through workshops, tutorials, technical collaborations, and guided tutorials, members can build practical skills, strengthen their portfolios, and gain hands-on experience with real-world AI tools and techniques.  
+        Learn from experts, collaborate on structured learning programs, and access resources that make complex concepts approachable.  
+        Whether you’re just starting out or expanding your expertise, our learning initiatives help you grow, experiment, and apply AI responsibly.
+      </section>
+    </div>
+
     <!-- Featured Learnings -->
     {featuredLearnings.length > 0 && (
       <>
-        <section class="pink-panel">
+        <section class="pink-panel featured-learning-space">
           <p class="pink-title">Featured Learning</p>
         </section>
 
@@ -129,7 +145,7 @@ function formatDate(dateStr) {
 
     <!-- All Learnings -->
     <section class="pink-panel panel-topspace">
-      <p class="pink-title">Learn about AI & ML</p>
+      <p class="pink-title">All Learning Resources</p>
     </section>
 
     <div class="key-content">
