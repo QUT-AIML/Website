@@ -3,9 +3,8 @@
 }
 
 .panel-topspace {
-    margin-top: 6rem;
+    margin-top: 6rem !important;
   }
-
 
 .info-panel-wrapper {
   position: relative;
