@@ -10,7 +10,8 @@
     "title": "Admin Team",
     "items": [
       { "role": "President", "name": "Zac Knight", "image": "Zac.png" },
-      { "role": "Vice President", "name": "Jackson Riding", "image": "Jackson.png" },
+      { "role": "Vice President", "name": "Iwan Kaczmar-Donaghue (S1)", "image": "Iwan.png" },
+      { "role": "Vice President", "name": "Jackson Riding (S2)", "image": "Jackson.png" },
       { "role": "Secretary", "name": "Leonora Van De Sande", "image": "Leonora.png" },
       { "role": "Treasurer", "name": "Declan Whitty", "image": "Declan.png" }
     ]
